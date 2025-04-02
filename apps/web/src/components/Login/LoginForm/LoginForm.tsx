@@ -51,7 +51,7 @@ export function LoginForm({}: LoginFormProps) {
                 handleCreateNewAccount();
               }}
             >
-              crete New Account
+              create New Account
             </Link>
           </Center>
         </form>

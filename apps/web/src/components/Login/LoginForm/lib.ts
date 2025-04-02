@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { setCookie } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { BlogService } from '@/__generated__/services/blog_connectweb';
-import { LoginRequest } from '@/__generated__/services/blog_pb';
+import { OdachinService } from '@/__generated__/services/odachin_connectweb';
+import { LoginRequest } from '@/__generated__/services/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 
 export const loginFormSchema = z.object({
