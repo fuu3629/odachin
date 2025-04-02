@@ -1,0 +1,22 @@
+syntax = "proto3";
+package odachin;
+import "google/protobuf/empty.proto";
+
+service OdachinService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+}
+enum Status {
+  SUCCESS = 0;  // 成功
+  FAILURE = 1;  // 失敗
+}
+
+message CreateUserRequest {
+  string userId = 1;
+  string name = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message CreateUserResponse {
+  Status status = 1;
+}
