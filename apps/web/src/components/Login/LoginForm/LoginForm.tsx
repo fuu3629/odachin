@@ -9,52 +9,94 @@ import {
   Spacer,
   Link,
   Center,
+  Box,
+  VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useLoginForm } from './lib';
 export interface LoginFormProps {}
 
 export function LoginForm({}: LoginFormProps) {
-  const { register, onSubmit, formState } = useLoginForm();
+  const {
+    register,
+    onSubmit,
+    formState: { errors },
+  } = useLoginForm();
   const router = useRouter();
   const handleCreateNewAccount = async () => {
     await router.push('/createNewAccount');
   };
   return (
     <>
-      <Flex background='gray.200' direction='column' pb={6} pt={12} px={12} rounded={6}>
-        <Heading mb={6}>Log in</Heading>
-        <form onSubmit={onSubmit}>
-          <HStack mb={6}>
-            <Text h='100%' w='150px'>
-              UserName
-            </Text>
-            <Input bg='white' placeholder='sample@sample.com' {...register('name')} />
-          </HStack>
-          <HStack mb={12}>
-            <Text h='100%' w='150px'>
-              Password
-            </Text>
-            <Input bg='white' placeholder='********' {...register('password')} />
-          </HStack>
-          <HStack>
-            <Spacer></Spacer>
-            <Button colorScheme='teal' mb={16} type='submit' w={32}>
-              Login
-            </Button>
-          </HStack>
-          <Center>
-            <Link
-              _hover={{ cursor: 'pointer' }}
-              color='blue.400'
-              onClick={() => {
-                handleCreateNewAccount();
-              }}
-            >
-              crete New Account
-            </Link>
-          </Center>
-        </form>
+      <Flex
+        h='100vh'
+        w='100vw'
+        direction='column'
+        alignItems='center'
+        justifyContent='center'
+        bgSize='cover'
+      >
+        <Box
+          w='100%'
+          maxW='500px'
+          bg='white'
+          p={8}
+          boxShadow='lg'
+          borderRadius='lg'
+          bgImage="url('/mnt/data/image.png')"
+        >
+          <Flex bg='white' direction='column' justify='center' alignItems='center' p={12}>
+            <Box w='100%' maxW='400px'>
+              <form onSubmit={onSubmit} style={{ width: '100%' }}>
+                <Text fontSize='sm' mb={1} fontWeight='bold'>
+                  メールアドレスを入力
+                </Text>
+                <Input bg='gray.100' {...register('email')} />
+                {errors.email && (
+                  <Text color='red.500' fontSize='sm'>
+                    {errors.email.message}
+                  </Text>
+                )}
+                <Text fontSize='sm' mb={1} fontWeight='bold' mt={4}>
+                  パスワードを入力
+                </Text>
+                <Input bg='gray.100' {...register('password')} w='full' />
+                {errors.password && (
+                  <Text color='red.500' fontSize='sm'>
+                    {errors.password.message}
+                  </Text>
+                )}
+                <VStack mt={8} mb={2}>
+                  <Button
+                    type='submit'
+                    bg='black'
+                    color='white'
+                    w='full'
+                    _hover={{ bg: 'gray.800' }}
+                  >
+                    ログイン
+                  </Button>
+                </VStack>
+              </form>
+
+              <Center mt={6} mb={4} fontSize='sm' color='gray.500'>
+                または
+              </Center>
+
+              <Button
+                variant='outline'
+                w='full'
+                mb={2}
+                borderColor='gray.300'
+                onClick={() => {
+                  handleCreateNewAccount();
+                }}
+              >
+                新規登録
+              </Button>
+            </Box>
+          </Flex>
+        </Box>
       </Flex>
     </>
   );

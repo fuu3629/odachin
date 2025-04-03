@@ -4,6 +4,7 @@ import "google/protobuf/empty.proto";
 
 service OdachinService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc login(LoginRequest) returns (LoginResponse);
 }
 enum Status {
   SUCCESS = 0;  // 成功
@@ -18,5 +19,16 @@ message CreateUserRequest {
 }
 
 message CreateUserResponse {
+  Status status = 1;
+}
+
+message LoginRequest {
+  string userId = 1;
+  string name = 2;
+  string email = 3;
+  string password = 4;
+}
+
+message LoginResponse {
   Status status = 1;
 }

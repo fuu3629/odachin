@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CreateUserRequest, CreateUserResponse } from "./odachin_pb";
+import { CreateUserRequest, CreateUserResponse, LoginRequest, LoginResponse } from "./odachin_pb";
 import { MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -19,6 +19,15 @@ export const OdachinService = {
       name: "CreateUser",
       I: CreateUserRequest,
       O: CreateUserResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.login
+     */
+    login: {
+      name: "login",
+      I: LoginRequest,
+      O: LoginResponse,
       kind: MethodKind.Unary,
     },
   }

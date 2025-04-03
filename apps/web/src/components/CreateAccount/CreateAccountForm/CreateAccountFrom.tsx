@@ -1,4 +1,15 @@
-import { Flex, Heading, Input, Button, HStack, Text, Spacer } from '@chakra-ui/react';
+import {
+  Flex,
+  Heading,
+  Input,
+  Button,
+  HStack,
+  Text,
+  Spacer,
+  Box,
+  Center,
+  VStack,
+} from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { useCreateAccountForm } from './lib';
 export interface CreateAccountFormProps {
@@ -6,36 +17,70 @@ export interface CreateAccountFormProps {
 }
 
 export function CreateAccountForm({ setToken }: CreateAccountFormProps) {
-  const { register, onSubmit, formState } = useCreateAccountForm(setToken);
+  const {
+    register,
+    onSubmit,
+    formState: { errors },
+  } = useCreateAccountForm(setToken);
   return (
-    <Flex background='gray.200' direction='column' padding={12} rounded={6}>
-      <form onSubmit={onSubmit}>
-        <Heading mb={6}>新規登録</Heading>
-        <HStack mb={6}>
-          <Text h='100%' w='250px'>
-            User ID
-          </Text>
-          <Input bg='white' placeholder='sample' {...register('userId')} />
-        </HStack>
-        <HStack mb={6}>
-          <Text h='100%' w='250px'>
-            User Name(表示名)
-          </Text>
-          <Input bg='white' placeholder='sample' {...register('userName')} />
-        </HStack>
-        <HStack mb={6}>
-          <Text h='100%' w='250px'>
-            Password
-          </Text>
-          <Input bg='white' placeholder='********' {...register('password')} />
-        </HStack>
-        <HStack>
-          <Spacer></Spacer>
-          <Button colorScheme='teal' mb={6} type='submit'>
-            crete New Account
-          </Button>
-        </HStack>
-      </form>
+    <Flex
+      h='100vh'
+      w='100vw'
+      direction='column'
+      alignItems='center'
+      justifyContent='center'
+      bgSize='cover'
+    >
+      <Box
+        w='100%'
+        maxW='500px'
+        bg='white'
+        p={8}
+        boxShadow='lg'
+        borderRadius='lg'
+        bgImage="url('/mnt/data/image.png')"
+      >
+        <Flex bg='white' direction='column' justify='center' alignItems='center' p={12}>
+          <Box w='100%' maxW='400px'>
+            <form onSubmit={onSubmit}>
+              <Heading mb={6}>新規登録</Heading>
+              <Text fontSize='sm' mb={1} fontWeight='bold'>
+                メールアドレスを入力
+              </Text>
+              <Input bg='gray.100' {...register('userId')} />
+              {errors.email && (
+                <Text color='red.500' fontSize='sm'>
+                  {errors.email.message}
+                </Text>
+              )}
+              <Text fontSize='sm' mb={1} mt={4} fontWeight='bold'>
+                ユーザ名（表示名）
+              </Text>
+              <Input bg='gray.100' {...register('email')} w='full' />
+              {errors.userName && (
+                <Text color='red.500' fontSize='sm'>
+                  {errors.userName.message}
+                </Text>
+              )}
+              <Text fontSize='sm' mb={1} mt={4} fontWeight='bold'>
+                パスワードを入力
+              </Text>
+              <Input bg='gray.100' {...register('password')} w='full' />
+              {errors.password && (
+                <Text color='red.500' fontSize='sm'>
+                  {errors.password.message}
+                </Text>
+              )}
+
+              <VStack mt={8} mb={2}>
+                <Button type='submit' bg='black' color='white' w='full' _hover={{ bg: 'gray.800' }}>
+                  新規登録
+                </Button>
+              </VStack>
+            </form>
+          </Box>
+        </Flex>
+      </Box>
     </Flex>
   );
 }

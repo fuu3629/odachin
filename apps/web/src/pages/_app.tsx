@@ -1,4 +1,4 @@
-import '@/styles/globals.css';
+// import '@/styles/globals.css';
 import { Box, Flex } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import type { AppProps } from 'next/app';
