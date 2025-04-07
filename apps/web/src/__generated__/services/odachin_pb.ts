@@ -31,6 +31,30 @@ proto3.util.setEnumType(Status, "odachin.Status", [
 ]);
 
 /**
+ * @generated from enum odachin.Role
+ */
+export enum Role {
+  /**
+   * 親
+   *
+   * @generated from enum value: PARENT = 0;
+   */
+  PARENT = 0,
+
+  /**
+   * 子供
+   *
+   * @generated from enum value: CHILD = 1;
+   */
+  CHILD = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(Role)
+proto3.util.setEnumType(Role, "odachin.Role", [
+  { no: 0, name: "PARENT" },
+  { no: 1, name: "CHILD" },
+]);
+
+/**
  * @generated from message odachin.CreateUserRequest
  */
 export class CreateUserRequest extends Message<CreateUserRequest> {
@@ -54,6 +78,11 @@ export class CreateUserRequest extends Message<CreateUserRequest> {
    */
   password = "";
 
+  /**
+   * @generated from field: odachin.Role role = 5;
+   */
+  role = Role.PARENT;
+
   constructor(data?: PartialMessage<CreateUserRequest>) {
     super();
     proto3.util.initPartial(data, this);
@@ -66,6 +95,7 @@ export class CreateUserRequest extends Message<CreateUserRequest> {
     { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "email", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "password", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "role", kind: "enum", T: proto3.getEnumType(Role) },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CreateUserRequest {
@@ -90,9 +120,9 @@ export class CreateUserRequest extends Message<CreateUserRequest> {
  */
 export class CreateUserResponse extends Message<CreateUserResponse> {
   /**
-   * @generated from field: odachin.Status status = 1;
+   * @generated from field: string token = 1;
    */
-  status = Status.SUCCESS;
+  token = "";
 
   constructor(data?: PartialMessage<CreateUserResponse>) {
     super();
@@ -102,7 +132,7 @@ export class CreateUserResponse extends Message<CreateUserResponse> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "odachin.CreateUserResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "status", kind: "enum", T: proto3.getEnumType(Status) },
+    { no: 1, name: "token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CreateUserResponse {
@@ -132,17 +162,7 @@ export class LoginRequest extends Message<LoginRequest> {
   userId = "";
 
   /**
-   * @generated from field: string name = 2;
-   */
-  name = "";
-
-  /**
-   * @generated from field: string email = 3;
-   */
-  email = "";
-
-  /**
-   * @generated from field: string password = 4;
+   * @generated from field: string password = 2;
    */
   password = "";
 
@@ -155,9 +175,7 @@ export class LoginRequest extends Message<LoginRequest> {
   static readonly typeName = "odachin.LoginRequest";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "userId", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "email", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "password", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "password", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LoginRequest {
@@ -182,9 +200,9 @@ export class LoginRequest extends Message<LoginRequest> {
  */
 export class LoginResponse extends Message<LoginResponse> {
   /**
-   * @generated from field: odachin.Status status = 1;
+   * @generated from field: string token = 1;
    */
-  status = Status.SUCCESS;
+  token = "";
 
   constructor(data?: PartialMessage<LoginResponse>) {
     super();
@@ -194,7 +212,7 @@ export class LoginResponse extends Message<LoginResponse> {
   static readonly runtime: typeof proto3 = proto3;
   static readonly typeName = "odachin.LoginResponse";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "status", kind: "enum", T: proto3.getEnumType(Status) },
+    { no: 1, name: "token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): LoginResponse {

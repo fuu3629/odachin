@@ -1,33 +1,35 @@
 package models
 
+import "time"
+
 type Family struct {
-	FamilyID   uint `gorm:"primaryKey"`
+	FamilyID   uint `gorm:"primaryKey;autoIncrement"`
 	FamilyName string
 	Email      string `gorm:"unique"`
 	Password   string
-	CreatedAt  int64
-	UpdatedAt  int64
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 	Users      []User `gorm:"foreignKey:FamilyID"`
 }
 
 type User struct {
-	UserID    uint `gorm:"primaryKey"`
-	FamilyID  uint `gorm:"index"`
+	UserID    string `gorm:"primaryKey"`
+	FamilyID  *uint  `gorm:"index"`
 	Role      string
 	UserName  string
 	Email     string `gorm:"unique"`
 	Password  string
-	CreatedAt int64
-	UpdatedAt int64
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	Wallet    Wallet `gorm:"foreignKey:UserID"`
 }
 
 type Wallet struct {
-	WalletID  uint `gorm:"primaryKey"`
-	UserID    uint `gorm:"uniqueIndex"`
+	WalletID  uint   `gorm:"primaryKey"`
+	UserID    string `gorm:"uniqueIndex"`
 	Balance   float64
-	CreatedAt int64
-	UpdatedAt int64
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type Transaction struct {
@@ -36,7 +38,7 @@ type Transaction struct {
 	ToUserID      uint `gorm:"index"`
 	Amount        float64
 	Type          string
-	CreatedAt     int64
+	CreatedAt     time.Time
 }
 
 type Allowance struct {
@@ -45,8 +47,8 @@ type Allowance struct {
 	ToUserID    uint `gorm:"index"`
 	Amount      float64
 	Interval    string
-	CreatedAt   int64
-	UpdatedAt   int64
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 type Reward struct {
@@ -54,7 +56,7 @@ type Reward struct {
 	ToUserID  uint `gorm:"index"`
 	Amount    float64
 	Reason    string
-	CreatedAt int64
+	CreatedAt time.Time
 }
 
 // func main() {

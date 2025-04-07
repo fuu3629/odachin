@@ -1,9 +1,12 @@
 package presentation
 
 import (
+	"context"
+
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/pkg/usecase"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
 )
 
@@ -28,3 +31,27 @@ func NewServer(grpcServer *grpc.Server, db *gorm.DB) {
 
 // 	return nil, nil // Placeholder return
 // }
+
+func (s *ServerStruct) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (*odachin.CreateUserResponse, error) {
+	token, err := s.useCase.CreateUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &odachin.CreateUserResponse{Token: token}, nil
+}
+
+func (s *ServerStruct) Login(ctx context.Context, req *odachin.LoginRequest) (*odachin.LoginResponse, error) {
+	token, err := s.useCase.Login(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &odachin.LoginResponse{Token: token}, nil
+}
+
+func (s *ServerStruct) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) (*emptypb.Empty, error) {
+	err := s.useCase.CreateGroup(ctx, req)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, nil
+}

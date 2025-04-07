@@ -8,6 +8,7 @@ import (
 type UserRepository interface {
 	Get(id string) (models.User, error)
 	Save(param *models.User) error
+	UpdateUser(param *models.User) error
 }
 
 type UserRepositoryImpl struct {
@@ -20,7 +21,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 func (r *UserRepositoryImpl) Get(id string) (models.User, error) {
 	var user models.User
-	if err := r.db.Where("id = ?", id).First(&user).Error; err != nil {
+	if err := r.db.Where("user_id = ?", id).First(&user).Error; err != nil {
 		return models.User{}, err
 	}
 	return user, nil
@@ -28,6 +29,13 @@ func (r *UserRepositoryImpl) Get(id string) (models.User, error) {
 
 func (r *UserRepositoryImpl) Save(user *models.User) error {
 	if err := r.db.Create(&user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *UserRepositoryImpl) UpdateUser(user *models.User) error {
+	if err := r.db.Updates(&user).Error; err != nil {
 		return err
 	}
 	return nil
