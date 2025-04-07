@@ -11,11 +11,11 @@ plugins:
   #   opt: paths=source_relative
   # リモートプラグインを使用
   - plugin: buf.build/protocolbuffers/go:v1.31.0
-    out: gen/go
+    out: gen
     # GoのモジュールパスがProtobufファイルから相対的に解決されるよう指定
     # なくてもいいがないと上で指定したdefaultのフルパスが使われる
     opt: paths=source_relative
   # protoc-gen-go-grpcプラグイン
   - plugin: buf.build/grpc/go:v1.3.0
-    out: gen/go
+    out: gen
     opt: paths=source_relative
