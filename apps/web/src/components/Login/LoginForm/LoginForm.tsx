@@ -29,26 +29,26 @@ export function LoginForm({}: LoginFormProps) {
   return (
     <>
       <Flex
-        h='100vh'
-        w='100vw'
-        direction='column'
         alignItems='center'
-        justifyContent='center'
         bgSize='cover'
+        direction='column'
+        h='100vh'
+        justifyContent='center'
+        w='100vw'
       >
         <Box
-          w='100%'
-          maxW='500px'
           bg='white'
-          p={8}
-          boxShadow='lg'
-          borderRadius='lg'
           bgImage="url('/mnt/data/image.png')"
+          borderRadius='lg'
+          boxShadow='lg'
+          maxW='500px'
+          p={8}
+          w='100%'
         >
-          <Flex bg='white' direction='column' justify='center' alignItems='center' p={12}>
-            <Box w='100%' maxW='400px'>
+          <Flex alignItems='center' bg='white' direction='column' justify='center' p={12}>
+            <Box maxW='400px' w='100%'>
               <form onSubmit={onSubmit} style={{ width: '100%' }}>
-                <Text fontSize='sm' mb={1} fontWeight='bold'>
+                <Text fontSize='sm' fontWeight='bold' mb={1}>
                   メールアドレスを入力
                 </Text>
                 <Input bg='gray.100' {...register('email')} />
@@ -57,7 +57,7 @@ export function LoginForm({}: LoginFormProps) {
                     {errors.email.message}
                   </Text>
                 )}
-                <Text fontSize='sm' mb={1} fontWeight='bold' mt={4}>
+                <Text fontSize='sm' fontWeight='bold' mb={1} mt={4}>
                   パスワードを入力
                 </Text>
                 <Input bg='gray.100' {...register('password')} w='full' />
@@ -66,31 +66,31 @@ export function LoginForm({}: LoginFormProps) {
                     {errors.password.message}
                   </Text>
                 )}
-                <VStack mt={8} mb={2}>
+                <VStack mb={2} mt={8}>
                   <Button
-                    type='submit'
+                    _hover={{ bg: 'gray.800' }}
                     bg='black'
                     color='white'
+                    type='submit'
                     w='full'
-                    _hover={{ bg: 'gray.800' }}
                   >
                     ログイン
                   </Button>
                 </VStack>
               </form>
 
-              <Center mt={6} mb={4} fontSize='sm' color='gray.500'>
+              <Center color='gray.500' fontSize='sm' mb={4} mt={6}>
                 または
               </Center>
 
               <Button
-                variant='outline'
-                w='full'
-                mb={2}
                 borderColor='gray.300'
+                mb={2}
                 onClick={() => {
                   handleCreateNewAccount();
                 }}
+                variant='outline'
+                w='full'
               >
                 新規登録
               </Button>
