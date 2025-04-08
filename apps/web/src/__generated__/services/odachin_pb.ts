@@ -232,3 +232,40 @@ export class LoginResponse extends Message<LoginResponse> {
   }
 }
 
+/**
+ * @generated from message odachin.CreateGroupRequest
+ */
+export class CreateGroupRequest extends Message<CreateGroupRequest> {
+  /**
+   * @generated from field: string FamilyName = 1;
+   */
+  FamilyName = "";
+
+  constructor(data?: PartialMessage<CreateGroupRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.CreateGroupRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "FamilyName", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CreateGroupRequest {
+    return new CreateGroupRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): CreateGroupRequest {
+    return new CreateGroupRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): CreateGroupRequest {
+    return new CreateGroupRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: CreateGroupRequest | PlainMessage<CreateGroupRequest> | undefined, b: CreateGroupRequest | PlainMessage<CreateGroupRequest> | undefined): boolean {
+    return proto3.util.equals(CreateGroupRequest, a, b);
+  }
+}
+

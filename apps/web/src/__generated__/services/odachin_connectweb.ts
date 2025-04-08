@@ -3,8 +3,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CreateUserRequest, CreateUserResponse, LoginRequest, LoginResponse } from "./odachin_pb";
-import { MethodKind } from "@bufbuild/protobuf";
+import { CreateGroupRequest, CreateUserRequest, CreateUserResponse, LoginRequest, LoginResponse } from "./odachin_pb";
+import { Empty, MethodKind } from "@bufbuild/protobuf";
 
 /**
  * @generated from service odachin.OdachinService
@@ -28,6 +28,15 @@ export const OdachinService = {
       name: "login",
       I: LoginRequest,
       O: LoginResponse,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.CreateGroup
+     */
+    createGroup: {
+      name: "CreateGroup",
+      I: CreateGroupRequest,
+      O: Empty,
       kind: MethodKind.Unary,
     },
   }
