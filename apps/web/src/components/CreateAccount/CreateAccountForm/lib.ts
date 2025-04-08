@@ -29,8 +29,7 @@ export const useCreateAccountForm = (setToken: Dispatch<SetStateAction<string>>)
       password: data.password,
     };
     const res = await client.createUser(req);
-    setToken(res.status.toString());
-    setCookie(null, 'auth', res.status.toString(), {
+    setCookie(null, 'auth', res.token, {
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: '/',
     });

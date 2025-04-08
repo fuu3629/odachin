@@ -23,13 +23,12 @@ export const useLoginForm = () => {
     const client = clientProvider();
     const req: PartialMessage<LoginRequest> = {
       userId: data.name,
-      email: data.email,
       password: data.password,
     };
     try {
       console.log('login');
       const res = await client.login(req);
-      setCookie(null, 'auth', res.status.toString(), {
+      setCookie(null, 'auth', res.token, {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
