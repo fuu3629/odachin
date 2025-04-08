@@ -15,10 +15,16 @@ import (
 
 func main() {
 	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 	//dbの準備
 	db := database.DbConn()
 	//マイグレーションの実行 これカラムの変更とか削除は対応されないため注意。運用段階になった時考えるけど、今のところdbに変更があった場合一回全部消すのが楽そう
 	database.Migrations(db)
+
+	//開発用のモックデータの投入
+	database.Seed(db)
 
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
