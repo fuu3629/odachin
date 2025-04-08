@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"context"
-	"fmt"
+	"database/sql"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -15,73 +15,92 @@ import (
 )
 
 // trait
-type UseCaseImpl interface {
+type UseCase interface {
 	CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error)
 	Login(ctx context.Context, req *odachin.LoginRequest) (string, error)
 	CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error
 }
 
-type UseCase struct {
+type UseCaseImpl struct {
 	userRepository   repository.UserRepository
 	familyRepository repository.FamilyRepository
+	db               *gorm.DB
 }
 
-func New(db *gorm.DB) UseCaseImpl {
-	return &UseCase{userRepository: repository.NewUserRepository(db), familyRepository: repository.NewFamilyRepository(db)}
+func New(db *gorm.DB) UseCase {
+	return &UseCaseImpl{userRepository: repository.NewUserRepository(db), familyRepository: repository.NewFamilyRepository(db), db: db}
 }
 
-func (u *UseCase) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error) {
-	hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	// req を models.User に変換
-	user := &models.User{
-		UserID:   req.UserId,
-		UserName: req.Name,
-		Email:    req.Email,
-		Password: string(hashed),
-		Role:     req.Role.String(),
-	}
-	err := u.userRepository.Save(user)
-	if err != nil {
-		return "", status.Errorf(codes.Internal, "database error: %v", err)
-	}
-	token, err := domain.GenerateToken(user.UserID)
+func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error) {
+	var token string
+	u.db.Transaction(func(tx *gorm.DB) error {
+
+		hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+		// req を models.User に変換
+		user := &models.User{
+			UserID:   req.UserId,
+			UserName: req.Name,
+			Email:    req.Email,
+			Password: string(hashed),
+			Role:     req.Role.String(),
+		}
+		err := u.userRepository.Save(tx, user)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		token, err = domain.GenerateToken(user.UserID)
+		if err != nil {
+			return status.Errorf(codes.Internal, "token generation error: %v", err)
+		}
+		// トランザクションをコミット
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return token, nil
 
 }
 
-func (u *UseCase) Login(ctx context.Context, req *odachin.LoginRequest) (string, error) {
-	user, err := u.userRepository.Get(req.UserId)
-	if err != nil {
-		return "", status.Errorf(codes.Internal, "database error: %v", err)
-	}
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
-	if err != nil {
-		return "", status.Errorf(codes.Unauthenticated, "invalid password")
-	}
-	token, err := domain.GenerateToken(user.UserID)
-
+func (u *UseCaseImpl) Login(ctx context.Context, req *odachin.LoginRequest) (string, error) {
+	var token string
+	u.db.Transaction(func(tx *gorm.DB) error {
+		user, err := u.userRepository.Get(tx, req.UserId)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid password")
+		}
+		token, err = domain.GenerateToken(user.UserID)
+		if err != nil {
+			return status.Errorf(codes.Internal, "token generation error: %v", err)
+		}
+		// トランザクションをコミット
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return token, nil
 }
 
-func (u *UseCase) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error {
-	user_id, err := domain.ExtractTokenMetadata(ctx)
-	fmt.Println(err)
+func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		user_id, err := domain.ExtractTokenMetadata(ctx)
 
-	if err != nil {
-		return status.Errorf(codes.Unauthenticated, "invalid token")
-	}
-	family := &models.Family{
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token")
+		}
+		family := &models.Family{
 
-		FamilyName: req.FamilyName,
-	}
+			FamilyName: req.FamilyName,
+		}
 
-	family, err = u.familyRepository.Save(family)
+		family, err = u.familyRepository.Save(family)
 
-	user := &models.User{
-		UserID:   user_id,
-		FamilyID: &family.FamilyID,
-	}
-	u.userRepository.UpdateUser(user)
+		user := &models.User{
+			UserID:   user_id,
+			FamilyID: &family.FamilyID,
+		}
+		u.userRepository.Update(tx, user)
 
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return nil
 }

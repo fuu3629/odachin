@@ -11,7 +11,7 @@ import (
 )
 
 type ServerStruct struct {
-	useCase usecase.UseCaseImpl
+	useCase usecase.UseCase
 	odachin.UnimplementedOdachinServiceServer
 }
 

@@ -41,3 +41,14 @@ message LoginResponse {
 message CreateGroupRequest {
   string FamilyName = 1;
 }
+
+message AddMemberRequest {
+  string familyId = 1;
+  string userId = 2;
+}
+
+message AddMemberResponse {
+  string token =1;
+}
+
+
