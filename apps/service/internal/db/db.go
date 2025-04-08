@@ -26,7 +26,7 @@ func DbConn() *gorm.DB {
 }
 
 func Migrations(db *gorm.DB) {
-	err := db.AutoMigrate(&models.Family{}, &models.User{}, &models.Wallet{}, &models.Transaction{}, &models.Allowance{}, &models.Reward{})
+	err := db.AutoMigrate(&models.Family{}, &models.User{}, &models.Wallet{}, &models.Transaction{}, &models.Allowance{}, &models.Reward{}, &models.Invitation{})
 	if err != nil {
 		fmt.Println(err)
 	} else {

@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -19,12 +20,14 @@ type UseCase interface {
 	CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error)
 	Login(ctx context.Context, req *odachin.LoginRequest) (string, error)
 	CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error
+	InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error
 }
 
 type UseCaseImpl struct {
-	userRepository   repository.UserRepository
-	familyRepository repository.FamilyRepository
-	db               *gorm.DB
+	userRepository       repository.UserRepository
+	familyRepository     repository.FamilyRepository
+	invitationRepository repository.InvitationRepository
+	db                   *gorm.DB
 }
 
 func New(db *gorm.DB) UseCase {
@@ -94,6 +97,10 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 
 		family, err = u.familyRepository.Save(family)
 
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+
 		user := &models.User{
 			UserID:   user_id,
 			FamilyID: &family.FamilyID,
@@ -101,6 +108,36 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 		u.userRepository.Update(tx, user)
 
 		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return nil
+}
+
+func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		user_id, err := domain.ExtractTokenMetadata(ctx)
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+		}
+		user, err := u.userRepository.Get(tx, user_id)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		// req を models.Invitation に変換
+		fmt.Println(*user.FamilyID)
+		tmp := *user.FamilyID
+		invitation := &models.Invitation{
+			FamilyID:   &tmp,
+			FromUserID: user_id,
+			ToUserID:   req.ToUserId,
+			IsAccepted: false,
+		}
+		err = u.invitationRepository.Save(tx, invitation)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		// トランザクションをコミット
+		return nil
+
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return nil
 }

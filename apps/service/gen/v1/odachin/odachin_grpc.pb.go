@@ -23,6 +23,7 @@ const (
 	OdachinService_CreateUser_FullMethodName  = "/odachin.OdachinService/CreateUser"
 	OdachinService_Login_FullMethodName       = "/odachin.OdachinService/login"
 	OdachinService_CreateGroup_FullMethodName = "/odachin.OdachinService/CreateGroup"
+	OdachinService_InviteUser_FullMethodName  = "/odachin.OdachinService/InviteUser"
 )
 
 // OdachinServiceClient is the client API for OdachinService service.
@@ -32,6 +33,7 @@ type OdachinServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type odachinServiceClient struct {
@@ -69,6 +71,15 @@ func (c *odachinServiceClient) CreateGroup(ctx context.Context, in *CreateGroupR
 	return out, nil
 }
 
+func (c *odachinServiceClient) InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, OdachinService_InviteUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OdachinServiceServer is the server API for OdachinService service.
 // All implementations must embed UnimplementedOdachinServiceServer
 // for forward compatibility
@@ -76,6 +87,7 @@ type OdachinServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	CreateGroup(context.Context, *CreateGroupRequest) (*emptypb.Empty, error)
+	InviteUser(context.Context, *InviteUserRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedOdachinServiceServer()
 }
 
@@ -91,6 +103,9 @@ func (UnimplementedOdachinServiceServer) Login(context.Context, *LoginRequest) (
 }
 func (UnimplementedOdachinServiceServer) CreateGroup(context.Context, *CreateGroupRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
+}
+func (UnimplementedOdachinServiceServer) InviteUser(context.Context, *InviteUserRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InviteUser not implemented")
 }
 func (UnimplementedOdachinServiceServer) mustEmbedUnimplementedOdachinServiceServer() {}
 
@@ -159,6 +174,24 @@ func _OdachinService_CreateGroup_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OdachinService_InviteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InviteUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OdachinServiceServer).InviteUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OdachinService_InviteUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OdachinServiceServer).InviteUser(ctx, req.(*InviteUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OdachinService_ServiceDesc is the grpc.ServiceDesc for OdachinService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -177,6 +210,10 @@ var OdachinService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateGroup",
 			Handler:    _OdachinService_CreateGroup_Handler,
+		},
+		{
+			MethodName: "InviteUser",
+			Handler:    _OdachinService_InviteUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -59,6 +59,16 @@ type Reward struct {
 	CreatedAt time.Time
 }
 
+type Invitation struct {
+	InvitationID uint   `gorm:"primaryKey;autoIncrement"`
+	FamilyID     *uint  `gorm:"index"`
+	FromUserID   string `gorm:"index"`
+	ToUserID     string `gorm:"index"`
+	IsAccepted   bool
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+}
+
 // func main() {
 // 	dsn := "user:password@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 // 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

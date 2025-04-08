@@ -6,6 +6,7 @@ service OdachinService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   rpc login(LoginRequest) returns (LoginResponse);
   rpc CreateGroup(CreateGroupRequest) returns (google.protobuf.Empty);
+  rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
 }
 enum Status {
   SUCCESS = 0;  // 成功
@@ -42,13 +43,6 @@ message CreateGroupRequest {
   string FamilyName = 1;
 }
 
-message AddMemberRequest {
-  string familyId = 1;
-  string userId = 2;
+message InviteUserRequest {
+  string toUserId = 1;
 }
-
-message AddMemberResponse {
-  string token =1;
-}
-
-
