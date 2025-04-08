@@ -25,7 +25,7 @@ type User struct {
 }
 
 type Wallet struct {
-	WalletID  uint   `gorm:"primaryKey"`
+	WalletID  uint   `gorm:"primaryKey;autoIncrement"`
 	UserID    string `gorm:"uniqueIndex"`
 	Balance   float64
 	CreatedAt time.Time

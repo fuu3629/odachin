@@ -24,10 +24,11 @@ type UseCaseImpl interface {
 type UseCase struct {
 	userRepository   repository.UserRepository
 	familyRepository repository.FamilyRepository
+	walletRepository repository.WalletRepository
 }
 
 func New(db *gorm.DB) UseCaseImpl {
-	return &UseCase{userRepository: repository.NewUserRepository(db), familyRepository: repository.NewFamilyRepository(db)}
+	return &UseCase{userRepository: repository.NewUserRepository(db), familyRepository: repository.NewFamilyRepository(db), walletRepository: repository.NewWalletRepository(db)}
 }
 
 func (u *UseCase) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error) {
@@ -44,7 +45,20 @@ func (u *UseCase) CreateUser(ctx context.Context, req *odachin.CreateUserRequest
 	if err != nil {
 		return "", status.Errorf(codes.Internal, "database error: %v", err)
 	}
+	if user.Role == "CHILD" {
+		wallet := &models.Wallet{
+			UserID: req.UserId,
+		}
+		err := u.walletRepository.Save(wallet)
+		if err != nil {
+			return "", status.Errorf(codes.Internal, "database error: %v", err)
+		}
+
+	}
 	token, err := domain.GenerateToken(user.UserID)
+	if err != nil {
+		return "", status.Errorf(codes.Internal, "token generation error: %v", err)
+	}
 	return token, nil
 
 }
