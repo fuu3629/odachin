@@ -3,7 +3,10 @@ package usecase
 import (
 	"context"
 	"database/sql"
+<<<<<<< HEAD
 	"fmt"
+=======
+>>>>>>> 74952a0df08700d958a8f021bcfe4836db777336
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -24,10 +27,16 @@ type UseCase interface {
 }
 
 type UseCaseImpl struct {
+<<<<<<< HEAD
 	userRepository       repository.UserRepository
 	familyRepository     repository.FamilyRepository
 	invitationRepository repository.InvitationRepository
 	db                   *gorm.DB
+=======
+	userRepository   repository.UserRepository
+	familyRepository repository.FamilyRepository
+	db               *gorm.DB
+>>>>>>> 74952a0df08700d958a8f021bcfe4836db777336
 }
 
 func New(db *gorm.DB) UseCase {
@@ -97,6 +106,7 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 
 		family, err = u.familyRepository.Save(family)
 
+<<<<<<< HEAD
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
@@ -139,5 +149,15 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 		return nil
 
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+=======
+		user := &models.User{
+			UserID:   user_id,
+			FamilyID: &family.FamilyID,
+		}
+		u.userRepository.Update(tx, user)
+
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+>>>>>>> 74952a0df08700d958a8f021bcfe4836db777336
 	return nil
 }

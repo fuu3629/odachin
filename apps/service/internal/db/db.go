@@ -30,6 +30,10 @@ func Migrations(db *gorm.DB) {
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		fmt.Println("Migrated")
+		fmt.Println("------------------------------")
+		fmt.Println("")
+		fmt.Println("Database migrated successfully🏃🏿‍♀️")
+		fmt.Println("")
+		fmt.Println("------------------------------")
 	}
 }
