@@ -33,6 +33,6 @@ jobs:
 
       - name: Build and Push Docker image
         run: |
-          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/odachin-web-dev:latest
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/odachin_web_dev:latest
           docker build -t $IMAGE_URI ./apps/web
           docker push $IMAGE_URI
