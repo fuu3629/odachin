@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -73,23 +72,27 @@ func (u *UseCase) Login(ctx context.Context, req *odachin.LoginRequest) (string,
 		return "", status.Errorf(codes.Unauthenticated, "invalid password")
 	}
 	token, err := domain.GenerateToken(user.UserID)
+	if err != nil {
+		return "", status.Errorf(codes.Internal, "token generation error: %v", err)
+	}
 
 	return token, nil
 }
 
 func (u *UseCase) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error {
 	user_id, err := domain.ExtractTokenMetadata(ctx)
-	fmt.Println(err)
 
 	if err != nil {
 		return status.Errorf(codes.Unauthenticated, "invalid token")
 	}
 	family := &models.Family{
-
 		FamilyName: req.FamilyName,
 	}
 
 	family, err = u.familyRepository.Save(family)
+	if err != nil {
+		return status.Errorf(codes.Internal, "database error: %v", err)
+	}
 
 	user := &models.User{
 		UserID:   user_id,
