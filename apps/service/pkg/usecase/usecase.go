@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -27,6 +26,7 @@ type UseCaseImpl struct {
 	userRepository       repository.UserRepository
 	familyRepository     repository.FamilyRepository
 	invitationRepository repository.InvitationRepository
+	walletRepository     repository.WalletRepository
 	db                   *gorm.DB
 }
 
@@ -50,6 +50,16 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 		err := u.userRepository.Save(tx, user)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		if user.Role == "CHILD" {
+			wallet := &models.Wallet{
+				UserID: req.UserId,
+			}
+			err := u.walletRepository.Save(wallet)
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+
 		}
 		token, err = domain.GenerateToken(user.UserID)
 		if err != nil {
@@ -91,7 +101,6 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 			return status.Errorf(codes.Unauthenticated, "invalid token")
 		}
 		family := &models.Family{
-
 			FamilyName: req.FamilyName,
 		}
 
@@ -123,7 +132,6 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
 		// req を models.Invitation に変換
-		fmt.Println(*user.FamilyID)
 		tmp := *user.FamilyID
 		invitation := &models.Invitation{
 			FamilyID:   &tmp,
