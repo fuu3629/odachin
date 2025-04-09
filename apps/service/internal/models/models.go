@@ -5,8 +5,6 @@ import "time"
 type Family struct {
 	FamilyID   uint `gorm:"primaryKey;autoIncrement"`
 	FamilyName string
-	Email      string `gorm:"unique"`
-	Password   string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 	Users      []User `gorm:"foreignKey:FamilyID"`
@@ -25,7 +23,7 @@ type User struct {
 }
 
 type Wallet struct {
-	WalletID  uint   `gorm:"primaryKey"`
+	WalletID  uint   `gorm:"primaryKey;autoIncrement"`
 	UserID    string `gorm:"uniqueIndex"`
 	Balance   float64
 	CreatedAt time.Time
@@ -59,12 +57,12 @@ type Reward struct {
 	CreatedAt time.Time
 }
 
-// func main() {
-// 	dsn := "user:password@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
-// 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-// 	if err != nil {
-// 		panic("failed to connect database")
-// 	}
-
-// 	db.AutoMigrate(&Family{}, &User{}, &Wallet{}, &Transaction{}, &Allowance{}, &Reward{})
-// }
+type Invitation struct {
+	InvitationID uint   `gorm:"primaryKey;autoIncrement"`
+	FamilyID     *uint  `gorm:"index"`
+	FromUserID   string `gorm:"index"`
+	ToUserID     string `gorm:"index"`
+	IsAccepted   bool
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+}

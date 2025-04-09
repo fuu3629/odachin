@@ -11,7 +11,7 @@ import (
 )
 
 type ServerStruct struct {
-	useCase usecase.UseCaseImpl
+	useCase usecase.UseCase
 	odachin.UnimplementedOdachinServiceServer
 }
 
@@ -50,6 +50,14 @@ func (s *ServerStruct) Login(ctx context.Context, req *odachin.LoginRequest) (*o
 
 func (s *ServerStruct) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) (*emptypb.Empty, error) {
 	err := s.useCase.CreateGroup(ctx, req)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, nil
+}
+
+func (s *ServerStruct) InviteUser(ctx context.Context, req *odachin.InviteUserRequest) (*emptypb.Empty, error) {
+	err := s.useCase.InviteUser(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
