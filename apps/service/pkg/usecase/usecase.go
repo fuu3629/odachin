@@ -3,11 +3,13 @@ package usecase
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/domain"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/repository"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -31,7 +33,13 @@ type UseCaseImpl struct {
 }
 
 func New(db *gorm.DB) UseCase {
-	return &UseCaseImpl{userRepository: repository.NewUserRepository(db), familyRepository: repository.NewFamilyRepository(db), db: db}
+	return &UseCaseImpl{
+		userRepository:       repository.NewUserRepository(),
+		familyRepository:     repository.NewFamilyRepository(),
+		invitationRepository: repository.NewInvitationRepository(),
+		walletRepository:     repository.NewWalletRepository(),
+		db:                   db,
+	}
 }
 
 func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error) {
@@ -55,7 +63,7 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 			wallet := &models.Wallet{
 				UserID: req.UserId,
 			}
-			err := u.walletRepository.Save(wallet)
+			err := u.walletRepository.Save(tx, wallet)
 			if err != nil {
 				return status.Errorf(codes.Internal, "database error: %v", err)
 			}
@@ -104,7 +112,7 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 			FamilyName: req.FamilyName,
 		}
 
-		family, err = u.familyRepository.Save(family)
+		family, err = u.familyRepository.Save(tx, family)
 
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
@@ -131,14 +139,21 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
+		fmt.Println(user.FamilyID)
+		fmt.Println(*user.FamilyID)
 		// req を models.Invitation に変換
-		tmp := *user.FamilyID
 		invitation := &models.Invitation{
-			FamilyID:   &tmp,
+			FamilyID:   user.FamilyID,
 			FromUserID: user_id,
 			ToUserID:   req.ToUserId,
 			IsAccepted: false,
 		}
+		log.WithFields(log.Fields{
+			"family_id":    user.FamilyID,
+			"from_user_id": user_id,
+			"to_user_id":   req.ToUserId,
+			"is_accepted":  false,
+		}).Info("Invitation")
 		err = u.invitationRepository.Save(tx, invitation)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)

@@ -11,23 +11,22 @@ type InvitationRepository interface {
 }
 
 type InvitationRepositoryImpl struct {
-	db *gorm.DB
 }
 
-func NewInvitationRepository(db *gorm.DB) InvitationRepository {
-	return &InvitationRepositoryImpl{db}
+func NewInvitationRepository() InvitationRepository {
+	return &InvitationRepositoryImpl{}
 }
 
 func (r *InvitationRepositoryImpl) Get(tx *gorm.DB, id uint) (models.Invitation, error) {
 	var invitation models.Invitation
-	if err := r.db.Where("invitation_id = ?", id).First(&invitation).Error; err != nil {
+	if err := tx.Where("invitation_id = ?", id).First(&invitation).Error; err != nil {
 		return models.Invitation{}, err
 	}
 	return invitation, nil
 }
 
 func (r *InvitationRepositoryImpl) Save(tx *gorm.DB, invitation *models.Invitation) error {
-	if err := r.db.Create(&invitation).Error; err != nil {
+	if err := tx.Create(&invitation).Error; err != nil {
 		return err
 	}
 	return nil

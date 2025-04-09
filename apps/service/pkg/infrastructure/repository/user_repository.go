@@ -11,11 +11,9 @@ type UserRepository interface {
 	Update(tx *gorm.DB, param *models.User) error
 }
 
-type UserRepositoryImpl struct {
-	// db *gorm.DB
-}
+type UserRepositoryImpl struct{}
 
-func NewUserRepository(db *gorm.DB) UserRepository {
+func NewUserRepository() UserRepository {
 	return &UserRepositoryImpl{}
 }
 
