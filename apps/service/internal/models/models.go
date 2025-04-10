@@ -41,9 +41,9 @@ type Transaction struct {
 }
 
 type Allowance struct {
-	AllowanceID uint `gorm:"primaryKey"`
-	FromUserID  uint `gorm:"index"`
-	ToUserID    uint `gorm:"index"`
+	AllowanceID uint   `gorm:"primaryKey"`
+	FromUserID  string `gorm:"index"`
+	ToUserID    string `gorm:"index"`
 	Amount      float64
 	Interval    string
 	CreatedAt   time.Time

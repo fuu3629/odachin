@@ -95,3 +95,19 @@ func (s *ServerStruct) DeleteReward(ctx context.Context, req *odachin.DeleteRewa
 	}
 	return nil, nil
 }
+
+func (s *ServerStruct) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) (*emptypb.Empty, error) {
+	err := s.useCase.RegisterAllowance(ctx, req)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, nil
+}
+
+func (s *ServerStruct) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) (*emptypb.Empty, error) {
+	err := s.useCase.UpdateAllowance(ctx, req)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, nil
+}

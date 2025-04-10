@@ -25,6 +25,8 @@ type UseCase interface {
 	AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error
 	RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error
 	DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error
+	RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error
+	UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error
 }
 
 type UseCaseImpl struct {
@@ -33,6 +35,7 @@ type UseCaseImpl struct {
 	invitationRepository repository.InvitationRepository
 	walletRepository     repository.WalletRepository
 	rewardRepository     repository.RewardRepository
+	allowanceRepository  repository.AllowanceRepository
 	db                   *gorm.DB
 	s3Client             client.AwsS3Client
 }
@@ -44,6 +47,7 @@ func New(db *gorm.DB) UseCase {
 		invitationRepository: repository.NewInvitationRepository(),
 		walletRepository:     repository.NewWalletRepository(),
 		rewardRepository:     repository.NewRewardRepository(),
+		allowanceRepository:  repository.NewAllowanceRepository(),
 		db:                   db,
 		s3Client:             client.NewAwsS3Client(),
 	}
@@ -251,6 +255,49 @@ func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterR
 func (u *UseCaseImpl) DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
 		err := u.rewardRepository.Delete(tx, uint(req.RewardId))
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return nil
+}
+
+func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		_, err := domain.ExtractTokenMetadata(ctx)
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+		}
+		allowance := &models.Allowance{
+			FromUserID: req.FromUserId,
+			ToUserID:   req.ToUserId,
+			Amount:     float64(req.Amount),
+			Interval:   req.Interval,
+		}
+		err = u.allowanceRepository.Save(tx, allowance)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return nil
+}
+
+func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		_, err := domain.ExtractTokenMetadata(ctx)
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+		}
+		allowance := &models.Allowance{
+			AllowanceID: uint(req.AllowanceId),
+			FromUserID:  req.FromUserId,
+			ToUserID:    req.ToUserId,
+			Amount:      float64(req.Amount),
+			Interval:    req.Interval,
+		}
+		err = u.allowanceRepository.Update(tx, allowance)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}

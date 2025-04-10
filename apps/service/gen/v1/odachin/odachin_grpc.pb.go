@@ -20,14 +20,16 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OdachinService_CreateUser_FullMethodName       = "/odachin.OdachinService/CreateUser"
-	OdachinService_UpdateUser_FullMethodName       = "/odachin.OdachinService/UpdateUser"
-	OdachinService_Login_FullMethodName            = "/odachin.OdachinService/login"
-	OdachinService_CreateGroup_FullMethodName      = "/odachin.OdachinService/CreateGroup"
-	OdachinService_InviteUser_FullMethodName       = "/odachin.OdachinService/InviteUser"
-	OdachinService_AcceptInvitation_FullMethodName = "/odachin.OdachinService/AcceptInvitation"
-	OdachinService_RegisterReward_FullMethodName   = "/odachin.OdachinService/RegisterReward"
-	OdachinService_DeleteReward_FullMethodName     = "/odachin.OdachinService/DeleteReward"
+	OdachinService_CreateUser_FullMethodName        = "/odachin.OdachinService/CreateUser"
+	OdachinService_UpdateUser_FullMethodName        = "/odachin.OdachinService/UpdateUser"
+	OdachinService_Login_FullMethodName             = "/odachin.OdachinService/login"
+	OdachinService_CreateGroup_FullMethodName       = "/odachin.OdachinService/CreateGroup"
+	OdachinService_InviteUser_FullMethodName        = "/odachin.OdachinService/InviteUser"
+	OdachinService_AcceptInvitation_FullMethodName  = "/odachin.OdachinService/AcceptInvitation"
+	OdachinService_RegisterReward_FullMethodName    = "/odachin.OdachinService/RegisterReward"
+	OdachinService_DeleteReward_FullMethodName      = "/odachin.OdachinService/DeleteReward"
+	OdachinService_RegisterAllowance_FullMethodName = "/odachin.OdachinService/RegisterAllowance"
+	OdachinService_UpdateAllowance_FullMethodName   = "/odachin.OdachinService/UpdateAllowance"
 )
 
 // OdachinServiceClient is the client API for OdachinService service.
@@ -43,6 +45,8 @@ type OdachinServiceClient interface {
 	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	RegisterReward(ctx context.Context, in *RegisterRewardRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteReward(ctx context.Context, in *DeleteRewardRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	RegisterAllowance(ctx context.Context, in *RegisterAllowanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateAllowance(ctx context.Context, in *UpdateAllowanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type odachinServiceClient struct {
@@ -125,6 +129,24 @@ func (c *odachinServiceClient) DeleteReward(ctx context.Context, in *DeleteRewar
 	return out, nil
 }
 
+func (c *odachinServiceClient) RegisterAllowance(ctx context.Context, in *RegisterAllowanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, OdachinService_RegisterAllowance_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *odachinServiceClient) UpdateAllowance(ctx context.Context, in *UpdateAllowanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, OdachinService_UpdateAllowance_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OdachinServiceServer is the server API for OdachinService service.
 // All implementations must embed UnimplementedOdachinServiceServer
 // for forward compatibility
@@ -138,6 +160,8 @@ type OdachinServiceServer interface {
 	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*emptypb.Empty, error)
 	RegisterReward(context.Context, *RegisterRewardRequest) (*emptypb.Empty, error)
 	DeleteReward(context.Context, *DeleteRewardRequest) (*emptypb.Empty, error)
+	RegisterAllowance(context.Context, *RegisterAllowanceRequest) (*emptypb.Empty, error)
+	UpdateAllowance(context.Context, *UpdateAllowanceRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedOdachinServiceServer()
 }
 
@@ -168,6 +192,12 @@ func (UnimplementedOdachinServiceServer) RegisterReward(context.Context, *Regist
 }
 func (UnimplementedOdachinServiceServer) DeleteReward(context.Context, *DeleteRewardRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteReward not implemented")
+}
+func (UnimplementedOdachinServiceServer) RegisterAllowance(context.Context, *RegisterAllowanceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterAllowance not implemented")
+}
+func (UnimplementedOdachinServiceServer) UpdateAllowance(context.Context, *UpdateAllowanceRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAllowance not implemented")
 }
 func (UnimplementedOdachinServiceServer) mustEmbedUnimplementedOdachinServiceServer() {}
 
@@ -326,6 +356,42 @@ func _OdachinService_DeleteReward_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OdachinService_RegisterAllowance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterAllowanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OdachinServiceServer).RegisterAllowance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OdachinService_RegisterAllowance_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OdachinServiceServer).RegisterAllowance(ctx, req.(*RegisterAllowanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OdachinService_UpdateAllowance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateAllowanceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OdachinServiceServer).UpdateAllowance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OdachinService_UpdateAllowance_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OdachinServiceServer).UpdateAllowance(ctx, req.(*UpdateAllowanceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OdachinService_ServiceDesc is the grpc.ServiceDesc for OdachinService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -364,6 +430,14 @@ var OdachinService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteReward",
 			Handler:    _OdachinService_DeleteReward_Handler,
+		},
+		{
+			MethodName: "RegisterAllowance",
+			Handler:    _OdachinService_RegisterAllowance_Handler,
+		},
+		{
+			MethodName: "UpdateAllowance",
+			Handler:    _OdachinService_UpdateAllowance_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

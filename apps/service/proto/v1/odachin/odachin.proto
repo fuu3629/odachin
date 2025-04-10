@@ -12,6 +12,8 @@ service OdachinService {
   rpc AcceptInvitation(AcceptInvitationRequest) returns (google.protobuf.Empty);
   rpc RegisterReward(RegisterRewardRequest) returns (google.protobuf.Empty);
   rpc DeleteReward(DeleteRewardRequest) returns (google.protobuf.Empty);
+  rpc RegisterAllowance(RegisterAllowanceRequest) returns (google.protobuf.Empty);
+  rpc UpdateAllowance(UpdateAllowanceRequest) returns (google.protobuf.Empty);
 }
 
 enum Status {
@@ -72,4 +74,19 @@ message RegisterRewardRequest {
 
 message DeleteRewardRequest {
   uint64 rewardId = 1;
+}
+
+message RegisterAllowanceRequest {
+  string fromUserId = 1;
+  string toUserId = 2;
+  float amount = 3;
+  string interval  =4;
+}
+
+message UpdateAllowanceRequest {
+  uint64 allowanceId = 1;
+  string fromUserId = 2;
+  string toUserId = 3;
+  float amount = 4;
+  string interval = 5;
 }
