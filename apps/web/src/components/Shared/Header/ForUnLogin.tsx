@@ -14,8 +14,12 @@ export function ForUnLogin({}: ForUnLoginProps) {
   return (
     <>
       <HStack>
-        <Button onClick={handleClickLogin}>ログイン</Button>
-        <Button onClick={handleCreateNewAccount}>新規登録</Button>
+        <Button onClick={handleClickLogin} rounded='full' variant='outline'>
+          ログイン
+        </Button>
+        <Button onClick={handleCreateNewAccount} rounded='full'>
+          新規登録
+        </Button>
       </HStack>
     </>
   );

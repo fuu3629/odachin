@@ -14,6 +14,7 @@ const pacifico = Pacifico({
 export function Header({}: HeaderProps) {
   const router = useRouter();
   const { pathname } = router;
+  console.log('pathname', pathname);
   const paths = ['/login', '/createNewAccount', '/'];
 
   return (
@@ -26,7 +27,7 @@ export function Header({}: HeaderProps) {
           家庭に安全にお小遣いを導入できるアプリ
         </Text>
         <Spacer></Spacer>
-        {paths.includes(pathname) ? <ForLogin></ForLogin> : <ForUnLogin></ForUnLogin>}
+        {paths.includes(pathname) ? <ForUnLogin></ForUnLogin> : <ForLogin></ForLogin>}
       </HStack>
     </>
   );

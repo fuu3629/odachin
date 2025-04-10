@@ -34,7 +34,7 @@ export const useCreateAccountForm = (setToken: Dispatch<SetStateAction<string>>)
       path: '/',
     });
     //TODO
-    window.location.href = '/';
+    window.location.href = '/myPage';
   };
   return { register, onSubmit: handleSubmit(onSubmit), formState };
 };
