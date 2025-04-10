@@ -20,11 +20,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OdachinService_CreateUser_FullMethodName  = "/odachin.OdachinService/CreateUser"
-	OdachinService_UpdateUser_FullMethodName  = "/odachin.OdachinService/UpdateUser"
-	OdachinService_Login_FullMethodName       = "/odachin.OdachinService/login"
-	OdachinService_CreateGroup_FullMethodName = "/odachin.OdachinService/CreateGroup"
-	OdachinService_InviteUser_FullMethodName  = "/odachin.OdachinService/InviteUser"
+	OdachinService_CreateUser_FullMethodName       = "/odachin.OdachinService/CreateUser"
+	OdachinService_UpdateUser_FullMethodName       = "/odachin.OdachinService/UpdateUser"
+	OdachinService_Login_FullMethodName            = "/odachin.OdachinService/login"
+	OdachinService_CreateGroup_FullMethodName      = "/odachin.OdachinService/CreateGroup"
+	OdachinService_InviteUser_FullMethodName       = "/odachin.OdachinService/InviteUser"
+	OdachinService_AcceptInvitation_FullMethodName = "/odachin.OdachinService/AcceptInvitation"
 )
 
 // OdachinServiceClient is the client API for OdachinService service.
@@ -32,10 +33,12 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OdachinServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
+	// TODO 未テスト
 	UpdateUser(ctx context.Context, in *UpdateUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type odachinServiceClient struct {
@@ -91,15 +94,26 @@ func (c *odachinServiceClient) InviteUser(ctx context.Context, in *InviteUserReq
 	return out, nil
 }
 
+func (c *odachinServiceClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, OdachinService_AcceptInvitation_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OdachinServiceServer is the server API for OdachinService service.
 // All implementations must embed UnimplementedOdachinServiceServer
 // for forward compatibility
 type OdachinServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
+	// TODO 未テスト
 	UpdateUser(context.Context, *UpdateUserRequest) (*emptypb.Empty, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	CreateGroup(context.Context, *CreateGroupRequest) (*emptypb.Empty, error)
 	InviteUser(context.Context, *InviteUserRequest) (*emptypb.Empty, error)
+	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedOdachinServiceServer()
 }
 
@@ -121,6 +135,9 @@ func (UnimplementedOdachinServiceServer) CreateGroup(context.Context, *CreateGro
 }
 func (UnimplementedOdachinServiceServer) InviteUser(context.Context, *InviteUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InviteUser not implemented")
+}
+func (UnimplementedOdachinServiceServer) AcceptInvitation(context.Context, *AcceptInvitationRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AcceptInvitation not implemented")
 }
 func (UnimplementedOdachinServiceServer) mustEmbedUnimplementedOdachinServiceServer() {}
 
@@ -225,6 +242,24 @@ func _OdachinService_InviteUser_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OdachinService_AcceptInvitation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AcceptInvitationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OdachinServiceServer).AcceptInvitation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OdachinService_AcceptInvitation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OdachinServiceServer).AcceptInvitation(ctx, req.(*AcceptInvitationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OdachinService_ServiceDesc is the grpc.ServiceDesc for OdachinService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -251,6 +286,10 @@ var OdachinService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "InviteUser",
 			Handler:    _OdachinService_InviteUser_Handler,
+		},
+		{
+			MethodName: "AcceptInvitation",
+			Handler:    _OdachinService_AcceptInvitation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
