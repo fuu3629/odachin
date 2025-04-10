@@ -71,3 +71,11 @@ func (s *ServerStruct) InviteUser(ctx context.Context, req *odachin.InviteUserRe
 	}
 	return nil, nil
 }
+
+func (s *ServerStruct) AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) (*emptypb.Empty, error) {
+	err := s.useCase.AcceptInvitation(ctx, req)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, nil
+}

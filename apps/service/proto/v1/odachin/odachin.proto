@@ -9,6 +9,7 @@ service OdachinService {
   rpc login(LoginRequest) returns (LoginResponse);
   rpc CreateGroup(CreateGroupRequest) returns (google.protobuf.Empty);
   rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
+  rpc AcceptInvitation(AcceptInvitationRequest) returns (google.protobuf.Empty);
 }
 
 enum Status {
@@ -56,3 +57,8 @@ message CreateGroupRequest {
 message InviteUserRequest {
   string toUserId = 1;
 }
+
+message AcceptInvitationRequest {
+  uint64 invitationId = 1;
+}
+

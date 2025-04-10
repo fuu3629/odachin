@@ -22,6 +22,7 @@ type UseCase interface {
 	Login(ctx context.Context, req *odachin.LoginRequest) (string, error)
 	CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error
 	InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error
+	AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error
 }
 
 type UseCaseImpl struct {
@@ -183,6 +184,41 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 		// トランザクションをコミット
 		return nil
 
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return nil
+}
+
+func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		user_id, err := domain.ExtractTokenMetadata(ctx)
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+		}
+
+		invitation, err := u.invitationRepository.Get(tx, uint(req.InvitationId))
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+
+		if invitation.IsAccepted {
+			return status.Errorf(codes.Internal, "already accepted invitation")
+		}
+
+		user := &models.User{
+			UserID:   user_id,
+			FamilyID: invitation.FamilyID,
+		}
+		err = u.userRepository.Update(tx, user)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		invitation.IsAccepted = true
+
+		err = u.invitationRepository.Update(tx, &invitation)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return nil
 }
