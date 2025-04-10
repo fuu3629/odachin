@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
+	"github.com/fuu3629/odachin/apps/service/pkg/presentation/dto"
 	"github.com/fuu3629/odachin/apps/service/pkg/usecase"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -110,4 +111,12 @@ func (s *ServerStruct) UpdateAllowance(ctx context.Context, req *odachin.UpdateA
 		return nil, nil
 	}
 	return nil, nil
+}
+
+func (s *ServerStruct) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*odachin.GetUserInfoResponse, error) {
+	userInfo, err := s.useCase.GetUserInfo(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return dto.ToUserInfoResponse(userInfo), nil
 }

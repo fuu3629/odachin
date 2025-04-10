@@ -27,6 +27,7 @@ type UseCase interface {
 	DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error
 	RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error
 	UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error
+	GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error)
 }
 
 type UseCaseImpl struct {
@@ -304,4 +305,27 @@ func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAl
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return nil
+}
+
+func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error) {
+	var userInfo models.User
+	u.db.Transaction(func(tx *gorm.DB) error {
+		_, err := domain.ExtractTokenMetadata(ctx)
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+		}
+		user, err := u.userRepository.Get(tx, req.UserId)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		userInfo = models.User{
+			UserID:         req.UserId,
+			UserName:       user.UserName,
+			Role:           user.Role,
+			AvatarImageUrl: user.AvatarImageUrl,
+		}
+
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return &userInfo, nil
 }
