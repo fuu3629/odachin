@@ -32,7 +32,7 @@ func Migrations(db *gorm.DB) {
 	} else {
 		fmt.Println("------------------------------")
 		fmt.Println("")
-		fmt.Println("Database migrated successfully🏃🏿‍♀️")
+		fmt.Println("Database migrated successfully🕊️")
 		fmt.Println("")
 		fmt.Println("------------------------------")
 	}
