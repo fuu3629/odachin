@@ -23,6 +23,8 @@ type UseCase interface {
 	CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error
 	InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error
 	AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error
+	RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error
+	DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error
 }
 
 type UseCaseImpl struct {
@@ -30,6 +32,7 @@ type UseCaseImpl struct {
 	familyRepository     repository.FamilyRepository
 	invitationRepository repository.InvitationRepository
 	walletRepository     repository.WalletRepository
+	rewardRepository     repository.RewardRepository
 	db                   *gorm.DB
 	s3Client             client.AwsS3Client
 }
@@ -40,6 +43,7 @@ func New(db *gorm.DB) UseCase {
 		familyRepository:     repository.NewFamilyRepository(),
 		invitationRepository: repository.NewInvitationRepository(),
 		walletRepository:     repository.NewWalletRepository(),
+		rewardRepository:     repository.NewRewardRepository(),
 		db:                   db,
 		s3Client:             client.NewAwsS3Client(),
 	}
@@ -215,6 +219,38 @@ func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptI
 		invitation.IsAccepted = true
 
 		err = u.invitationRepository.Update(tx, &invitation)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return nil
+}
+
+func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		_, err := domain.ExtractTokenMetadata(ctx)
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+		}
+		reward := &models.Reward{
+			ToUserID: req.ToUserId,
+			Amount:   float64(req.Amount),
+			Reason:   req.Reason,
+		}
+
+		err = u.rewardRepository.Save(tx, reward)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return nil
+}
+
+func (u *UseCaseImpl) DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		err := u.rewardRepository.Delete(tx, uint(req.RewardId))
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}

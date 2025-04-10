@@ -51,8 +51,8 @@ type Allowance struct {
 }
 
 type Reward struct {
-	RewardID  uint `gorm:"primaryKey"`
-	ToUserID  uint `gorm:"index"`
+	RewardID  uint   `gorm:"primaryKey"`
+	ToUserID  string `gorm:"index"`
 	Amount    float64
 	Reason    string
 	CreatedAt time.Time

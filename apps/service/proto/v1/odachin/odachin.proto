@@ -10,6 +10,8 @@ service OdachinService {
   rpc CreateGroup(CreateGroupRequest) returns (google.protobuf.Empty);
   rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
   rpc AcceptInvitation(AcceptInvitationRequest) returns (google.protobuf.Empty);
+  rpc RegisterReward(RegisterRewardRequest) returns (google.protobuf.Empty);
+  rpc DeleteReward(DeleteRewardRequest) returns (google.protobuf.Empty);
 }
 
 enum Status {
@@ -62,3 +64,12 @@ message AcceptInvitationRequest {
   uint64 invitationId = 1;
 }
 
+message RegisterRewardRequest {
+  string toUserId = 1;
+  float amount = 2;
+  string reason  =3;
+}
+
+message DeleteRewardRequest {
+  uint64 rewardId = 1;
+}
