@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { parseCookies } from 'nookies';
 import { useEffect } from 'react';
 import { CokiesContext } from './api/CokiesContext';
+import { Header } from '@/components/Shared/Header';
 import { Provider } from '@/components/ui/provider';
 
 export default function App({ Component, pageProps }: AppProps, ctx: NextPageContext) {
@@ -20,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps, ctx: NextPageCon
 
     router.beforePopState(({ url, as, options }) => {
       // ログイン画面とエラー画面遷移時のみ認証チェックを行わない
-      if (url !== '/login' && url !== '/createNewAccount' && url !== '/_error') {
+      if (url !== '/login' && url !== '/createNewAccount' && url !== '/_error' && url !== '/') {
         if (typeof cookies.auth === 'undefined') {
           // CSR用リダイレクト処理
           window.location.href = '/login';
@@ -34,6 +35,7 @@ export default function App({ Component, pageProps }: AppProps, ctx: NextPageCon
     <Provider>
       <CokiesContext.Provider value={cookies}>
         <Box>
+          <Header></Header>
           <Flex>
             <Component {...pageProps} />
           </Flex>
@@ -51,7 +53,8 @@ App.getInitialProps = async (appContext: any) => {
   if (
     appContext.ctx.pathname !== '/login' &&
     appContext.ctx.pathname !== '/createNewAccount' &&
-    appContext.ctx.pathname !== '/_error'
+    appContext.ctx.pathname !== '/_error' &&
+    appContext.ctx.pathname !== '/'
   ) {
     if (typeof cookies.auth === 'undefined') {
       // SSR or CSRを判定
