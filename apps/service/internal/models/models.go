@@ -11,15 +11,16 @@ type Family struct {
 }
 
 type User struct {
-	UserID    string `gorm:"primaryKey"`
-	FamilyID  *uint  `gorm:"index"`
-	Role      string
-	UserName  string
-	Email     string `gorm:"unique"`
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Wallet    Wallet `gorm:"foreignKey:UserID"`
+	UserID         string `gorm:"primaryKey"`
+	FamilyID       *uint  `gorm:"index"`
+	Role           string
+	UserName       string
+	Email          string `gorm:"unique"`
+	Password       string
+	AvatarImageUrl *string
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
+	Wallet         Wallet `gorm:"foreignKey:UserID"`
 }
 
 type Wallet struct {

@@ -153,6 +153,61 @@ export class CreateUserResponse extends Message<CreateUserResponse> {
 }
 
 /**
+ * @generated from message odachin.UpdateUserRequest
+ */
+export class UpdateUserRequest extends Message<UpdateUserRequest> {
+  /**
+   * @generated from field: optional string name = 1;
+   */
+  name?: string;
+
+  /**
+   * @generated from field: optional string email = 2;
+   */
+  email?: string;
+
+  /**
+   * @generated from field: optional string password = 3;
+   */
+  password?: string;
+
+  /**
+   * @generated from field: optional bytes profileImage = 4;
+   */
+  profileImage?: Uint8Array;
+
+  constructor(data?: PartialMessage<UpdateUserRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.UpdateUserRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 2, name: "email", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 3, name: "password", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+    { no: 4, name: "profileImage", kind: "scalar", T: 12 /* ScalarType.BYTES */, opt: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpdateUserRequest {
+    return new UpdateUserRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpdateUserRequest {
+    return new UpdateUserRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpdateUserRequest {
+    return new UpdateUserRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: UpdateUserRequest | PlainMessage<UpdateUserRequest> | undefined, b: UpdateUserRequest | PlainMessage<UpdateUserRequest> | undefined): boolean {
+    return proto3.util.equals(UpdateUserRequest, a, b);
+  }
+}
+
+/**
  * @generated from message odachin.LoginRequest
  */
 export class LoginRequest extends Message<LoginRequest> {
@@ -266,6 +321,43 @@ export class CreateGroupRequest extends Message<CreateGroupRequest> {
 
   static equals(a: CreateGroupRequest | PlainMessage<CreateGroupRequest> | undefined, b: CreateGroupRequest | PlainMessage<CreateGroupRequest> | undefined): boolean {
     return proto3.util.equals(CreateGroupRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.InviteUserRequest
+ */
+export class InviteUserRequest extends Message<InviteUserRequest> {
+  /**
+   * @generated from field: string toUserId = 1;
+   */
+  toUserId = "";
+
+  constructor(data?: PartialMessage<InviteUserRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.InviteUserRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "toUserId", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): InviteUserRequest {
+    return new InviteUserRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): InviteUserRequest {
+    return new InviteUserRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): InviteUserRequest {
+    return new InviteUserRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: InviteUserRequest | PlainMessage<InviteUserRequest> | undefined, b: InviteUserRequest | PlainMessage<InviteUserRequest> | undefined): boolean {
+    return proto3.util.equals(InviteUserRequest, a, b);
   }
 }
 

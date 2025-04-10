@@ -3,13 +3,12 @@ package usecase
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
+	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/client"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/domain"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/repository"
-	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -19,6 +18,7 @@ import (
 // trait
 type UseCase interface {
 	CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error)
+	UpdateUser(ctx context.Context, req *odachin.UpdateUserRequest) error
 	Login(ctx context.Context, req *odachin.LoginRequest) (string, error)
 	CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error
 	InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error
@@ -30,6 +30,7 @@ type UseCaseImpl struct {
 	invitationRepository repository.InvitationRepository
 	walletRepository     repository.WalletRepository
 	db                   *gorm.DB
+	s3Client             client.AwsS3Client
 }
 
 func New(db *gorm.DB) UseCase {
@@ -39,6 +40,7 @@ func New(db *gorm.DB) UseCase {
 		invitationRepository: repository.NewInvitationRepository(),
 		walletRepository:     repository.NewWalletRepository(),
 		db:                   db,
+		s3Client:             client.NewAwsS3Client(),
 	}
 }
 
@@ -77,7 +79,35 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return token, nil
+}
 
+func (u *UseCaseImpl) UpdateUser(ctx context.Context, req *odachin.UpdateUserRequest) error {
+	u.db.Transaction(func(tx *gorm.DB) error {
+		user_id, err := domain.ExtractTokenMetadata(ctx)
+		if err != nil {
+			return status.Errorf(codes.Unauthenticated, "invalid token")
+		}
+		var avaterImageUrl *string
+		if req.ProfileImage != nil {
+			avaterImageUrl, err = u.s3Client.PutObject(ctx, "odachin-dev", "avaters", req.ProfileImage)
+			if err != nil {
+				return status.Errorf(codes.Internal, "s3 upload error: %v", err)
+			}
+		} else {
+			avaterImageUrl = nil
+		}
+
+		user := &models.User{
+			UserID:         user_id,
+			UserName:       *req.Name,
+			Email:          *req.Email,
+			Password:       *req.Password,
+			AvatarImageUrl: avaterImageUrl,
+		}
+		u.userRepository.Update(tx, user)
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	return nil
 }
 
 func (u *UseCaseImpl) Login(ctx context.Context, req *odachin.LoginRequest) (string, error) {
@@ -139,8 +169,6 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
-		fmt.Println(user.FamilyID)
-		fmt.Println(*user.FamilyID)
 		// req を models.Invitation に変換
 		invitation := &models.Invitation{
 			FamilyID:   user.FamilyID,
@@ -148,12 +176,6 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 			ToUserID:   req.ToUserId,
 			IsAccepted: false,
 		}
-		log.WithFields(log.Fields{
-			"family_id":    user.FamilyID,
-			"from_user_id": user_id,
-			"to_user_id":   req.ToUserId,
-			"is_accepted":  false,
-		}).Info("Invitation")
 		err = u.invitationRepository.Save(tx, invitation)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)

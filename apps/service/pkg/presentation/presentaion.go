@@ -40,6 +40,14 @@ func (s *ServerStruct) CreateUser(ctx context.Context, req *odachin.CreateUserRe
 	return &odachin.CreateUserResponse{Token: token}, nil
 }
 
+func (s *ServerStruct) UpdateUser(ctx context.Context, req *odachin.UpdateUserRequest) (*emptypb.Empty, error) {
+	err := s.useCase.UpdateUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
 func (s *ServerStruct) Login(ctx context.Context, req *odachin.LoginRequest) (*odachin.LoginResponse, error) {
 	token, err := s.useCase.Login(ctx, req)
 	if err != nil {

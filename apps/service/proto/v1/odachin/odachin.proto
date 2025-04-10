@@ -4,10 +4,13 @@ import "google/protobuf/empty.proto";
 
 service OdachinService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  // TODO 未テスト
+  rpc UpdateUser(UpdateUserRequest) returns (google.protobuf.Empty);
   rpc login(LoginRequest) returns (LoginResponse);
   rpc CreateGroup(CreateGroupRequest) returns (google.protobuf.Empty);
   rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
 }
+
 enum Status {
   SUCCESS = 0;  // 成功
   FAILURE = 1;  // 失敗
@@ -28,6 +31,13 @@ message CreateUserRequest {
 
 message CreateUserResponse {
   string token =1;
+}
+
+message UpdateUserRequest {
+  optional string name = 1;
+  optional string email = 2;
+  optional string password = 3;
+  optional bytes profileImage = 4;
 }
 
 message LoginRequest {
