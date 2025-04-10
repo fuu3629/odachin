@@ -79,3 +79,19 @@ func (s *ServerStruct) AcceptInvitation(ctx context.Context, req *odachin.Accept
 	}
 	return nil, nil
 }
+
+func (s *ServerStruct) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) (*emptypb.Empty, error) {
+	err := s.useCase.RegisterReward(ctx, req)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, nil
+}
+
+func (s *ServerStruct) DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) (*emptypb.Empty, error) {
+	err := s.useCase.DeleteReward(ctx, req)
+	if err != nil {
+		return nil, nil
+	}
+	return nil, nil
+}
