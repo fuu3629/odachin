@@ -221,17 +221,13 @@ func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptI
 
 func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		_, err := domain.ExtractTokenMetadata(ctx)
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
-		}
 		reward := &models.Reward{
 			ToUserID: req.ToUserId,
 			Amount:   float64(req.Amount),
 			Reason:   req.Reason,
 		}
 
-		err = u.rewardRepository.Save(tx, reward)
+		err := u.rewardRepository.Save(tx, reward)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
@@ -254,17 +250,13 @@ func (u *UseCaseImpl) DeleteReward(ctx context.Context, req *odachin.DeleteRewar
 // TODO Fromはreqに含めない
 func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		_, err := domain.ExtractTokenMetadata(ctx)
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
-		}
 		allowance := &models.Allowance{
 			FromUserID: req.FromUserId,
 			ToUserID:   req.ToUserId,
 			Amount:     float64(req.Amount),
 			Interval:   req.Interval,
 		}
-		err = u.allowanceRepository.Save(tx, allowance)
+		err := u.allowanceRepository.Save(tx, allowance)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
@@ -275,10 +267,6 @@ func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.Regist
 
 func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		_, err := domain.ExtractTokenMetadata(ctx)
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
-		}
 		allowance := &models.Allowance{
 			AllowanceID: uint(req.AllowanceId),
 			FromUserID:  req.FromUserId,
@@ -286,7 +274,7 @@ func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAl
 			Amount:      float64(req.Amount),
 			Interval:    req.Interval,
 		}
-		err = u.allowanceRepository.Update(tx, allowance)
+		err := u.allowanceRepository.Update(tx, allowance)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
