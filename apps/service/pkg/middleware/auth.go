@@ -3,21 +3,30 @@ package middleware
 import (
 	"context"
 	"fmt"
+	"os"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 )
 
 func AuthFunc(ctx context.Context) (context.Context, error) {
-	token, err := auth.AuthFromMD(ctx, "auth")
+	tokenString, err := auth.AuthFromMD(ctx, "Bearer")
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("receive token: %s\n", token)
-	if token != "hoge" {
-		return nil, grpc.Errorf(codes.Unauthenticated, "invalid token")
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
+	})
+	claims, ok := token.Claims.(jwt.MapClaims)
+	fmt.Println(claims["user_id"])
+	if ok && token.Valid {
+		newCtx := context.WithValue(ctx, "user_id", claims["user_id"])
+		return newCtx, nil
+	} else {
+		return nil, fmt.Errorf("no userId")
 	}
-	newCtx := context.WithValue(ctx, "result", "ok")
-	return newCtx, nil
 }

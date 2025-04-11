@@ -2,10 +2,14 @@ package presentation
 
 import (
 	"context"
+	"fmt"
+	"os"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/pkg/presentation/dto"
 	"github.com/fuu3629/odachin/apps/service/pkg/usecase"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
@@ -16,22 +20,35 @@ type ServerStruct struct {
 	odachin.UnimplementedOdachinServiceServer
 }
 
+func (s *ServerStruct) AuthFuncOverride(ctx context.Context, fullMethodName string) (context.Context, error) {
+	if fullMethodName == "/odachin.OdachinService/CreateUser" || fullMethodName == "/odachin.OdachinService/Login" {
+		return ctx, nil
+	}
+	tokenString, err := auth.AuthFromMD(ctx, "Bearer")
+	if err != nil {
+		return nil, err
+	}
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
+	})
+	claims, ok := token.Claims.(jwt.MapClaims)
+	fmt.Println(claims["user_id"])
+	if ok && token.Valid {
+		newCtx := context.WithValue(ctx, "user_id", claims["user_id"])
+		return newCtx, nil
+	} else {
+		return nil, fmt.Errorf("no userId")
+	}
+}
+
 func NewServer(grpcServer *grpc.Server, db *gorm.DB) {
 	userGrpc := &ServerStruct{useCase: usecase.New(db)}
 	odachin.RegisterOdachinServiceServer(grpcServer, userGrpc)
 }
-
-// func (s *ServerStruct) GetUser(ctx context.Context, req *odachin.CreateUserRequest) (*odachin.CreateUserResponse, error) {
-// 	// Implement the logic to get user details using the use case
-// 	// For example:
-// 	// user, err := s.useCase.GetUser(req.Id)
-// 	// if err != nil {
-// 	//     return nil, err
-// 	// }
-// 	// return &odachin.GetUserResponse{User: user}, nil
-
-// 	return nil, nil // Placeholder return
-// }
 
 func (s *ServerStruct) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (*odachin.CreateUserResponse, error) {
 	token, err := s.useCase.CreateUser(ctx, req)

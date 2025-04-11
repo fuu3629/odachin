@@ -5,7 +5,9 @@ import (
 	"net"
 
 	database "github.com/fuu3629/odachin/apps/service/internal/db"
+	"github.com/fuu3629/odachin/apps/service/pkg/middleware"
 	"github.com/fuu3629/odachin/apps/service/pkg/presentation"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 )
@@ -31,7 +33,9 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(
+		grpc.UnaryInterceptor(auth.UnaryServerInterceptor(middleware.AuthFunc)),
+	)
 	presentation.NewServer(grpcServer, db)
 
 	if err := grpcServer.Serve(lis); err != nil {

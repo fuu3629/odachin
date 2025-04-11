@@ -93,11 +93,9 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 
 func (u *UseCaseImpl) UpdateUser(ctx context.Context, req *odachin.UpdateUserRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		user_id, err := domain.ExtractTokenMetadata(ctx)
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token")
-		}
+		user_id := ctx.Value("user_id").(string)
 		var avaterImageUrl *string
+		var err error
 		if req.ProfileImage != nil {
 			avaterImageUrl, err = u.s3Client.PutObject(ctx, "odachin-dev", "avaters", req.ProfileImage)
 			if err != nil {
@@ -143,16 +141,12 @@ func (u *UseCaseImpl) Login(ctx context.Context, req *odachin.LoginRequest) (str
 
 func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		user_id, err := domain.ExtractTokenMetadata(ctx)
-
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token")
-		}
+		user_id := ctx.Value("user_id").(string)
 		family := &models.Family{
 			FamilyName: req.FamilyName,
 		}
 
-		family, err = u.familyRepository.Save(tx, family)
+		family, err := u.familyRepository.Save(tx, family)
 
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
@@ -171,10 +165,7 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 
 func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		user_id, err := domain.ExtractTokenMetadata(ctx)
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
-		}
+		user_id := ctx.Value("user_id").(string)
 		user, err := u.userRepository.Get(tx, user_id)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
@@ -199,11 +190,7 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 
 func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		user_id, err := domain.ExtractTokenMetadata(ctx)
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
-		}
-
+		user_id := ctx.Value("user_id").(string)
 		invitation, err := u.invitationRepository.Get(tx, uint(req.InvitationId))
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
@@ -264,6 +251,7 @@ func (u *UseCaseImpl) DeleteReward(ctx context.Context, req *odachin.DeleteRewar
 	return nil
 }
 
+// TODO Fromはreqに含めない
 func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
 		_, err := domain.ExtractTokenMetadata(ctx)
