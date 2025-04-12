@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -60,7 +61,7 @@ func New(db *gorm.DB) UseCase {
 
 func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error) {
 	var token string
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 
 		hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		// req を models.User に変換
@@ -72,6 +73,7 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 			Role:     req.Role.String(),
 		}
 		err := u.userRepository.Save(tx, user)
+		fmt.Println(err)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
@@ -92,11 +94,14 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 		// トランザクションをコミット
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return "", err
+	}
 	return token, nil
 }
 
 func (u *UseCaseImpl) UpdateUser(ctx context.Context, req *odachin.UpdateUserRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
 		var avaterImageUrl *string
 		var err error
@@ -119,12 +124,15 @@ func (u *UseCaseImpl) UpdateUser(ctx context.Context, req *odachin.UpdateUserReq
 		u.userRepository.Update(tx, user)
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (u *UseCaseImpl) Login(ctx context.Context, req *odachin.LoginRequest) (string, error) {
 	var token string
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user, err := u.userRepository.Get(tx, req.UserId)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
@@ -140,11 +148,14 @@ func (u *UseCaseImpl) Login(ctx context.Context, req *odachin.LoginRequest) (str
 		// トランザクションをコミット
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return "", err
+	}
 	return token, nil
 }
 
 func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
 		family := &models.Family{
 			FamilyName: req.FamilyName,
@@ -164,17 +175,19 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
 		user, err := u.userRepository.Get(tx, user_id)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
-		// req を models.Invitation に変換
 		invitation := &models.Invitation{
 			FamilyID:   user.FamilyID,
 			FromUserID: user_id,
@@ -185,15 +198,17 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
-		// トランザクションをコミット
 		return nil
 
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
 		invitation, err := u.invitationRepository.Get(tx, uint(req.InvitationId))
 		if err != nil {
@@ -220,11 +235,14 @@ func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptI
 		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		reward := &models.Reward{
 			ToUserID: req.ToUserId,
 			Amount:   float64(req.Amount),
@@ -237,23 +255,28 @@ func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterR
 		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (u *UseCaseImpl) DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		err := u.rewardRepository.Delete(tx, uint(req.RewardId))
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-// TODO Fromはreqに含めない
 func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
 		var dayOfWeek *string
 		if req.DayOfWeek == nil {
@@ -277,11 +300,14 @@ func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.Regist
 		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error {
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		updateFields, err := ProtoToMap(req)
 		if err != nil {
 			return status.Errorf(codes.Internal, "failed to convert request to map: %v", err)
@@ -292,12 +318,15 @@ func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAl
 		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error) {
 	var userInfo models.User
-	u.db.Transaction(func(tx *gorm.DB) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
 		_, err := domain.ExtractTokenMetadata(ctx)
 		if err != nil {
 			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
@@ -315,6 +344,9 @@ func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoR
 
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return nil, err
+	}
 	return &userInfo, nil
 }
 
