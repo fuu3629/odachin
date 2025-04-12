@@ -4,7 +4,7 @@
 // @ts-nocheck
 
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3 } from "@bufbuild/protobuf";
+import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
 
 /**
  * @generated from enum odachin.Status
@@ -52,6 +52,88 @@ export enum Role {
 proto3.util.setEnumType(Role, "odachin.Role", [
   { no: 0, name: "PARENT" },
   { no: 1, name: "CHILD" },
+]);
+
+/**
+ * @generated from enum odachin.DayOfWeek
+ */
+export enum DayOfWeek {
+  /**
+   * @generated from enum value: MONDAY = 0;
+   */
+  MONDAY = 0,
+
+  /**
+   * @generated from enum value: TUESDAY = 1;
+   */
+  TUESDAY = 1,
+
+  /**
+   * @generated from enum value: WEDNESDAY = 2;
+   */
+  WEDNESDAY = 2,
+
+  /**
+   * @generated from enum value: THURSDAY = 3;
+   */
+  THURSDAY = 3,
+
+  /**
+   * @generated from enum value: FRIDAY = 4;
+   */
+  FRIDAY = 4,
+
+  /**
+   * @generated from enum value: SATURDAY = 5;
+   */
+  SATURDAY = 5,
+
+  /**
+   * @generated from enum value: SUNDAY = 6;
+   */
+  SUNDAY = 6,
+}
+// Retrieve enum metadata with: proto3.getEnumType(DayOfWeek)
+proto3.util.setEnumType(DayOfWeek, "odachin.DayOfWeek", [
+  { no: 0, name: "MONDAY" },
+  { no: 1, name: "TUESDAY" },
+  { no: 2, name: "WEDNESDAY" },
+  { no: 3, name: "THURSDAY" },
+  { no: 4, name: "FRIDAY" },
+  { no: 5, name: "SATURDAY" },
+  { no: 6, name: "SUNDAY" },
+]);
+
+/**
+ * @generated from enum odachin.IntervalType
+ */
+export enum IntervalType {
+  /**
+   * n日ごと
+   *
+   * @generated from enum value: EVERY_N_DAY = 0;
+   */
+  EVERY_N_DAY = 0,
+
+  /**
+   * 毎週
+   *
+   * @generated from enum value: WEEKLY = 1;
+   */
+  WEEKLY = 1,
+
+  /**
+   * 毎月
+   *
+   * @generated from enum value: MONTHLY = 2;
+   */
+  MONTHLY = 2,
+}
+// Retrieve enum metadata with: proto3.getEnumType(IntervalType)
+proto3.util.setEnumType(IntervalType, "odachin.IntervalType", [
+  { no: 0, name: "EVERY_N_DAY" },
+  { no: 1, name: "WEEKLY" },
+  { no: 2, name: "MONTHLY" },
 ]);
 
 /**
@@ -358,6 +440,355 @@ export class InviteUserRequest extends Message<InviteUserRequest> {
 
   static equals(a: InviteUserRequest | PlainMessage<InviteUserRequest> | undefined, b: InviteUserRequest | PlainMessage<InviteUserRequest> | undefined): boolean {
     return proto3.util.equals(InviteUserRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.AcceptInvitationRequest
+ */
+export class AcceptInvitationRequest extends Message<AcceptInvitationRequest> {
+  /**
+   * @generated from field: uint64 invitationId = 1;
+   */
+  invitationId = protoInt64.zero;
+
+  constructor(data?: PartialMessage<AcceptInvitationRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.AcceptInvitationRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "invitationId", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AcceptInvitationRequest {
+    return new AcceptInvitationRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): AcceptInvitationRequest {
+    return new AcceptInvitationRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): AcceptInvitationRequest {
+    return new AcceptInvitationRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: AcceptInvitationRequest | PlainMessage<AcceptInvitationRequest> | undefined, b: AcceptInvitationRequest | PlainMessage<AcceptInvitationRequest> | undefined): boolean {
+    return proto3.util.equals(AcceptInvitationRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.RegisterRewardRequest
+ */
+export class RegisterRewardRequest extends Message<RegisterRewardRequest> {
+  /**
+   * @generated from field: string toUserId = 1;
+   */
+  toUserId = "";
+
+  /**
+   * @generated from field: double amount = 2;
+   */
+  amount = 0;
+
+  /**
+   * @generated from field: string reason = 3;
+   */
+  reason = "";
+
+  constructor(data?: PartialMessage<RegisterRewardRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.RegisterRewardRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "toUserId", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "amount", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
+    { no: 3, name: "reason", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RegisterRewardRequest {
+    return new RegisterRewardRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RegisterRewardRequest {
+    return new RegisterRewardRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RegisterRewardRequest {
+    return new RegisterRewardRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RegisterRewardRequest | PlainMessage<RegisterRewardRequest> | undefined, b: RegisterRewardRequest | PlainMessage<RegisterRewardRequest> | undefined): boolean {
+    return proto3.util.equals(RegisterRewardRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.DeleteRewardRequest
+ */
+export class DeleteRewardRequest extends Message<DeleteRewardRequest> {
+  /**
+   * @generated from field: uint64 rewardId = 1;
+   */
+  rewardId = protoInt64.zero;
+
+  constructor(data?: PartialMessage<DeleteRewardRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.DeleteRewardRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "rewardId", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeleteRewardRequest {
+    return new DeleteRewardRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeleteRewardRequest {
+    return new DeleteRewardRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeleteRewardRequest {
+    return new DeleteRewardRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: DeleteRewardRequest | PlainMessage<DeleteRewardRequest> | undefined, b: DeleteRewardRequest | PlainMessage<DeleteRewardRequest> | undefined): boolean {
+    return proto3.util.equals(DeleteRewardRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.RegisterAllowanceRequest
+ */
+export class RegisterAllowanceRequest extends Message<RegisterAllowanceRequest> {
+  /**
+   * @generated from field: string toUserId = 1;
+   */
+  toUserId = "";
+
+  /**
+   * @generated from field: double amount = 2;
+   */
+  amount = 0;
+
+  /**
+   * @generated from field: odachin.IntervalType intervalType = 3;
+   */
+  intervalType = IntervalType.EVERY_N_DAY;
+
+  /**
+   * @generated from field: optional uint32 interval = 4;
+   */
+  interval?: number;
+
+  /**
+   * @generated from field: optional uint32 date = 5;
+   */
+  date?: number;
+
+  /**
+   * @generated from field: optional odachin.DayOfWeek dayOfWeek = 6;
+   */
+  dayOfWeek?: DayOfWeek;
+
+  constructor(data?: PartialMessage<RegisterAllowanceRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.RegisterAllowanceRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "toUserId", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "amount", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
+    { no: 3, name: "intervalType", kind: "enum", T: proto3.getEnumType(IntervalType) },
+    { no: 4, name: "interval", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
+    { no: 5, name: "date", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
+    { no: 6, name: "dayOfWeek", kind: "enum", T: proto3.getEnumType(DayOfWeek), opt: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RegisterAllowanceRequest {
+    return new RegisterAllowanceRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): RegisterAllowanceRequest {
+    return new RegisterAllowanceRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): RegisterAllowanceRequest {
+    return new RegisterAllowanceRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: RegisterAllowanceRequest | PlainMessage<RegisterAllowanceRequest> | undefined, b: RegisterAllowanceRequest | PlainMessage<RegisterAllowanceRequest> | undefined): boolean {
+    return proto3.util.equals(RegisterAllowanceRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.UpdateAllowanceRequest
+ */
+export class UpdateAllowanceRequest extends Message<UpdateAllowanceRequest> {
+  /**
+   * @generated from field: uint64 allowanceId = 1;
+   */
+  allowanceId = protoInt64.zero;
+
+  /**
+   * @generated from field: optional double amount = 2;
+   */
+  amount?: number;
+
+  /**
+   * @generated from field: optional odachin.IntervalType intervalType = 3;
+   */
+  intervalType?: IntervalType;
+
+  /**
+   * @generated from field: optional uint32 interval = 4;
+   */
+  interval?: number;
+
+  /**
+   * @generated from field: optional uint32 date = 5;
+   */
+  date?: number;
+
+  /**
+   * @generated from field: optional odachin.DayOfWeek dayOfWeek = 6;
+   */
+  dayOfWeek?: DayOfWeek;
+
+  constructor(data?: PartialMessage<UpdateAllowanceRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.UpdateAllowanceRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "allowanceId", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: "amount", kind: "scalar", T: 1 /* ScalarType.DOUBLE */, opt: true },
+    { no: 3, name: "intervalType", kind: "enum", T: proto3.getEnumType(IntervalType), opt: true },
+    { no: 4, name: "interval", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
+    { no: 5, name: "date", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
+    { no: 6, name: "dayOfWeek", kind: "enum", T: proto3.getEnumType(DayOfWeek), opt: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): UpdateAllowanceRequest {
+    return new UpdateAllowanceRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): UpdateAllowanceRequest {
+    return new UpdateAllowanceRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): UpdateAllowanceRequest {
+    return new UpdateAllowanceRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: UpdateAllowanceRequest | PlainMessage<UpdateAllowanceRequest> | undefined, b: UpdateAllowanceRequest | PlainMessage<UpdateAllowanceRequest> | undefined): boolean {
+    return proto3.util.equals(UpdateAllowanceRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.GetUserInfoRequest
+ */
+export class GetUserInfoRequest extends Message<GetUserInfoRequest> {
+  /**
+   * @generated from field: string userId = 1;
+   */
+  userId = "";
+
+  constructor(data?: PartialMessage<GetUserInfoRequest>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.GetUserInfoRequest";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "userId", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetUserInfoRequest {
+    return new GetUserInfoRequest().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetUserInfoRequest {
+    return new GetUserInfoRequest().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetUserInfoRequest {
+    return new GetUserInfoRequest().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetUserInfoRequest | PlainMessage<GetUserInfoRequest> | undefined, b: GetUserInfoRequest | PlainMessage<GetUserInfoRequest> | undefined): boolean {
+    return proto3.util.equals(GetUserInfoRequest, a, b);
+  }
+}
+
+/**
+ * @generated from message odachin.GetUserInfoResponse
+ */
+export class GetUserInfoResponse extends Message<GetUserInfoResponse> {
+  /**
+   * @generated from field: string userId = 1;
+   */
+  userId = "";
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name = "";
+
+  /**
+   * @generated from field: odachin.Role role = 3;
+   */
+  role = Role.PARENT;
+
+  /**
+   * @generated from field: optional string avatarImageUrl = 4;
+   */
+  avatarImageUrl?: string;
+
+  constructor(data?: PartialMessage<GetUserInfoResponse>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.GetUserInfoResponse";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "userId", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: "name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "role", kind: "enum", T: proto3.getEnumType(Role) },
+    { no: 4, name: "avatarImageUrl", kind: "scalar", T: 9 /* ScalarType.STRING */, opt: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): GetUserInfoResponse {
+    return new GetUserInfoResponse().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): GetUserInfoResponse {
+    return new GetUserInfoResponse().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): GetUserInfoResponse {
+    return new GetUserInfoResponse().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: GetUserInfoResponse | PlainMessage<GetUserInfoResponse> | undefined, b: GetUserInfoResponse | PlainMessage<GetUserInfoResponse> | undefined): boolean {
+    return proto3.util.equals(GetUserInfoResponse, a, b);
   }
 }
 

@@ -20,6 +20,7 @@ type ServerStruct struct {
 	odachin.UnimplementedOdachinServiceServer
 }
 
+// TODO Roleによる認可を実装する
 func (s *ServerStruct) AuthFuncOverride(ctx context.Context, fullMethodName string) (context.Context, error) {
 	if fullMethodName == "/odachin.OdachinService/CreateUser" || fullMethodName == "/odachin.OdachinService/Login" {
 		return ctx, nil
@@ -36,8 +37,7 @@ func (s *ServerStruct) AuthFuncOverride(ctx context.Context, fullMethodName stri
 		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
 	})
 	claims, ok := token.Claims.(jwt.MapClaims)
-	fmt.Println(claims["user_id"])
-	if ok && token.Valid {
+	if ok {
 		newCtx := context.WithValue(ctx, "user_id", claims["user_id"])
 		return newCtx, nil
 	} else {

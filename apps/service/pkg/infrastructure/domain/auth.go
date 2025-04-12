@@ -19,7 +19,8 @@ func GenerateToken(userId string) (string, error) {
 	// ヘッダーとペイロード生成
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	accessToken, _ := token.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
-	return accessToken, nil
+	b_accessToken := fmt.Sprintf("Bearer %s", accessToken)
+	return b_accessToken, nil
 }
 
 func ValidateToken(tokenString string) (string, error) {

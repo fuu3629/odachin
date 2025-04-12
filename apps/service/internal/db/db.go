@@ -26,6 +26,22 @@ func DbConn() *gorm.DB {
 }
 
 func Migrations(db *gorm.DB) {
+	db.Exec(`
+DO
+$$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role_enum') THEN
+    create type role_enum AS ENUM ('CHILD', 'PARENT');
+  END IF;
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'interval_enum') THEN
+		create type interval_enum AS ENUM ('EVERY_N_DAY', 'MONTHLY', 'WEEKLY');
+	END IF;
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'dayofweek_enum') THEN
+		create type dayofweek_enum AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY');
+	END IF;
+END
+$$;
+`)
 	err := db.AutoMigrate(&models.Family{}, &models.User{}, &models.Wallet{}, &models.Transaction{}, &models.Allowance{}, &models.Reward{}, &models.Invitation{})
 	if err != nil {
 		fmt.Println(err)

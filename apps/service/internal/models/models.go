@@ -13,7 +13,7 @@ type Family struct {
 type User struct {
 	UserID         string `gorm:"primaryKey"`
 	FamilyID       *uint  `gorm:"index"`
-	Role           string
+	Role           string `gorm:"type: role_enum;"`
 	UserName       string
 	Email          string `gorm:"unique"`
 	Password       string
@@ -32,22 +32,28 @@ type Wallet struct {
 }
 
 type Transaction struct {
-	TransactionID uint `gorm:"primaryKey"`
-	FromUserID    uint `gorm:"index"`
-	ToUserID      uint `gorm:"index"`
+	TransactionID uint   `gorm:"primaryKey"`
+	FromUserID    string `gorm:"index"`
+	ToUserID      string `gorm:"index"`
 	Amount        float64
 	Type          string
 	CreatedAt     time.Time
 }
 
+// EVERY_N_DAYは、IntervalがN日ごとに送金される
+// Monthlyは毎月Dateに送金される
+// Weeklyは毎週DayOfWeekに送金される
 type Allowance struct {
-	AllowanceID uint   `gorm:"primaryKey"`
-	FromUserID  string `gorm:"index"`
-	ToUserID    string `gorm:"index"`
-	Amount      float64
-	Interval    string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	AllowanceID  uint   `gorm:"primaryKey"`
+	FromUserID   string `gorm:"index"`
+	ToUserID     string `gorm:"index"`
+	Amount       float64
+	IntervalType string `gorm:"type: interval_enum"`
+	Interval     *uint32
+	Date         *uint32
+	DayOfWeek    *string `gorm:"type: dayofweek_enum"`
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 type Reward struct {

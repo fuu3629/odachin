@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { CreateGroupRequest, CreateUserRequest, CreateUserResponse, InviteUserRequest, LoginRequest, LoginResponse, UpdateUserRequest } from "./odachin_pb";
+import { AcceptInvitationRequest, CreateGroupRequest, CreateUserRequest, CreateUserResponse, DeleteRewardRequest, GetUserInfoRequest, GetUserInfoResponse, InviteUserRequest, LoginRequest, LoginResponse, RegisterAllowanceRequest, RegisterRewardRequest, UpdateAllowanceRequest, UpdateUserRequest } from "./odachin_pb";
 import { Empty, MethodKind } from "@bufbuild/protobuf";
 
 /**
@@ -22,6 +22,8 @@ export const OdachinService = {
       kind: MethodKind.Unary,
     },
     /**
+     * TODO 未テスト
+     *
      * @generated from rpc odachin.OdachinService.UpdateUser
      */
     updateUser: {
@@ -31,10 +33,10 @@ export const OdachinService = {
       kind: MethodKind.Unary,
     },
     /**
-     * @generated from rpc odachin.OdachinService.login
+     * @generated from rpc odachin.OdachinService.Login
      */
     login: {
-      name: "login",
+      name: "Login",
       I: LoginRequest,
       O: LoginResponse,
       kind: MethodKind.Unary,
@@ -55,6 +57,60 @@ export const OdachinService = {
       name: "InviteUser",
       I: InviteUserRequest,
       O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.AcceptInvitation
+     */
+    acceptInvitation: {
+      name: "AcceptInvitation",
+      I: AcceptInvitationRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.RegisterReward
+     */
+    registerReward: {
+      name: "RegisterReward",
+      I: RegisterRewardRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.DeleteReward
+     */
+    deleteReward: {
+      name: "DeleteReward",
+      I: DeleteRewardRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.RegisterAllowance
+     */
+    registerAllowance: {
+      name: "RegisterAllowance",
+      I: RegisterAllowanceRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.UpdateAllowance
+     */
+    updateAllowance: {
+      name: "UpdateAllowance",
+      I: UpdateAllowanceRequest,
+      O: Empty,
+      kind: MethodKind.Unary,
+    },
+    /**
+     * @generated from rpc odachin.OdachinService.GetUserInfo
+     */
+    getUserInfo: {
+      name: "GetUserInfo",
+      I: GetUserInfoRequest,
+      O: GetUserInfoResponse,
       kind: MethodKind.Unary,
     },
   }

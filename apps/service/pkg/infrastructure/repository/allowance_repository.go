@@ -8,7 +8,7 @@ import (
 type AllowanceRepository interface {
 	Get(tx *gorm.DB, id uint) (models.Allowance, error)
 	Save(tx *gorm.DB, param *models.Allowance) error
-	Update(tx *gorm.DB, param *models.Allowance) error
+	Update(tx *gorm.DB, param map[string]interface{}) error
 }
 
 type AllowanceRepositoryImpl struct {
@@ -33,8 +33,10 @@ func (r *AllowanceRepositoryImpl) Save(tx *gorm.DB, allowance *models.Allowance)
 	return nil
 }
 
-func (r *AllowanceRepositoryImpl) Update(tx *gorm.DB, allowance *models.Allowance) error {
-	if err := tx.Updates(&allowance).Error; err != nil {
+func (r *AllowanceRepositoryImpl) Update(tx *gorm.DB, allowance map[string]interface{}) error {
+	id := allowance["allowance_id"]
+	delete(allowance, "allowance_id")
+	if err := tx.Model(&models.Allowance{}).Where("allowance_id = ?", id).Updates(&allowance).Error; err != nil {
 		return err
 	}
 	return nil

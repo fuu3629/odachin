@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	OdachinService_CreateUser_FullMethodName        = "/odachin.OdachinService/CreateUser"
 	OdachinService_UpdateUser_FullMethodName        = "/odachin.OdachinService/UpdateUser"
-	OdachinService_Login_FullMethodName             = "/odachin.OdachinService/login"
+	OdachinService_Login_FullMethodName             = "/odachin.OdachinService/Login"
 	OdachinService_CreateGroup_FullMethodName       = "/odachin.OdachinService/CreateGroup"
 	OdachinService_InviteUser_FullMethodName        = "/odachin.OdachinService/InviteUser"
 	OdachinService_AcceptInvitation_FullMethodName  = "/odachin.OdachinService/AcceptInvitation"
@@ -441,7 +441,7 @@ var OdachinService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _OdachinService_UpdateUser_Handler,
 		},
 		{
-			MethodName: "login",
+			MethodName: "Login",
 			Handler:    _OdachinService_Login_Handler,
 		},
 		{

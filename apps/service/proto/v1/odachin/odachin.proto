@@ -6,7 +6,7 @@ service OdachinService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   // TODO 未テスト
   rpc UpdateUser(UpdateUserRequest) returns (google.protobuf.Empty);
-  rpc login(LoginRequest) returns (LoginResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
   rpc CreateGroup(CreateGroupRequest) returns (google.protobuf.Empty);
   rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
   rpc AcceptInvitation(AcceptInvitationRequest) returns (google.protobuf.Empty);
@@ -25,6 +25,21 @@ enum Status {
 enum Role {
   PARENT = 0;  // 親
   CHILD = 1;   // 子供
+}
+
+enum DayOfWeek {
+  MONDAY = 0;
+  TUESDAY = 1;
+  WEDNESDAY = 2;
+  THURSDAY = 3;
+  FRIDAY = 4;
+  SATURDAY = 5;
+  SUNDAY = 6;
+}
+enum IntervalType {
+  EVERY_N_DAY = 0;   // n日ごと
+  WEEKLY = 1;  // 毎週
+  MONTHLY = 2; // 毎月
 }
 
 message CreateUserRequest {
@@ -69,7 +84,7 @@ message AcceptInvitationRequest {
 
 message RegisterRewardRequest {
   string toUserId = 1;
-  float amount = 2;
+  double amount = 2;
   string reason  =3;
 }
 
@@ -78,18 +93,21 @@ message DeleteRewardRequest {
 }
 
 message RegisterAllowanceRequest {
-  string fromUserId = 1;
-  string toUserId = 2;
-  float amount = 3;
-  string interval  =4;
+  string toUserId = 1;
+  double amount = 2;
+  IntervalType intervalType = 3;
+  optional uint32 interval = 4;
+  optional uint32 date = 5;
+  optional DayOfWeek dayOfWeek = 6;
 }
 
 message UpdateAllowanceRequest {
   uint64 allowanceId = 1;
-  string fromUserId = 2;
-  string toUserId = 3;
-  float amount = 4;
-  string interval = 5;
+  optional double amount = 2;
+  optional IntervalType intervalType = 3;
+  optional uint32 interval = 4;
+  optional uint32 date = 5;
+  optional DayOfWeek dayOfWeek = 6;
 }
 
 message GetUserInfoRequest {

@@ -3,15 +3,19 @@ package usecase
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/client"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/domain"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/repository"
+	"github.com/iancoleman/strcase"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 	"gorm.io/gorm"
 )
 
@@ -250,11 +254,22 @@ func (u *UseCaseImpl) DeleteReward(ctx context.Context, req *odachin.DeleteRewar
 // TODO Fromはreqに含めない
 func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		var dayOfWeek *string
+		if req.DayOfWeek == nil {
+			dayOfWeek = nil
+		} else {
+			tmp := req.DayOfWeek.String()
+			dayOfWeek = &tmp
+		}
 		allowance := &models.Allowance{
-			FromUserID: req.FromUserId,
-			ToUserID:   req.ToUserId,
-			Amount:     float64(req.Amount),
-			Interval:   req.Interval,
+			FromUserID:   user_id,
+			ToUserID:     req.ToUserId,
+			Amount:       req.Amount,
+			IntervalType: req.IntervalType.String(),
+			Interval:     req.Interval,
+			Date:         req.Date,
+			DayOfWeek:    dayOfWeek,
 		}
 		err := u.allowanceRepository.Save(tx, allowance)
 		if err != nil {
@@ -267,14 +282,11 @@ func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.Regist
 
 func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error {
 	u.db.Transaction(func(tx *gorm.DB) error {
-		allowance := &models.Allowance{
-			AllowanceID: uint(req.AllowanceId),
-			FromUserID:  req.FromUserId,
-			ToUserID:    req.ToUserId,
-			Amount:      float64(req.Amount),
-			Interval:    req.Interval,
+		updateFields, err := ProtoToMap(req)
+		if err != nil {
+			return status.Errorf(codes.Internal, "failed to convert request to map: %v", err)
 		}
-		err := u.allowanceRepository.Update(tx, allowance)
+		err = u.allowanceRepository.Update(tx, updateFields)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
@@ -304,4 +316,27 @@ func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoR
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	return &userInfo, nil
+}
+
+func ProtoToMap(msg proto.Message) (map[string]interface{}, error) {
+	jsonBytes, err := protojson.Marshal(msg)
+	if err != nil {
+		return nil, err
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal(jsonBytes, &result); err != nil {
+		return nil, err
+	}
+	// Convert keys to snake_case
+	result = ToSnakeCaseMap(result)
+	return result, nil
+}
+func ToSnakeCaseMap(m map[string]interface{}) map[string]interface{} {
+	result := make(map[string]interface{})
+	for k, v := range m {
+		snakeKey := strcase.ToSnake(k)
+		result[snakeKey] = v
+	}
+	return result
 }

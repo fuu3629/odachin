@@ -10,6 +10,7 @@ import (
 )
 
 func AuthFunc(ctx context.Context) (context.Context, error) {
+	fmt.Println("AuthFunc")
 	tokenString, err := auth.AuthFromMD(ctx, "Bearer")
 	if err != nil {
 		return nil, err
