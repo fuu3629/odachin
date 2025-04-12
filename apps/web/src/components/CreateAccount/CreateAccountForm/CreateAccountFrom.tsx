@@ -47,16 +47,25 @@ export function CreateAccountForm({ setToken }: CreateAccountFormProps) {
               <Text fontSize='sm' fontWeight='bold' mb={1}>
                 メールアドレスを入力
               </Text>
-              <Input bg='gray.100' {...register('userId')} />
+              <Input bg='gray.100' {...register('email')} />
               {errors.email && (
                 <Text color='red.500' fontSize='sm'>
                   {errors.email.message}
                 </Text>
               )}
+              <Text fontSize='sm' fontWeight='bold' mb={1}>
+                ユーザIDを入力
+              </Text>
+              <Input bg='gray.100' {...register('userId')} />
+              {errors.userId && (
+                <Text color='red.500' fontSize='sm'>
+                  {errors.userId.message}
+                </Text>
+              )}
               <Text fontSize='sm' fontWeight='bold' mb={1} mt={4}>
                 ユーザ名（表示名）
               </Text>
-              <Input bg='gray.100' {...register('email')} w='full' />
+              <Input bg='gray.100' {...register('userName')} w='full' />
               {errors.userName && (
                 <Text color='red.500' fontSize='sm'>
                   {errors.userName.message}
