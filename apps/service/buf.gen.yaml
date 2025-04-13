@@ -1,21 +1,21 @@
-version: v1
-# マネージドモードを有効
+version: v2
+inputs:
+  - directory: proto
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.36.5
+    out: gen
+    opt:
+      - paths=source_relative
 managed:
   enabled: true
-  go_package_prefix:
-    default: github.com/JY8752/buf-demo/example/gen # デフォルトのpackage名を指定。これは必須
-plugins:
-  # protoc-gen-goプラグイン
-  # - plugin: go
-  #   out: gen/go
-  #   opt: paths=source_relative
-  # リモートプラグインを使用
-  - plugin: buf.build/protocolbuffers/go:v1.31.0
-    out: gen
-    # GoのモジュールパスがProtobufファイルから相対的に解決されるよう指定
-    # なくてもいいがないと上で指定したdefaultのフルパスが使われる
-    opt: paths=source_relative
-  # protoc-gen-go-grpcプラグイン
-  - plugin: buf.build/grpc/go:v1.3.0
-    out: gen
-    opt: paths=source_relative
+  override:
+    - file_option: go_package_prefix
+      value: github.com/fuu3629/odachin/apps/service/gen
+  disable:
+    - module: buf.build/bufbuild/protovalidate
+      file_option: go_package_prefix
+# Don't modify any file option or field option for protovalidate. Without
+# this, generated Go will fail to compile.
+# disable:
+#   - file_option: go_package
+#     module: buf.build/bufbuild/protovalidate

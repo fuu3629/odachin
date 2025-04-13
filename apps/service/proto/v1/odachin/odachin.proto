@@ -1,6 +1,8 @@
 syntax = "proto3";
 package odachin;
 import "google/protobuf/empty.proto";
+import "buf/validate/validate.proto";
+
 
 service OdachinService {
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
@@ -43,11 +45,11 @@ enum IntervalType {
 }
 
 message CreateUserRequest {
-  string userId = 1;
-  string name = 2;
-  string email = 3;
-  string password = 4;
-  Role role = 5;
+  string user_id = 1 [ (buf.validate.field).string.min_len = 1 ];
+  string name = 2 [ (buf.validate.field).string.min_len = 1 ];
+  string email = 3 [(buf.validate.field).string.email = true];
+  string password = 4 [ (buf.validate.field).string.min_len = 8 ];
+  Role role = 5 [(buf.validate.field).enum.defined_only = true];
 }
 
 message CreateUserResponse {
@@ -57,13 +59,12 @@ message CreateUserResponse {
 message UpdateUserRequest {
   optional string name = 1;
   optional string email = 2;
-  optional string password = 3;
-  optional bytes profileImage = 4;
+  optional bytes profile_image = 4;
 }
 
 message LoginRequest {
-  string userId = 1;
-  string password = 2;
+  string user_id = 1 [ (buf.validate.field).string.min_len = 1 ];
+  string password = 2 [ (buf.validate.field).string.min_len = 8 ];
 }
 
 message LoginResponse {
@@ -71,52 +72,52 @@ message LoginResponse {
 }
 
 message CreateGroupRequest {
-  string FamilyName = 1;
+  string family_name = 1 [(buf.validate.field).string.min_len = 1];
 }
 
 message InviteUserRequest {
-  string toUserId = 1;
+  string to_user_id = 1 [(buf.validate.field).string.min_len = 1];
 }
 
 message AcceptInvitationRequest {
-  uint64 invitationId = 1;
+  uint64 invitation_id = 1 [(buf.validate.field).int64.gte = 0];
 }
 
 message RegisterRewardRequest {
-  string toUserId = 1;
-  double amount = 2;
-  string reason  =3;
+  string to_user_id = 1 [(buf.validate.field).string.min_len = 1];
+  double amount = 2 [(buf.validate.field).double.gt = 0];
+  string reason  =3 [(buf.validate.field).string.min_len = 1];
 }
 
 message DeleteRewardRequest {
-  uint64 rewardId = 1;
+  uint64 reward_id = 1 [(buf.validate.field).int64.gte = 0];
 }
 
 message RegisterAllowanceRequest {
-  string toUserId = 1;
-  double amount = 2;
-  IntervalType intervalType = 3;
-  optional uint32 interval = 4;
-  optional uint32 date = 5;
-  optional DayOfWeek dayOfWeek = 6;
+  string to_user_id = 1 [(buf.validate.field).string.min_len = 1];
+  double amount = 2 [(buf.validate.field).double.gt = 0];
+  IntervalType interval_type = 3 [(buf.validate.field).enum.defined_only = true];
+  optional uint32 interval = 4 [(buf.validate.field).int32.gte = 1];
+  optional uint32 date = 5 [(buf.validate.field).int32.gte = 1, (buf.validate.field).int32.lte = 31];
+  optional DayOfWeek day_of_week = 6;
 }
 
 message UpdateAllowanceRequest {
-  uint64 allowanceId = 1;
-  optional double amount = 2;
-  optional IntervalType intervalType = 3;
+  uint64 allowance_id = 1 [(buf.validate.field).int64.gte = 0];
+  optional double amount = 2 [(buf.validate.field).double.gt = 0];
+  optional IntervalType interval_type = 3 ;
   optional uint32 interval = 4;
   optional uint32 date = 5;
-  optional DayOfWeek dayOfWeek = 6;
+  optional DayOfWeek day_of_week = 6;
 }
 
 message GetUserInfoRequest {
-  string userId = 1;
+  string user_id = 1 [(buf.validate.field).string.min_len = 1];
 }
 
 message GetUserInfoResponse {
-  string userId = 1;
+  string user_id = 1;
   string name = 2;
   Role role = 3;
-  optional string avatarImageUrl = 4;
+  optional string avatar_image_url = 4;
 }

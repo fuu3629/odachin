@@ -19,5 +19,8 @@
     "source.addMissingImports": "always",
     "source.fixAll.eslint": "always"
   },
-  "editor.linkedEditing": true
+  "editor.linkedEditing": true,
+  "protoc": {
+    "options": ["-I=~/.cache/buf/v1/module/data/buf.build"]
+  }
 }

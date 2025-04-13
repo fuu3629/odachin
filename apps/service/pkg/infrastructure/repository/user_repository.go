@@ -8,7 +8,7 @@ import (
 type UserRepository interface {
 	Get(tx *gorm.DB, id string) (models.User, error)
 	Save(tx *gorm.DB, param *models.User) error
-	Update(tx *gorm.DB, param *models.User) error
+	Update(tx *gorm.DB, user map[string]interface{}) error
 }
 
 type UserRepositoryImpl struct{}
@@ -32,8 +32,10 @@ func (r *UserRepositoryImpl) Save(tx *gorm.DB, user *models.User) error {
 	return nil
 }
 
-func (r *UserRepositoryImpl) Update(tx *gorm.DB, user *models.User) error {
-	if err := tx.Updates(&user).Error; err != nil {
+func (r *UserRepositoryImpl) Update(tx *gorm.DB, user map[string]interface{}) error {
+	id := user["user_id"]
+	delete(user, "user_id")
+	if err := tx.Model(&models.User{}).Where("user_id = ?", id).Updates(&user).Error; err != nil {
 		return err
 	}
 	return nil

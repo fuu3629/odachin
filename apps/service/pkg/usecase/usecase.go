@@ -62,9 +62,11 @@ func New(db *gorm.DB) UseCase {
 func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error) {
 	var token string
 	err := u.db.Transaction(func(tx *gorm.DB) error {
+		fmt.Println(req.Password)
 
 		hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		// req を models.User に変換
+		fmt.Println(req.Role)
 		user := &models.User{
 			UserID:   req.UserId,
 			UserName: req.Name,
@@ -73,7 +75,6 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 			Role:     req.Role.String(),
 		}
 		err := u.userRepository.Save(tx, user)
-		fmt.Println(err)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
@@ -103,23 +104,16 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 func (u *UseCaseImpl) UpdateUser(ctx context.Context, req *odachin.UpdateUserRequest) error {
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
-		var avaterImageUrl *string
-		var err error
+		user := make(map[string]interface{})
+		user["user_id"] = user_id
+		user["user_name"] = req.Name
+		user["email"] = req.Email
 		if req.ProfileImage != nil {
-			avaterImageUrl, err = u.s3Client.PutObject(ctx, "odachin-dev", "avaters", req.ProfileImage)
+			avaterImageUrl, err := u.s3Client.PutObject(ctx, "odachin-dev", "avaters", req.ProfileImage)
 			if err != nil {
 				return status.Errorf(codes.Internal, "s3 upload error: %v", err)
 			}
-		} else {
-			avaterImageUrl = nil
-		}
-
-		user := &models.User{
-			UserID:         user_id,
-			UserName:       *req.Name,
-			Email:          *req.Email,
-			Password:       *req.Password,
-			AvatarImageUrl: avaterImageUrl,
+			user["avatar_image_url"] = avaterImageUrl
 		}
 		u.userRepository.Update(tx, user)
 		return nil
@@ -167,10 +161,13 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
 
-		user := &models.User{
-			UserID:   user_id,
-			FamilyID: &family.FamilyID,
-		}
+		// user := &models.User{
+		// 	UserID:   user_id,
+		// 	FamilyID: &family.FamilyID,
+		// }
+		user := make(map[string]interface{})
+		user["user_id"] = user_id
+		user["family_id"] = family.FamilyID
 		u.userRepository.Update(tx, user)
 
 		return nil
@@ -219,10 +216,9 @@ func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptI
 			return status.Errorf(codes.Internal, "already accepted invitation")
 		}
 
-		user := &models.User{
-			UserID:   user_id,
-			FamilyID: invitation.FamilyID,
-		}
+		user := make(map[string]interface{})
+		user["user_id"] = user_id
+		user["family_id"] = invitation.FamilyID
 		err = u.userRepository.Update(tx, user)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)

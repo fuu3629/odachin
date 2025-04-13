@@ -4,10 +4,13 @@ import (
 	"log"
 	"net"
 
+	"github.com/bufbuild/protovalidate-go"
 	database "github.com/fuu3629/odachin/apps/service/internal/db"
 	"github.com/fuu3629/odachin/apps/service/pkg/middleware"
 	"github.com/fuu3629/odachin/apps/service/pkg/presentation"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
+	protovalidate_middleware "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/protovalidate"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 )
@@ -33,8 +36,20 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	validator, err := protovalidate.New()
+	if err != nil {
+		log.Fatalf("failed to create validator: %v", err)
+	}
+	opts := []recovery.Option{
+		recovery.WithRecoveryHandler(middleware.RecoveryFunc),
+	}
+
 	grpcServer := grpc.NewServer(
-		grpc.UnaryInterceptor(auth.UnaryServerInterceptor(middleware.AuthFunc)),
+		grpc.ChainUnaryInterceptor(
+			auth.UnaryServerInterceptor(middleware.AuthFunc),
+			protovalidate_middleware.UnaryServerInterceptor(validator),
+			recovery.UnaryServerInterceptor(opts...),
+		),
 	)
 	presentation.NewServer(grpcServer, db)
 
