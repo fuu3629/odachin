@@ -323,10 +323,10 @@ func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAl
 func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error) {
 	var userInfo models.User
 	err := u.db.Transaction(func(tx *gorm.DB) error {
-		_, err := domain.ExtractTokenMetadata(ctx)
-		if err != nil {
-			return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
-		}
+		// _, err := domain.ExtractTokenMetadata(ctx)
+		// if err != nil {
+		// 	return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
+		// }
 		user, err := u.userRepository.Get(tx, req.UserId)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)

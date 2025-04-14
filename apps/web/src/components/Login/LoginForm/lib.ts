@@ -29,10 +29,8 @@ export const useLoginForm = () => {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
-      console.log(res);
       window.location.href = '/myPage';
     } catch (e) {
-      console.error(e);
       alert('Login failed');
     }
   };
