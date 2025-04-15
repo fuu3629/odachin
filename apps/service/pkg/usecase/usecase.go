@@ -311,6 +311,7 @@ func (u *UseCaseImpl) RegisterAllowance(ctx context.Context, req *odachin.Regist
 	return nil
 }
 
+// TODO ROLEの確認を行う
 func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error {
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		updateFields, err := ProtoToMap(req)
@@ -329,6 +330,7 @@ func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAl
 	return nil
 }
 
+// TODO Family内じゃないと取得できないようにする
 func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error) {
 	var userInfo models.User
 	err := u.db.Transaction(func(tx *gorm.DB) error {

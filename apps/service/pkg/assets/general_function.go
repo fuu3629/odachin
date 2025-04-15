@@ -33,6 +33,7 @@ func MakePeriod(req *odachin.RegisterRewardRequest, reward *models.Reward) *mode
 			StartDate:   now,
 			EndDate:     tomorrowMidnight,
 			IsCompleted: false,
+			IsEditable:  true,
 		}
 	} else if req.RewardType == odachin.Reward_WEEKLY {
 		weekday := int(now.Weekday())
@@ -53,6 +54,7 @@ func MakePeriod(req *odachin.RegisterRewardRequest, reward *models.Reward) *mode
 			StartDate:   now,
 			EndDate:     nextMondayMidnight,
 			IsCompleted: false,
+			IsEditable:  true,
 		}
 	} else if req.RewardType == odachin.Reward_MONTHLY {
 		firstOfNextMonth := time.Date(
@@ -67,6 +69,7 @@ func MakePeriod(req *odachin.RegisterRewardRequest, reward *models.Reward) *mode
 			StartDate:   now,
 			EndDate:     firstOfNextMonth,
 			IsCompleted: false,
+			IsEditable:  true,
 		}
 	}
 	return reward_period

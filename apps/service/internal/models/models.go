@@ -75,6 +75,7 @@ type RewardPeriod struct {
 	StartDate      time.Time
 	EndDate        time.Time
 	IsCompleted    bool
+	IsEditable     bool
 	CompletedAt    time.Time
 }
 
