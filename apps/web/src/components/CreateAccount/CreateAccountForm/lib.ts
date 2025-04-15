@@ -4,7 +4,7 @@ import { setCookie } from 'nookies';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { CreateUserRequest } from '@/__generated__/services/odachin_pb';
+import { CreateUserRequest } from '@/__generated__/services/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 
 export const createAccountFormSchema = z.object({
