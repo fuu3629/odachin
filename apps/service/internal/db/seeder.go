@@ -4,16 +4,13 @@ import (
 	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/internal/models"
+	"github.com/fuu3629/odachin/apps/service/pkg/assets"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 func Seed(db *gorm.DB) error {
-	fmt.Println("------------------------------")
-	fmt.Println("")
-	fmt.Println("Seeding database...🍀")
-	fmt.Println("")
-	fmt.Println("------------------------------")
+	assets.Log("Seeding database...🌱")
 
 	var count int64
 	err := db.Model(&models.User{}).Count(&count)
@@ -21,7 +18,7 @@ func Seed(db *gorm.DB) error {
 		return fmt.Errorf("failed to count users: %v", err)
 	}
 	if count > 0 {
-		fmt.Println("Database already seeded")
+		assets.Log("Database already seeded")
 		return nil
 	}
 
@@ -82,11 +79,6 @@ func Seed(db *gorm.DB) error {
 	if err := db.Create(&child_belong).Error; err != nil {
 		fmt.Printf("%+v", err)
 	}
-
-	fmt.Println("------------------------------")
-	fmt.Println("")
-	fmt.Println("Database seeded successfully😄")
-	fmt.Println("")
-	fmt.Println("------------------------------")
+	assets.Log("Database seeded successfully🍀")
 	return nil
 }

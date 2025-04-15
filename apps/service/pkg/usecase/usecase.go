@@ -4,10 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
-	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
+	"github.com/fuu3629/odachin/apps/service/pkg/assets"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/client"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/domain"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/repository"
@@ -36,37 +36,37 @@ type UseCase interface {
 }
 
 type UseCaseImpl struct {
-	userRepository       repository.UserRepository
-	familyRepository     repository.FamilyRepository
-	invitationRepository repository.InvitationRepository
-	walletRepository     repository.WalletRepository
-	rewardRepository     repository.RewardRepository
-	allowanceRepository  repository.AllowanceRepository
-	db                   *gorm.DB
-	s3Client             client.AwsS3Client
+	userRepository         repository.UserRepository
+	familyRepository       repository.FamilyRepository
+	invitationRepository   repository.InvitationRepository
+	walletRepository       repository.WalletRepository
+	rewardRepository       repository.RewardRepository
+	allowanceRepository    repository.AllowanceRepository
+	rewardPeriodRepository repository.RewardPeriodRepository
+	db                     *gorm.DB
+	s3Client               client.AwsS3Client
 }
 
 func New(db *gorm.DB) UseCase {
 	return &UseCaseImpl{
-		userRepository:       repository.NewUserRepository(),
-		familyRepository:     repository.NewFamilyRepository(),
-		invitationRepository: repository.NewInvitationRepository(),
-		walletRepository:     repository.NewWalletRepository(),
-		rewardRepository:     repository.NewRewardRepository(),
-		allowanceRepository:  repository.NewAllowanceRepository(),
-		db:                   db,
-		s3Client:             client.NewAwsS3Client(),
+		userRepository:         repository.NewUserRepository(),
+		familyRepository:       repository.NewFamilyRepository(),
+		invitationRepository:   repository.NewInvitationRepository(),
+		walletRepository:       repository.NewWalletRepository(),
+		rewardRepository:       repository.NewRewardRepository(),
+		allowanceRepository:    repository.NewAllowanceRepository(),
+		rewardPeriodRepository: repository.NewRewardPeriodRepository(),
+		db:                     db,
+		s3Client:               client.NewAwsS3Client(),
 	}
 }
 
 func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (string, error) {
 	var token string
 	err := u.db.Transaction(func(tx *gorm.DB) error {
-		fmt.Println(req.Password)
 
 		hashed, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		// req を models.User に変換
-		fmt.Println(req.Role)
 		user := &models.User{
 			UserID:   req.UserId,
 			UserName: req.Name,
@@ -239,13 +239,22 @@ func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptI
 
 func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error {
 	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
 		reward := &models.Reward{
-			ToUserID: req.ToUserId,
-			Amount:   float64(req.Amount),
-			Reason:   req.Reason,
+			FromUserID:  user_id,
+			ToUserID:    req.ToUserId,
+			PeriodType:  req.RewardType.String(),
+			Title:       req.Title,
+			Description: req.Description,
+			Amount:      float64(req.Amount),
 		}
 
 		err := u.rewardRepository.Save(tx, reward)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		reward_period := assets.MakePeriod(req, reward)
+		err = u.rewardPeriodRepository.Save(tx, reward_period)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}

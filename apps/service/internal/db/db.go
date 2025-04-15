@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/fuu3629/odachin/apps/service/internal/models"
+	"github.com/fuu3629/odachin/apps/service/pkg/assets"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -16,7 +17,7 @@ func DbConn() *gorm.DB {
 	password := os.Getenv("POSTGRES_PASSWORD")
 	dbName := os.Getenv("POSTGRES_DB")
 	port := os.Getenv("POSTGRES_PORT")
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s TimeZone=Asia/Tokyo",
 		host, user, password, dbName, port)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -39,17 +40,16 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'dayofweek_enum') THEN
 		create type dayofweek_enum AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY');
 	END IF;
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'period_enum') THEN
+		create type period_enum AS ENUM ('DAILY', 'WEEKLY', 'MONTHLY');
+	END IF;
 END
 $$;
 `)
-	err := db.AutoMigrate(&models.Family{}, &models.User{}, &models.Wallet{}, &models.Transaction{}, &models.Allowance{}, &models.Reward{}, &models.Invitation{})
+	err := db.AutoMigrate(&models.Family{}, &models.User{}, &models.Wallet{}, &models.Transaction{}, &models.Allowance{}, &models.Reward{}, &models.RewardPeriod{}, &models.Invitation{})
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		fmt.Println("------------------------------")
-		fmt.Println("")
-		fmt.Println("Database migrated successfully🕊️")
-		fmt.Println("")
-		fmt.Println("------------------------------")
+		assets.Log("Database migrated successfully🕊️")
 	}
 }

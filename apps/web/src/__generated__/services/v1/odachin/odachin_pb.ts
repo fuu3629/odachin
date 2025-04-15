@@ -105,9 +105,40 @@ proto3.util.setEnumType(DayOfWeek, "odachin.DayOfWeek", [
 ]);
 
 /**
- * @generated from enum odachin.IntervalType
+ * @generated from message odachin.Alloance
  */
-export enum IntervalType {
+export class Alloance extends Message<Alloance> {
+  constructor(data?: PartialMessage<Alloance>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.Alloance";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Alloance {
+    return new Alloance().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Alloance {
+    return new Alloance().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Alloance {
+    return new Alloance().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: Alloance | PlainMessage<Alloance> | undefined, b: Alloance | PlainMessage<Alloance> | undefined): boolean {
+    return proto3.util.equals(Alloance, a, b);
+  }
+}
+
+/**
+ * @generated from enum odachin.Alloance.Type
+ */
+export enum Alloance_Type {
   /**
    * n日ごと
    *
@@ -129,9 +160,72 @@ export enum IntervalType {
    */
   MONTHLY = 2,
 }
-// Retrieve enum metadata with: proto3.getEnumType(IntervalType)
-proto3.util.setEnumType(IntervalType, "odachin.IntervalType", [
+// Retrieve enum metadata with: proto3.getEnumType(Alloance_Type)
+proto3.util.setEnumType(Alloance_Type, "odachin.Alloance.Type", [
   { no: 0, name: "EVERY_N_DAY" },
+  { no: 1, name: "WEEKLY" },
+  { no: 2, name: "MONTHLY" },
+]);
+
+/**
+ * @generated from message odachin.Reward
+ */
+export class Reward extends Message<Reward> {
+  constructor(data?: PartialMessage<Reward>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime: typeof proto3 = proto3;
+  static readonly typeName = "odachin.Reward";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Reward {
+    return new Reward().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Reward {
+    return new Reward().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Reward {
+    return new Reward().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: Reward | PlainMessage<Reward> | undefined, b: Reward | PlainMessage<Reward> | undefined): boolean {
+    return proto3.util.equals(Reward, a, b);
+  }
+}
+
+/**
+ * @generated from enum odachin.Reward.Type
+ */
+export enum Reward_Type {
+  /**
+   * 毎日
+   *
+   * @generated from enum value: DAILY = 0;
+   */
+  DAILY = 0,
+
+  /**
+   * 毎週
+   *
+   * @generated from enum value: WEEKLY = 1;
+   */
+  WEEKLY = 1,
+
+  /**
+   * 毎月
+   *
+   * @generated from enum value: MONTHLY = 2;
+   */
+  MONTHLY = 2,
+}
+// Retrieve enum metadata with: proto3.getEnumType(Reward_Type)
+proto3.util.setEnumType(Reward_Type, "odachin.Reward.Type", [
+  { no: 0, name: "DAILY" },
   { no: 1, name: "WEEKLY" },
   { no: 2, name: "MONTHLY" },
 ]);
@@ -489,9 +583,19 @@ export class RegisterRewardRequest extends Message<RegisterRewardRequest> {
   amount = 0;
 
   /**
-   * @generated from field: string reason = 3;
+   * @generated from field: odachin.Reward.Type reward_type = 3;
    */
-  reason = "";
+  rewardType = Reward_Type.DAILY;
+
+  /**
+   * @generated from field: string title = 4;
+   */
+  title = "";
+
+  /**
+   * @generated from field: string description = 5;
+   */
+  description = "";
 
   constructor(data?: PartialMessage<RegisterRewardRequest>) {
     super();
@@ -503,7 +607,9 @@ export class RegisterRewardRequest extends Message<RegisterRewardRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "to_user_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "amount", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
-    { no: 3, name: "reason", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "reward_type", kind: "enum", T: proto3.getEnumType(Reward_Type) },
+    { no: 4, name: "title", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): RegisterRewardRequest {
@@ -575,9 +681,9 @@ export class RegisterAllowanceRequest extends Message<RegisterAllowanceRequest> 
   amount = 0;
 
   /**
-   * @generated from field: odachin.IntervalType interval_type = 3;
+   * @generated from field: odachin.Alloance.Type interval_type = 3;
    */
-  intervalType = IntervalType.EVERY_N_DAY;
+  intervalType = Alloance_Type.EVERY_N_DAY;
 
   /**
    * @generated from field: optional uint32 interval = 4;
@@ -604,7 +710,7 @@ export class RegisterAllowanceRequest extends Message<RegisterAllowanceRequest> 
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "to_user_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "amount", kind: "scalar", T: 1 /* ScalarType.DOUBLE */ },
-    { no: 3, name: "interval_type", kind: "enum", T: proto3.getEnumType(IntervalType) },
+    { no: 3, name: "interval_type", kind: "enum", T: proto3.getEnumType(Alloance_Type) },
     { no: 4, name: "interval", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
     { no: 5, name: "date", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
     { no: 6, name: "day_of_week", kind: "enum", T: proto3.getEnumType(DayOfWeek), opt: true },
@@ -642,9 +748,9 @@ export class UpdateAllowanceRequest extends Message<UpdateAllowanceRequest> {
   amount?: number;
 
   /**
-   * @generated from field: optional odachin.IntervalType interval_type = 3;
+   * @generated from field: optional odachin.Alloance.Type interval_type = 3;
    */
-  intervalType?: IntervalType;
+  intervalType?: Alloance_Type;
 
   /**
    * @generated from field: optional uint32 interval = 4;
@@ -671,7 +777,7 @@ export class UpdateAllowanceRequest extends Message<UpdateAllowanceRequest> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "allowance_id", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
     { no: 2, name: "amount", kind: "scalar", T: 1 /* ScalarType.DOUBLE */, opt: true },
-    { no: 3, name: "interval_type", kind: "enum", T: proto3.getEnumType(IntervalType), opt: true },
+    { no: 3, name: "interval_type", kind: "enum", T: proto3.getEnumType(Alloance_Type), opt: true },
     { no: 4, name: "interval", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
     { no: 5, name: "date", kind: "scalar", T: 13 /* ScalarType.UINT32 */, opt: true },
     { no: 6, name: "day_of_week", kind: "enum", T: proto3.getEnumType(DayOfWeek), opt: true },

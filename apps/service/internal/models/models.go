@@ -32,7 +32,7 @@ type Wallet struct {
 }
 
 type Transaction struct {
-	TransactionID uint   `gorm:"primaryKey"`
+	TransactionID uint   `gorm:"primaryKey;autoIncrement"`
 	FromUserID    string `gorm:"index"`
 	ToUserID      string `gorm:"index"`
 	Amount        float64
@@ -44,7 +44,7 @@ type Transaction struct {
 // Monthlyは毎月Dateに送金される
 // Weeklyは毎週DayOfWeekに送金される
 type Allowance struct {
-	AllowanceID  uint   `gorm:"primaryKey"`
+	AllowanceID  uint   `gorm:"primaryKey;autoIncrement"`
 	FromUserID   string `gorm:"index"`
 	ToUserID     string `gorm:"index"`
 	Amount       float64
@@ -57,11 +57,25 @@ type Allowance struct {
 }
 
 type Reward struct {
-	RewardID  uint   `gorm:"primaryKey"`
-	ToUserID  string `gorm:"index"`
-	Amount    float64
-	Reason    string
-	CreatedAt time.Time
+	RewardID      uint   `gorm:"primaryKey;autoIncrement"`
+	FromUserID    string `gorm:"index"`
+	ToUserID      string `gorm:"index"`
+	PeriodType    string `gorm:"type: period_enum"`
+	Title         string
+	Description   string
+	Amount        float64
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	RewardPeriods []RewardPeriod `gorm:"foreignKey:RewardID"`
+}
+
+type RewardPeriod struct {
+	RewardPeriodID uint `gorm:"primaryKey;autoIncrement"`
+	RewardID       uint
+	StartDate      time.Time
+	EndDate        time.Time
+	IsCompleted    bool
+	CompletedAt    time.Time
 }
 
 type Invitation struct {
