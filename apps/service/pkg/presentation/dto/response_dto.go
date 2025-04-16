@@ -16,7 +16,8 @@ func ToUserInfoResponse(u *models.User) *odachin.GetUserInfoResponse {
 
 func ToOwnInfoResponse(u *models.User) *odachin.GetOwnInfoResponse {
 	return &odachin.GetOwnInfoResponse{
-		Name:  &u.UserName,
-		Email: &u.Email,
+		Name:           u.UserName,
+		Email:          u.Email,
+		AvaterImageUrl: *u.AvatarImageUrl,
 	}
 }

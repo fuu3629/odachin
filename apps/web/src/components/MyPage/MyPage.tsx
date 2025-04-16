@@ -56,7 +56,7 @@ export function MyPage({}: MyPageProps) {
         <VStack align='flex-start' maxW='800px' w='full'>
           <Avatar.Root size='2xl' top='20px'>
             <Avatar.Fallback name='Segun Adebayo' />
-            <Avatar.Image src='https://bit.ly/sage-adebayo' />
+            <Avatar.Image src={userInfo?.avaterImageUrl} />
           </Avatar.Root>
           <Text fontSize='2xl' fontWeight='bold' mt={2}>
             {userInfo?.name}
