@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { HiUpload } from 'react-icons/hi';
 import { useUpdateAccountForm } from './lib';
-import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
@@ -11,13 +10,13 @@ export interface UpdateAccountFormProps {}
 
 export function UpdateAccountForm({}: UpdateAccountFormProps) {
   const router = useRouter();
-  const [defaultData, setDefaultData] = useState<GetOwnInfoResponse>();
   const {
     register,
     onSubmit,
     formState: { errors },
     watch,
-  } = useUpdateAccountForm(defaultData);
+    reset,
+  } = useUpdateAccountForm();
   const cookies = useContext(CokiesContext);
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +32,11 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
             headers: { authorization: cookies.authorization },
           },
         );
-        setDefaultData(res);
+        reset({
+          userName: res.name,
+          email: res.email,
+          avatar: undefined,
+        });
       } catch (error) {
         // router.push('/login');
         console.error('Error fetching user info:', error);
@@ -41,7 +44,6 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
     };
     fetchData();
   }, []);
-  console.log(watch('email'));
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -49,7 +51,7 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
         <Text fontSize='sm' fontWeight='bold' mb={1}>
           メールアドレス
         </Text>
-        <Input bg='gray.100' defaultValue={defaultData?.email} {...register('email')} />
+        <Input bg='gray.100' {...register('email')} />
         {errors.email && (
           <Text color='red.500' fontSize='sm'>
             {errors.email.message}
@@ -58,7 +60,7 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
         <Text fontSize='sm' fontWeight='bold' mb={1} mt={4}>
           ユーザ名（表示名）
         </Text>
-        <Input bg='gray.100' {...register('userName')} defaultValue={defaultData?.name} w='full' />
+        <Input bg='gray.100' {...register('userName')} w='full' />
         {errors.userName && (
           <Text color='red.500' fontSize='sm'>
             {errors.userName.message}

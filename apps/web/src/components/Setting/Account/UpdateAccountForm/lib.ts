@@ -1,8 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
+import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export const updateAccountFormSchema = z.object({
   userName: z.string().min(1, 'User Name must be at least 1 characters'),
@@ -19,22 +21,25 @@ async function fileToUint8Array(file?: File): Promise<Uint8Array | undefined> {
   return new Uint8Array(arrayBuffer); // ArrayBuffer を Uint8Array に変換
 }
 
-export const useUpdateAccountForm = (defaultValues?: GetOwnInfoResponse) => {
+export const useUpdateAccountForm = () => {
+  const cookies = useContext(CokiesContext);
   const { register, handleSubmit, formState, ...rest } = useForm<UpdateAccountFormSchemaType>({
     resolver: zodResolver(updateAccountFormSchema),
-    defaultValues: {
-      userName: defaultValues?.name,
-      email: defaultValues?.email,
-      avatar: undefined,
-    },
   });
   const onSubmit = async (data: UpdateAccountFormSchemaType) => {
+    if (!cookies || !cookies.authorization) {
+      console.error('No authentication token found');
+      return;
+    }
     const client = clientProvider();
     const req = {
       name: data.userName,
       email: data.email,
+      avatar: await fileToUint8Array(data.avatar),
     };
-    const res = await client.createUser(req);
+    const res = await client.updateUser(req, {
+      headers: { authorization: cookies?.authorization },
+    });
   };
   return { register, onSubmit: handleSubmit(onSubmit), formState, ...rest };
 };
