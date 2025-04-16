@@ -1,7 +1,7 @@
 import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
-import { GetUserInfoResponse, GetUserInfoRequest } from '@/__generated__/v1/odachin/odachin_pb';
+import { GetUserInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 export interface MyPageProps {}
@@ -17,13 +17,15 @@ export function MyPage({}: MyPageProps) {
       return;
     }
     const fetchData = async () => {
-      const client = clientProvider(cookies.auth);
+      const client = clientProvider();
       //TODO connectの型付け調べる
       const req = {
         userId: 'parent1',
       };
       try {
-        const res = await client.getUserInfo(req);
+        const res = await client.getUserInfo(req, {
+          headers: { authorization: cookies.authorization },
+        });
         setuserInfo(res);
       } catch (error) {
         // TODO login画面返す
