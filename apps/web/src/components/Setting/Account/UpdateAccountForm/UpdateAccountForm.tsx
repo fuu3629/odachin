@@ -18,6 +18,7 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
     reset,
   } = useUpdateAccountForm();
   const cookies = useContext(CokiesContext);
+  const file = watch('avatar');
   useEffect(() => {
     const fetchData = async () => {
       if (!cookies || !cookies.authorization) {
@@ -66,9 +67,7 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
             {errors.userName.message}
           </Text>
         )}
-        <Text h='100%' w='150px'>
-          Avatar
-        </Text>
+        <Text>Avatar</Text>
         <FileUpload.Root allowDrop={true} {...register('avatar')}>
           <FileUpload.HiddenInput />
           <FileUpload.Trigger asChild bg='white'>
@@ -85,6 +84,7 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
             {errors.userName.message}
           </Text>
         )}
+        <Button type='submit'>Update</Button>
       </form>
     </>
   );

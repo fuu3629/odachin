@@ -8,7 +8,6 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/google/uuid"
 )
 
@@ -42,7 +41,7 @@ func (c *AwsS3ClientImpl) PutObject(ctx context.Context, bucket string, folder_n
 		Bucket: &bucket,
 		Key:    &fileName,
 		Body:   body,
-		ACL:    types.ObjectCannedACLPublicRead,
+		// ACL:    types.ObjectCannedACLPublicRead,
 	}
 	_, err = c.s3Client.PutObject(context.TODO(), input)
 	if err != nil {

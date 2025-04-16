@@ -32,10 +32,11 @@ export const useUpdateAccountForm = () => {
       return;
     }
     const client = clientProvider();
+    const file = await fileToUint8Array(data.avatar);
     const req = {
       name: data.userName,
       email: data.email,
-      avatar: await fileToUint8Array(data.avatar),
+      profileImage: file,
     };
     const res = await client.updateUser(req, {
       headers: { authorization: cookies?.authorization },

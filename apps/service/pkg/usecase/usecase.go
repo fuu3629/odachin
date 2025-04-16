@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -109,8 +110,9 @@ func (u *UseCaseImpl) UpdateUser(ctx context.Context, req *odachin.UpdateUserReq
 		user["user_name"] = req.Name
 		user["email"] = req.Email
 		if req.ProfileImage != nil {
-			avaterImageUrl, err := u.s3Client.PutObject(ctx, "odachin-dev", "avaters", req.ProfileImage)
+			avaterImageUrl, err := u.s3Client.PutObject(ctx, "odachin-dev", "avatars", req.ProfileImage)
 			if err != nil {
+				fmt.Println("error: ", err)
 				return status.Errorf(codes.Internal, "s3 upload error: %v", err)
 			}
 			user["avatar_image_url"] = avaterImageUrl

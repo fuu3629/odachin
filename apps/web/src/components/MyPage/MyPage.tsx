@@ -5,7 +5,7 @@ import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
 import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
-import UnauthorizedPage from '@/pages/unauthorized';
+import unauthorizedPage from '@/pages/unauthorized';
 export interface MyPageProps {}
 
 //TODO ROLEで分岐する
@@ -15,14 +15,12 @@ export function MyPage({}: MyPageProps) {
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   useEffect(() => {
     if (!cookies || !cookies.authorization) {
-      //TODO 401エラー
-      UnauthorizedPage();
+      unauthorizedPage();
       console.error('No authentication token found');
       return;
     }
     const fetchData = async () => {
       const client = clientProvider();
-      //TODO connectの型付け調べる
       const req = {};
       try {
         const res = await client.getOwnInfo(req, {
@@ -31,7 +29,7 @@ export function MyPage({}: MyPageProps) {
         console.log('res', res);
         setuserInfo(res);
       } catch (error) {
-        // TODO login画面返す
+        router.push('/login');
         console.error('Error fetching user info:', error);
       }
     };
