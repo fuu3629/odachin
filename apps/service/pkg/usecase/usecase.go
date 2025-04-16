@@ -33,6 +33,7 @@ type UseCase interface {
 	RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error
 	UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error
 	GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error)
+	GetOwnInfo(ctx context.Context) (*models.User, error)
 }
 
 type UseCaseImpl struct {
@@ -86,7 +87,6 @@ func (u *UseCaseImpl) CreateUser(ctx context.Context, req *odachin.CreateUserReq
 			if err != nil {
 				return status.Errorf(codes.Internal, "database error: %v", err)
 			}
-
 		}
 		token, err = domain.GenerateToken(user.UserID)
 		if err != nil {
@@ -154,17 +154,10 @@ func (u *UseCaseImpl) CreateGroup(ctx context.Context, req *odachin.CreateGroupR
 		family := &models.Family{
 			FamilyName: req.FamilyName,
 		}
-
 		family, err := u.familyRepository.Save(tx, family)
-
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
-
-		// user := &models.User{
-		// 	UserID:   user_id,
-		// 	FamilyID: &family.FamilyID,
-		// }
 		user := make(map[string]interface{})
 		user["user_id"] = user_id
 		user["family_id"] = family.FamilyID
@@ -196,7 +189,6 @@ func (u *UseCaseImpl) InviteUser(ctx context.Context, req *odachin.InviteUserReq
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
 		return nil
-
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	if err != nil {
 		return err
@@ -334,10 +326,6 @@ func (u *UseCaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAl
 func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error) {
 	var userInfo models.User
 	err := u.db.Transaction(func(tx *gorm.DB) error {
-		// _, err := domain.ExtractTokenMetadata(ctx)
-		// if err != nil {
-		// 	return status.Errorf(codes.Unauthenticated, "invalid token: %v", err)
-		// }
 		user, err := u.userRepository.Get(tx, req.UserId)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
@@ -348,7 +336,23 @@ func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoR
 			Role:           user.Role,
 			AvatarImageUrl: user.AvatarImageUrl,
 		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return nil, err
+	}
+	return &userInfo, nil
+}
 
+func (u *UseCaseImpl) GetOwnInfo(ctx context.Context) (*models.User, error) {
+	var userInfo models.User
+	var err2 error
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		userInfo, err2 = u.userRepository.Get(tx, user_id)
+		if err2 != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err2)
+		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	if err != nil {

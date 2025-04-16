@@ -1,8 +1,9 @@
+import { create } from '@bufbuild/protobuf';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { setCookie } from 'nookies';
-import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { CreateUserRequestSchema } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 
 export const createAccountFormSchema = z.object({
@@ -14,8 +15,8 @@ export const createAccountFormSchema = z.object({
 
 export type CreateAccountFormSchemaType = z.infer<typeof createAccountFormSchema>;
 
-export const useCreateAccountForm = (setToken: Dispatch<SetStateAction<string>>) => {
-  const { register, handleSubmit, formState } = useForm<CreateAccountFormSchemaType>({
+export const useCreateAccountForm = () => {
+  const { register, handleSubmit, formState, ...rest } = useForm<CreateAccountFormSchemaType>({
     resolver: zodResolver(createAccountFormSchema),
   });
   const onSubmit = async (data: CreateAccountFormSchemaType) => {
@@ -27,12 +28,11 @@ export const useCreateAccountForm = (setToken: Dispatch<SetStateAction<string>>)
       password: data.password,
     };
     const res = await client.createUser(req);
-    setCookie(null, 'auth', res.token, {
+    setCookie(null, 'authorization', res.token, {
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: '/',
     });
-    //TODO
     window.location.href = '/myPage';
   };
-  return { register, onSubmit: handleSubmit(onSubmit), formState };
+  return { register, onSubmit: handleSubmit(onSubmit), formState, ...rest };
 };

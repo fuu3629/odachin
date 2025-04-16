@@ -137,3 +137,11 @@ func (s *ServerStruct) GetUserInfo(ctx context.Context, req *odachin.GetUserInfo
 	}
 	return dto.ToUserInfoResponse(userInfo), nil
 }
+
+func (s *ServerStruct) GetOwnInfo(ctx context.Context, req *emptypb.Empty) (*odachin.GetOwnInfoResponse, error) {
+	userInfo, err := s.useCase.GetOwnInfo(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return dto.ToOwnInfoResponse(userInfo), nil
+}

@@ -1,27 +1,13 @@
-import {
-  Flex,
-  Heading,
-  Input,
-  Button,
-  HStack,
-  Text,
-  Spacer,
-  Box,
-  Center,
-  VStack,
-} from '@chakra-ui/react';
-import { Dispatch, SetStateAction } from 'react';
+import { Flex, Heading, Input, Button, Text, Box, VStack } from '@chakra-ui/react';
 import { useCreateAccountForm } from './lib';
-export interface CreateAccountFormProps {
-  setToken: Dispatch<SetStateAction<string>>;
-}
+export interface CreateAccountFormProps {}
 
-export function CreateAccountForm({ setToken }: CreateAccountFormProps) {
+export function CreateAccountForm({}: CreateAccountFormProps) {
   const {
     register,
     onSubmit,
     formState: { errors },
-  } = useCreateAccountForm(setToken);
+  } = useCreateAccountForm();
   return (
     <Flex
       alignItems='center'

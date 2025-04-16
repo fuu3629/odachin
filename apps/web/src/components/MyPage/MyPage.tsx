@@ -1,4 +1,5 @@
 import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
 import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
@@ -9,9 +10,10 @@ export interface MyPageProps {}
 //TODO ROLEで分岐する
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
+  const router = useRouter();
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   useEffect(() => {
-    if (!cookies || !cookies.auth) {
+    if (!cookies || !cookies.authorization) {
       //TODO 401エラー
       console.error('No authentication token found');
       return;
@@ -24,6 +26,7 @@ export function MyPage({}: MyPageProps) {
         const res = await client.getOwnInfo(req, {
           headers: { authorization: cookies.authorization },
         });
+        console.log('res', res);
         setuserInfo(res);
       } catch (error) {
         // TODO login画面返す
@@ -34,9 +37,15 @@ export function MyPage({}: MyPageProps) {
   }, []);
 
   const menuItems = [
-    { icon: FaUser, label: '家族情報' },
-    { icon: FaLaptop, label: '取引履歴' },
-    { icon: FaCog, label: '設定' },
+    { icon: FaUser, label: '家族情報', onCLick: () => {} },
+    { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
+    {
+      icon: FaCog,
+      label: '設定',
+      onCLick: () => {
+        router.push('setting/account');
+      },
+    },
   ];
 
   return (
@@ -59,7 +68,7 @@ export function MyPage({}: MyPageProps) {
           </Text>
           <Grid gap={6} px={4} templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }}>
             {menuItems.map((item, index) => (
-              <GridItem key={index} textAlign='center'>
+              <GridItem key={index} onClick={item.onCLick} textAlign='center'>
                 <Flex
                   _hover={{ bg: 'gray.100', cursor: 'pointer' }}
                   align='center'

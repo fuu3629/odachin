@@ -14,7 +14,6 @@ const pacifico = Pacifico({
 export function Header({}: HeaderProps) {
   const router = useRouter();
   const { pathname } = router;
-  console.log('pathname', pathname);
   const paths = ['/login', '/createNewAccount', '/'];
 
   return (

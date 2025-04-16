@@ -13,3 +13,10 @@ func ToUserInfoResponse(u *models.User) *odachin.GetUserInfoResponse {
 		AvatarImageUrl: u.AvatarImageUrl,
 	}
 }
+
+func ToOwnInfoResponse(u *models.User) *odachin.GetOwnInfoResponse {
+	return &odachin.GetOwnInfoResponse{
+		Name:  &u.UserName,
+		Email: &u.Email,
+	}
+}

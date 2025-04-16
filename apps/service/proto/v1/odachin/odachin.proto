@@ -17,6 +17,7 @@ service OdachinService {
   rpc RegisterAllowance(RegisterAllowanceRequest) returns (google.protobuf.Empty);
   rpc UpdateAllowance(UpdateAllowanceRequest) returns (google.protobuf.Empty);
   rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+  rpc GetOwnInfo(google.protobuf.Empty) returns (GetOwnInfoResponse);
 }
 
 enum Status {
@@ -70,7 +71,7 @@ message CreateUserResponse {
 message UpdateUserRequest {
   optional string name = 1;
   optional string email = 2;
-  optional bytes profile_image = 4;
+  optional bytes profile_image = 3;
 }
 
 message LoginRequest {
@@ -133,4 +134,9 @@ message GetUserInfoResponse {
   string name = 2;
   Role role = 3;
   optional string avatar_image_url = 4;
+}
+
+message GetOwnInfoResponse{
+  optional string name = 1;
+  optional string email = 2;
 }

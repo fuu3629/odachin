@@ -20,12 +20,11 @@ export const useLoginForm = () => {
     const req = {
       userId: data.userId,
       password: data.password,
-      a: '',
     };
     const res = await client.login(req);
     try {
       const res = await client.login(req);
-      setCookie(null, 'auth', res.token, {
+      setCookie(null, 'authorization', res.token, {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });

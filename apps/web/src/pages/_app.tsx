@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps, ctx: NextPageCon
     router.beforePopState(({ url, as, options }) => {
       // ログイン画面とエラー画面遷移時のみ認証チェックを行わない
       if (url !== '/login' && url !== '/createNewAccount' && url !== '/_error' && url !== '/') {
-        if (typeof cookies.auth === 'undefined') {
+        if (typeof cookies.authorization === 'undefined') {
           // CSR用リダイレクト処理
           window.location.href = '/login';
           return false;
@@ -56,7 +56,7 @@ App.getInitialProps = async (appContext: any) => {
     appContext.ctx.pathname !== '/_error' &&
     appContext.ctx.pathname !== '/'
   ) {
-    if (typeof cookies.auth === 'undefined') {
+    if (typeof cookies.authorization === 'undefined') {
       // SSR or CSRを判定
       const isServer = typeof window === 'undefined';
       if (isServer) {
