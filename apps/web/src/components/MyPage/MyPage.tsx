@@ -5,6 +5,7 @@ import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
 import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
+import UnauthorizedPage from '@/pages/unauthorized';
 export interface MyPageProps {}
 
 //TODO ROLEで分岐する
@@ -15,6 +16,7 @@ export function MyPage({}: MyPageProps) {
   useEffect(() => {
     if (!cookies || !cookies.authorization) {
       //TODO 401エラー
+      UnauthorizedPage();
       console.error('No authentication token found');
       return;
     }
