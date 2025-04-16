@@ -1,7 +1,7 @@
 import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
-import { GetUserInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
+import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 export interface MyPageProps {}
@@ -9,7 +9,7 @@ export interface MyPageProps {}
 //TODO ROLEで分岐する
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
-  const [userInfo, setuserInfo] = useState<GetUserInfoResponse | null>(null);
+  const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   useEffect(() => {
     if (!cookies || !cookies.auth) {
       //TODO 401エラー
@@ -19,11 +19,9 @@ export function MyPage({}: MyPageProps) {
     const fetchData = async () => {
       const client = clientProvider();
       //TODO connectの型付け調べる
-      const req = {
-        userId: 'parent1',
-      };
+      const req = {};
       try {
-        const res = await client.getUserInfo(req, {
+        const res = await client.getOwnInfo(req, {
           headers: { authorization: cookies.authorization },
         });
         setuserInfo(res);
