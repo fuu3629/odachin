@@ -1,10 +1,8 @@
-import type { PartialMessage } from '@bufbuild/protobuf';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { setCookie } from 'nookies';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { CreateUserRequest } from '@/__generated__/services/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 
 export const createAccountFormSchema = z.object({
@@ -22,7 +20,7 @@ export const useCreateAccountForm = (setToken: Dispatch<SetStateAction<string>>)
   });
   const onSubmit = async (data: CreateAccountFormSchemaType) => {
     const client = clientProvider();
-    const req: PartialMessage<CreateUserRequest> = {
+    const req = {
       userId: data.userId,
       name: data.userName,
       email: data.email,

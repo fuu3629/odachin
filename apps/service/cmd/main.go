@@ -9,15 +9,18 @@ import (
 	"github.com/fuu3629/odachin/apps/service/pkg/middleware"
 	"github.com/fuu3629/odachin/apps/service/pkg/presentation"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	protovalidate_middleware "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/protovalidate"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	"github.com/joho/godotenv"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
 // protoのコンパイルseviceで
 // buf generate proto
 
+// TODO connect対応にする
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -40,15 +43,22 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to create validator: %v", err)
 	}
-	opts := []recovery.Option{
+	recovery_opts := []recovery.Option{
 		recovery.WithRecoveryHandler(middleware.RecoveryFunc),
+	}
+	logger := zap.NewExample()
+
+	logger_opts := []logging.Option{
+		logging.WithLogOnEvents(logging.StartCall, logging.FinishCall),
+		// Add any other option (check functions starting with logging.With).
 	}
 
 	grpcServer := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(
 			auth.UnaryServerInterceptor(middleware.AuthFunc),
 			protovalidate_middleware.UnaryServerInterceptor(validator),
-			recovery.UnaryServerInterceptor(opts...),
+			recovery.UnaryServerInterceptor(recovery_opts...),
+			logging.UnaryServerInterceptor(middleware.InterceptorLogger(logger), logger_opts...),
 		),
 	)
 	presentation.NewServer(grpcServer, db)

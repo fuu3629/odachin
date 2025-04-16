@@ -1,12 +1,20 @@
-version: v1
+version: v2
+# plugins:
+#   # Protocol Buffersのmessageに対応するTypeScriptコードを生成する (_pb.tsで終わるファイル名のもの)
+#   - name: es
+#     out: src/__generated__
+#     opt: target=ts
+#   # Protocol Buffersのserviceに対応するTypeScriptコードを生成する (_connectweb.tsで終わるファイル名のもの)
+#   - name: connect-web
+#     out: src/__generated__
+#     opt:
+#       - target=ts
+#       - import_extension=none
 plugins:
-  # Protocol Buffersのmessageに対応するTypeScriptコードを生成する (_pb.tsで終わるファイル名のもの)
-  - name: es
-    out: src/__generated__/services
+  # This will invoke protoc-gen-es and write output to src/gen
+  - local: protoc-gen-es
+    out: src/__generated__
+    # Also generate any imported dependencies
+    include_imports: true
+    # Add more plugin options here
     opt: target=ts
-  # Protocol Buffersのserviceに対応するTypeScriptコードを生成する (_connectweb.tsで終わるファイル名のもの)
-  - name: connect-web
-    out: src/__generated__/services
-    opt:
-      - target=ts
-      - import_extension=none

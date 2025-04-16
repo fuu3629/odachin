@@ -1,33 +1,35 @@
-import { PartialMessage } from '@bufbuild/protobuf';
 import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@chakra-ui/react';
-import { use, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
-import { GetUserInfoRequest, GetUserInfoResponse } from '@/__generated__/services/odachin_pb';
+import { GetUserInfoResponse, GetUserInfoRequest } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 export interface MyPageProps {}
 
+//TODO ROLEで分岐する
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
   const [userInfo, setuserInfo] = useState<GetUserInfoResponse | null>(null);
   useEffect(() => {
     if (!cookies || !cookies.auth) {
+      //TODO 401エラー
       console.error('No authentication token found');
       return;
     }
     const fetchData = async () => {
       const client = clientProvider(cookies.auth);
-      const req: PartialMessage<GetUserInfoRequest> = {
+      //TODO connectの型付け調べる
+      const req = {
         userId: 'parent1',
       };
       try {
         const res = await client.getUserInfo(req);
         setuserInfo(res);
       } catch (error) {
+        // TODO login画面返す
         console.error('Error fetching user info:', error);
       }
     };
-
     fetchData();
   }, []);
 

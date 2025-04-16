@@ -1,22 +1,20 @@
-import { createPromiseClient, Interceptor } from '@bufbuild/connect';
-import { createGrpcWebTransport } from '@bufbuild/connect-web';
-import { useContext } from 'react';
-import { CokiesContext } from './CokiesContext';
-import { OdachinService } from '@/__generated__/services/v1/odachin/odachin_connectweb';
+import { createClient, Interceptor } from '@connectrpc/connect';
+import { createGrpcWebTransport, createConnectTransport } from '@connectrpc/connect-web';
+import { OdachinService } from '@/__generated__/v1/odachin/odachin_pb';
 
 export function clientProvider(token?: string) {
-  const authInterceptor: Interceptor = (next) => async (req) => {
-    if (token != null) {
-      // リクエストヘッダーにトークンをセットする
-      req.header.set('authorization', `${token}`);
-    }
-    return await next(req);
-  };
+  // const authInterceptor: Interceptor = (next) => async (req) => {
+  //   if (token != null) {
+  //     // リクエストヘッダーにトークンをセットする
+  //     req.header.set('authorization', `${token}`);
+  //   }
+  //   return await next(req);
+  // };
 
   const transport = createGrpcWebTransport({
     baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL as string,
-    interceptors: [authInterceptor],
+    // interceptors: [authInterceptor],
   });
 
-  return createPromiseClient(OdachinService, transport);
+  return createClient(OdachinService, transport);
 }

@@ -17,8 +17,7 @@
   },
   "dependencies": {
     "@bufbuild/buf": "^1.29.0",
-    "@bufbuild/connect-web": "^0.11.0",
-    "@bufbuild/protobuf": "^1.7.2",
+    "@bufbuild/protobuf": "^2.2.2",
     "@chakra-ui/react": "^3.14.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.11.0",
@@ -36,11 +35,11 @@
     "react-paginate": "^8.2.0",
     "react-select": "^5.10.1",
     "react-ymd-date-select": "^0.3.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@connectrpc/connect-web": "^2.0.0"
   },
   "devDependencies": {
-    "@bufbuild/protoc-gen-connect-web": "^0.11.0",
-    "@bufbuild/protoc-gen-es": "^1.7.2",
+    "@bufbuild/protoc-gen-es": "^2.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

@@ -1,9 +1,7 @@
-import type { PartialMessage } from '@bufbuild/protobuf';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { setCookie } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { LoginRequest } from '@/__generated__/services/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 
 export const loginFormSchema = z.object({
@@ -19,10 +17,12 @@ export const useLoginForm = () => {
   });
   const onSubmit = async (data: LoginFormSchemaType) => {
     const client = clientProvider();
-    const req: PartialMessage<LoginRequest> = {
+    const req = {
       userId: data.userId,
       password: data.password,
+      a: '',
     };
+    const res = await client.login(req);
     try {
       const res = await client.login(req);
       setCookie(null, 'auth', res.token, {
