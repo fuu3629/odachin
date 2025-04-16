@@ -7,16 +7,13 @@ import {
   Flex,
   Float,
   Heading,
-  HStack,
   Input,
   SimpleGrid,
   Spacer,
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import { HiUpload } from 'react-icons/hi';
+import { useContext, useEffect } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { useUpdateAccountForm } from './lib';
 import { clientProvider } from '@/pages/api/ClientProvider';
@@ -25,7 +22,6 @@ import { CokiesContext } from '@/pages/api/CokiesContext';
 export interface UpdateAccountFormProps {}
 
 export function UpdateAccountForm({}: UpdateAccountFormProps) {
-  const router = useRouter();
   const {
     register,
     onSubmit,

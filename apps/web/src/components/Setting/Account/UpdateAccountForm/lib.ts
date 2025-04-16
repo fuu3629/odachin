@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
@@ -23,6 +23,7 @@ async function fileToUint8Array(file?: File): Promise<Uint8Array | undefined> {
 
 export const useUpdateAccountForm = () => {
   const cookies = useContext(CokiesContext);
+  const router = useRouter();
   const { register, handleSubmit, formState, ...rest } = useForm<UpdateAccountFormSchemaType>({
     resolver: zodResolver(updateAccountFormSchema),
   });
@@ -38,9 +39,14 @@ export const useUpdateAccountForm = () => {
       email: data.email,
       profileImage: file,
     };
-    const res = await client.updateUser(req, {
-      headers: { authorization: cookies?.authorization },
-    });
+    try {
+      const res = await client.updateUser(req, {
+        headers: { authorization: cookies?.authorization },
+      });
+      router.push('/myPage');
+    } catch (error) {
+      alert('アップデートに失敗しました。');
+    }
   };
   return { register, onSubmit: handleSubmit(onSubmit), formState, ...rest };
 };
