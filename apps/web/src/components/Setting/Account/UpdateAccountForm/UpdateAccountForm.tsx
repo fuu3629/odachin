@@ -1,7 +1,23 @@
-import { Button, FileUpload, Heading, Input, Text } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Button,
+  Circle,
+  FileUpload,
+  Flex,
+  Float,
+  Heading,
+  HStack,
+  Input,
+  SimpleGrid,
+  Spacer,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { HiUpload } from 'react-icons/hi';
+import { MdEdit } from 'react-icons/md';
 import { useUpdateAccountForm } from './lib';
 import { clientProvider } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
@@ -46,46 +62,58 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
     fetchData();
   }, []);
   return (
-    <>
+    <Box bg='white' borderRadius='xl' boxShadow='lg' m='auto' p={8} w='40%'>
       <form onSubmit={onSubmit}>
-        <Heading mb={6}>ユーザー情報の更新</Heading>
-        <Text fontSize='sm' fontWeight='bold' mb={1}>
-          メールアドレス
-        </Text>
-        <Input bg='gray.100' {...register('email')} />
-        {errors.email && (
-          <Text color='red.500' fontSize='sm'>
-            {errors.email.message}
-          </Text>
-        )}
-        <Text fontSize='sm' fontWeight='bold' mb={1} mt={4}>
-          ユーザ名（表示名）
-        </Text>
-        <Input bg='gray.100' {...register('userName')} w='full' />
-        {errors.userName && (
-          <Text color='red.500' fontSize='sm'>
-            {errors.userName.message}
-          </Text>
-        )}
-        <Text>Avatar</Text>
-        <FileUpload.Root allowDrop={true} {...register('avatar')}>
-          <FileUpload.HiddenInput />
-          <FileUpload.Trigger asChild bg='white'>
-            <Button px='20px' size='sm' variant='outline'>
-              <HiUpload /> Upload file
-            </Button>
-          </FileUpload.Trigger>
-          <FileUpload.ItemGroup>
-            <FileUpload.Items />
-          </FileUpload.ItemGroup>
-        </FileUpload.Root>
-        {errors.userName && (
-          <Text color='red.500' fontSize='sm'>
-            {errors.userName.message}
-          </Text>
-        )}
-        <Button type='submit'>Update</Button>
+        <VStack>
+          <FileUpload.Root allowDrop={true} {...register('avatar')} alignItems='center'>
+            <FileUpload.HiddenInput />
+            <FileUpload.Trigger asChild bg='white'>
+              <Flex align='center' direction='column' mb={8}>
+                <Avatar.Root onClick={() => {}} size='2xl' top='20px'>
+                  <Avatar.Fallback name='Segun Adebayo' />
+                  <Avatar.Image src='https://bit.ly/sage-adebayo' />
+                  <Float offsetX='1' offsetY='1' placement='bottom-end'>
+                    <Circle bg='orange.500' outline='0.2em solid' outlineColor='bg' size='23px'>
+                      <MdEdit color='white' />
+                    </Circle>
+                  </Float>
+                </Avatar.Root>
+              </Flex>
+            </FileUpload.Trigger>
+            <FileUpload.ItemGroup>
+              <FileUpload.Items />
+            </FileUpload.ItemGroup>
+          </FileUpload.Root>
+
+          <Heading mb={6}>ユーザー情報の更新</Heading>
+          <SimpleGrid columns={2} gap={10}>
+            <Box>
+              <Text fontSize='sm' fontWeight='bold'>
+                メールアドレス
+              </Text>
+              <Input bg='gray.100' {...register('email')} />
+              {errors.email && (
+                <Text color='red.500' fontSize='sm'>
+                  {errors.email.message}
+                </Text>
+              )}
+            </Box>
+            <Box>
+              <Text fontSize='sm' fontWeight='bold'>
+                ユーザ名（表示名）
+              </Text>
+              <Input bg='gray.100' {...register('userName')} w='full' />
+              {errors.userName && (
+                <Text color='red.500' fontSize='sm'>
+                  {errors.userName.message}
+                </Text>
+              )}
+            </Box>
+          </SimpleGrid>
+          <Spacer />
+          <Button type='submit'>Update</Button>
+        </VStack>
       </form>
-    </>
+    </Box>
   );
 }
