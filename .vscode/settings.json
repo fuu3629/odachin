@@ -22,5 +22,6 @@
   "editor.linkedEditing": true,
   "protoc": {
     "options": ["-I=~/.cache/buf/v1/module/data/buf.build"]
-  }
+  },
+  "typescript.tsdk": "./apps/web/node_modules/typescript/lib"
 }
