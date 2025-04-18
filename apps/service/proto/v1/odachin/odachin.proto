@@ -18,6 +18,7 @@ service OdachinService {
   rpc UpdateAllowance(UpdateAllowanceRequest) returns (google.protobuf.Empty);
   rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
   rpc GetOwnInfo(google.protobuf.Empty) returns (GetOwnInfoResponse);
+  rpc GetRewardList(GetRewardListRequest) returns (GetRewardListResponse);
 }
 
 enum Status {
@@ -54,6 +55,18 @@ message Reward{
     WEEKLY = 1; // 毎週
     MONTHLY = 2; // 毎月
   }
+}
+
+message RewardInfo{
+  uint64 reward_period_id = 1 [(buf.validate.field).int64.gte = 1];
+  string from_user_id = 2 [(buf.validate.field).string.min_len = 1];
+  string to_user_id = 3 [(buf.validate.field).string.min_len = 1];
+  double amount = 4 [(buf.validate.field).double.gt = 0];
+  Reward.Type reward_type = 5 [(buf.validate.field).enum.defined_only = true];
+  string title = 6 [(buf.validate.field).string.min_len = 1];
+  string description = 7 [(buf.validate.field).string.min_len = 1];
+  bool isCompleted = 8;
+  bool isEditable = 9;
 }
 
 message CreateUserRequest {
@@ -139,5 +152,13 @@ message GetUserInfoResponse {
 message GetOwnInfoResponse{
   string name = 1;
   string email = 2;
-  string avater_image_url = 3;
+  optional string avater_image_url = 3;
+}
+
+message GetRewardListRequest {
+  Reward.Type reward_type = 1 [(buf.validate.field).enum.defined_only = true];
+}
+
+message GetRewardListResponse {
+  repeated RewardInfo reward_list = 1;
 }

@@ -9,6 +9,7 @@ type RewardPeriodRepository interface {
 	Get(tx *gorm.DB, id string) (models.RewardPeriod, error)
 	Save(tx *gorm.DB, param *models.RewardPeriod) error
 	Update(tx *gorm.DB, reward_period map[string]interface{}) error
+	GetWithReward(tx *gorm.DB, condition string, args ...interface{}) ([]models.RewardPeriod, error)
 }
 
 type RewardPeriodRepositoryImpl struct{}
@@ -23,6 +24,14 @@ func (r *RewardPeriodRepositoryImpl) Get(tx *gorm.DB, id string) (models.RewardP
 		return models.RewardPeriod{}, err
 	}
 	return reward_period, nil
+}
+
+func (r *RewardPeriodRepositoryImpl) GetWithReward(tx *gorm.DB, condition string, args ...interface{}) ([]models.RewardPeriod, error) {
+	var reward_periods []models.RewardPeriod
+	if err := tx.Joins("JOIN rewards ON reward_periods.reward_id = rewards.reward_id").Where(condition, args...).Preload("Reward").Find(&reward_periods).Error; err != nil {
+		return nil, err
+	}
+	return reward_periods, nil
 }
 
 func (r *RewardPeriodRepositoryImpl) Save(tx *gorm.DB, reward_period *models.RewardPeriod) error {

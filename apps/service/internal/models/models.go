@@ -77,6 +77,7 @@ type RewardPeriod struct {
 	IsCompleted    bool
 	IsEditable     bool
 	CompletedAt    time.Time
+	Reward         Reward
 }
 
 type Invitation struct {

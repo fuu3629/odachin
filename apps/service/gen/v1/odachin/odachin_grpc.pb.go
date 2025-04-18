@@ -32,6 +32,7 @@ const (
 	OdachinService_UpdateAllowance_FullMethodName   = "/odachin.OdachinService/UpdateAllowance"
 	OdachinService_GetUserInfo_FullMethodName       = "/odachin.OdachinService/GetUserInfo"
 	OdachinService_GetOwnInfo_FullMethodName        = "/odachin.OdachinService/GetOwnInfo"
+	OdachinService_GetRewardList_FullMethodName     = "/odachin.OdachinService/GetRewardList"
 )
 
 // OdachinServiceClient is the client API for OdachinService service.
@@ -51,6 +52,7 @@ type OdachinServiceClient interface {
 	UpdateAllowance(ctx context.Context, in *UpdateAllowanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error)
 	GetOwnInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetOwnInfoResponse, error)
+	GetRewardList(ctx context.Context, in *GetRewardListRequest, opts ...grpc.CallOption) (*GetRewardListResponse, error)
 }
 
 type odachinServiceClient struct {
@@ -169,6 +171,15 @@ func (c *odachinServiceClient) GetOwnInfo(ctx context.Context, in *emptypb.Empty
 	return out, nil
 }
 
+func (c *odachinServiceClient) GetRewardList(ctx context.Context, in *GetRewardListRequest, opts ...grpc.CallOption) (*GetRewardListResponse, error) {
+	out := new(GetRewardListResponse)
+	err := c.cc.Invoke(ctx, OdachinService_GetRewardList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OdachinServiceServer is the server API for OdachinService service.
 // All implementations must embed UnimplementedOdachinServiceServer
 // for forward compatibility
@@ -186,6 +197,7 @@ type OdachinServiceServer interface {
 	UpdateAllowance(context.Context, *UpdateAllowanceRequest) (*emptypb.Empty, error)
 	GetUserInfo(context.Context, *GetUserInfoRequest) (*GetUserInfoResponse, error)
 	GetOwnInfo(context.Context, *emptypb.Empty) (*GetOwnInfoResponse, error)
+	GetRewardList(context.Context, *GetRewardListRequest) (*GetRewardListResponse, error)
 	mustEmbedUnimplementedOdachinServiceServer()
 }
 
@@ -228,6 +240,9 @@ func (UnimplementedOdachinServiceServer) GetUserInfo(context.Context, *GetUserIn
 }
 func (UnimplementedOdachinServiceServer) GetOwnInfo(context.Context, *emptypb.Empty) (*GetOwnInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetOwnInfo not implemented")
+}
+func (UnimplementedOdachinServiceServer) GetRewardList(context.Context, *GetRewardListRequest) (*GetRewardListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRewardList not implemented")
 }
 func (UnimplementedOdachinServiceServer) mustEmbedUnimplementedOdachinServiceServer() {}
 
@@ -458,6 +473,24 @@ func _OdachinService_GetOwnInfo_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OdachinService_GetRewardList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRewardListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OdachinServiceServer).GetRewardList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OdachinService_GetRewardList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OdachinServiceServer).GetRewardList(ctx, req.(*GetRewardListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OdachinService_ServiceDesc is the grpc.ServiceDesc for OdachinService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -512,6 +545,10 @@ var OdachinService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOwnInfo",
 			Handler:    _OdachinService_GetOwnInfo_Handler,
+		},
+		{
+			MethodName: "GetRewardList",
+			Handler:    _OdachinService_GetRewardList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

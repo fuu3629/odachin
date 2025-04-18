@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/odachin.proto.
  */
 export const file_v1_odachin_odachin: GenFile = /*@__PURE__*/
-  fileDesc("Chh2MS9vZGFjaGluL29kYWNoaW4ucHJvdG8SB29kYWNoaW4iPAoIQWxsb2FuY2UiMAoEVHlwZRIPCgtFVkVSWV9OX0RBWRAAEgoKBldFRUtMWRABEgsKB01PTlRITFkQAiI0CgZSZXdhcmQiKgoEVHlwZRIJCgVEQUlMWRAAEgoKBldFRUtMWRABEgsKB01PTlRITFkQAiKeAQoRQ3JlYXRlVXNlclJlcXVlc3QSGAoHdXNlcl9pZBgBIAEoCUIHukgEcgIQARIVCgRuYW1lGAIgASgJQge6SARyAhABEhYKBWVtYWlsGAMgASgJQge6SARyAmABEhkKCHBhc3N3b3JkGAQgASgJQge6SARyAhAIEiUKBHJvbGUYBSABKA4yDS5vZGFjaGluLlJvbGVCCLpIBYIBAhABIiMKEkNyZWF0ZVVzZXJSZXNwb25zZRINCgV0b2tlbhgBIAEoCSJ7ChFVcGRhdGVVc2VyUmVxdWVzdBIRCgRuYW1lGAEgASgJSACIAQESEgoFZW1haWwYAiABKAlIAYgBARIaCg1wcm9maWxlX2ltYWdlGAMgASgMSAKIAQFCBwoFX25hbWVCCAoGX2VtYWlsQhAKDl9wcm9maWxlX2ltYWdlIkMKDExvZ2luUmVxdWVzdBIYCgd1c2VyX2lkGAEgASgJQge6SARyAhABEhkKCHBhc3N3b3JkGAIgASgJQge6SARyAhAIIh4KDUxvZ2luUmVzcG9uc2USDQoFdG9rZW4YASABKAkiMgoSQ3JlYXRlR3JvdXBSZXF1ZXN0EhwKC2ZhbWlseV9uYW1lGAEgASgJQge6SARyAhABIjAKEUludml0ZVVzZXJSZXF1ZXN0EhsKCnRvX3VzZXJfaWQYASABKAlCB7pIBHICEAEiOQoXQWNjZXB0SW52aXRhdGlvblJlcXVlc3QSHgoNaW52aXRhdGlvbl9pZBgBIAEoBEIHukgEIgIoASK/AQoVUmVnaXN0ZXJSZXdhcmRSZXF1ZXN0EhsKCnRvX3VzZXJfaWQYASABKAlCB7pIBHICEAESHgoGYW1vdW50GAIgASgBQg66SAsSCSEAAAAAAAAAABIzCgtyZXdhcmRfdHlwZRgDIAEoDjIULm9kYWNoaW4uUmV3YXJkLlR5cGVCCLpIBYIBAhABEhYKBXRpdGxlGAQgASgJQge6SARyAhABEhwKC2Rlc2NyaXB0aW9uGAUgASgJQge6SARyAhABIjEKE0RlbGV0ZVJld2FyZFJlcXVlc3QSGgoJcmV3YXJkX2lkGAEgASgEQge6SAQiAigBIqICChhSZWdpc3RlckFsbG93YW5jZVJlcXVlc3QSGwoKdG9fdXNlcl9pZBgBIAEoCUIHukgEcgIQARIeCgZhbW91bnQYAiABKAFCDrpICxIJIQAAAAAAAAAAEjcKDWludGVydmFsX3R5cGUYAyABKA4yFi5vZGFjaGluLkFsbG9hbmNlLlR5cGVCCLpIBYIBAhABEh4KCGludGVydmFsGAQgASgNQge6SAQaAigBSACIAQESHAoEZGF0ZRgFIAEoDUIJukgGGgQYHygBSAGIAQESLAoLZGF5X29mX3dlZWsYBiABKA4yEi5vZGFjaGluLkRheU9mV2Vla0gCiAEBQgsKCV9pbnRlcnZhbEIHCgVfZGF0ZUIOCgxfZGF5X29mX3dlZWsiqwIKFlVwZGF0ZUFsbG93YW5jZVJlcXVlc3QSHQoMYWxsb3dhbmNlX2lkGAEgASgEQge6SAQiAigBEiMKBmFtb3VudBgCIAEoAUIOukgLEgkhAAAAAAAAAABIAIgBARIyCg1pbnRlcnZhbF90eXBlGAMgASgOMhYub2RhY2hpbi5BbGxvYW5jZS5UeXBlSAGIAQESFQoIaW50ZXJ2YWwYBCABKA1IAogBARIRCgRkYXRlGAUgASgNSAOIAQESLAoLZGF5X29mX3dlZWsYBiABKA4yEi5vZGFjaGluLkRheU9mV2Vla0gEiAEBQgkKB19hbW91bnRCEAoOX2ludGVydmFsX3R5cGVCCwoJX2ludGVydmFsQgcKBV9kYXRlQg4KDF9kYXlfb2Zfd2VlayIuChJHZXRVc2VySW5mb1JlcXVlc3QSGAoHdXNlcl9pZBgBIAEoCUIHukgEcgIQASKFAQoTR2V0VXNlckluZm9SZXNwb25zZRIPCgd1c2VyX2lkGAEgASgJEgwKBG5hbWUYAiABKAkSGwoEcm9sZRgDIAEoDjINLm9kYWNoaW4uUm9sZRIdChBhdmF0YXJfaW1hZ2VfdXJsGAQgASgJSACIAQFCEwoRX2F2YXRhcl9pbWFnZV91cmwiSwoSR2V0T3duSW5mb1Jlc3BvbnNlEgwKBG5hbWUYASABKAkSDQoFZW1haWwYAiABKAkSGAoQYXZhdGVyX2ltYWdlX3VybBgDIAEoCSoiCgZTdGF0dXMSCwoHU1VDQ0VTUxAAEgsKB0ZBSUxVUkUQASodCgRSb2xlEgoKBlBBUkVOVBAAEgkKBUNISUxEEAEqZwoJRGF5T2ZXZWVrEgoKBk1PTkRBWRAAEgsKB1RVRVNEQVkQARINCglXRURORVNEQVkQAhIMCghUSFVSU0RBWRADEgoKBkZSSURBWRAEEgwKCFNBVFVSREFZEAUSCgoGU1VOREFZEAYy3gYKDk9kYWNoaW5TZXJ2aWNlEkUKCkNyZWF0ZVVzZXISGi5vZGFjaGluLkNyZWF0ZVVzZXJSZXF1ZXN0Ghsub2RhY2hpbi5DcmVhdGVVc2VyUmVzcG9uc2USQAoKVXBkYXRlVXNlchIaLm9kYWNoaW4uVXBkYXRlVXNlclJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSNgoFTG9naW4SFS5vZGFjaGluLkxvZ2luUmVxdWVzdBoWLm9kYWNoaW4uTG9naW5SZXNwb25zZRJCCgtDcmVhdGVHcm91cBIbLm9kYWNoaW4uQ3JlYXRlR3JvdXBSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EkAKCkludml0ZVVzZXISGi5vZGFjaGluLkludml0ZVVzZXJSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EkwKEEFjY2VwdEludml0YXRpb24SIC5vZGFjaGluLkFjY2VwdEludml0YXRpb25SZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EkgKDlJlZ2lzdGVyUmV3YXJkEh4ub2RhY2hpbi5SZWdpc3RlclJld2FyZFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSRAoMRGVsZXRlUmV3YXJkEhwub2RhY2hpbi5EZWxldGVSZXdhcmRSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Ek4KEVJlZ2lzdGVyQWxsb3dhbmNlEiEub2RhY2hpbi5SZWdpc3RlckFsbG93YW5jZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSSgoPVXBkYXRlQWxsb3dhbmNlEh8ub2RhY2hpbi5VcGRhdGVBbGxvd2FuY2VSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EkgKC0dldFVzZXJJbmZvEhsub2RhY2hpbi5HZXRVc2VySW5mb1JlcXVlc3QaHC5vZGFjaGluLkdldFVzZXJJbmZvUmVzcG9uc2USQQoKR2V0T3duSW5mbxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRobLm9kYWNoaW4uR2V0T3duSW5mb1Jlc3BvbnNlYgZwcm90bzM", [file_google_protobuf_empty, file_buf_validate_validate]);
+  fileDesc("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CQoHX2Ftb3VudEIQCg5faW50ZXJ2YWxfdHlwZUILCglfaW50ZXJ2YWxCBwoFX2RhdGVCDgoMX2RheV9vZl93ZWVrIi4KEkdldFVzZXJJbmZvUmVxdWVzdBIYCgd1c2VyX2lkGAEgASgJQge6SARyAhABIoUBChNHZXRVc2VySW5mb1Jlc3BvbnNlEg8KB3VzZXJfaWQYASABKAkSDAoEbmFtZRgCIAEoCRIbCgRyb2xlGAMgASgOMg0ub2RhY2hpbi5Sb2xlEh0KEGF2YXRhcl9pbWFnZV91cmwYBCABKAlIAIgBAUITChFfYXZhdGFyX2ltYWdlX3VybCJlChJHZXRPd25JbmZvUmVzcG9uc2USDAoEbmFtZRgBIAEoCRINCgVlbWFpbBgCIAEoCRIdChBhdmF0ZXJfaW1hZ2VfdXJsGAMgASgJSACIAQFCEwoRX2F2YXRlcl9pbWFnZV91cmwiSwoUR2V0UmV3YXJkTGlzdFJlcXVlc3QSMwoLcmV3YXJkX3R5cGUYASABKA4yFC5vZGFjaGluLlJld2FyZC5UeXBlQgi6SAWCAQIQASJBChVHZXRSZXdhcmRMaXN0UmVzcG9uc2USKAoLcmV3YXJkX2xpc3QYASADKAsyEy5vZGFjaGluLlJld2FyZEluZm8qIgoGU3RhdHVzEgsKB1NVQ0NFU1MQABILCgdGQUlMVVJFEAEqHQoEUm9sZRIKCgZQQVJFTlQQABIJCgVDSElMRBABKmcKCURheU9mV2VlaxIKCgZNT05EQVkQABILCgdUVUVTREFZEAESDQoJV0VETkVTREFZEAISDAoIVEhVUlNEQVkQAxIKCgZGUklEQVkQBBIMCghTQVRVUkRBWRAFEgoKBlNVTkRBWRAGMq4HCg5PZGFjaGluU2VydmljZRJFCgpDcmVhdGVVc2VyEhoub2RhY2hpbi5DcmVhdGVVc2VyUmVxdWVzdBobLm9kYWNoaW4uQ3JlYXRlVXNlclJlc3BvbnNlEkAKClVwZGF0ZVVzZXISGi5vZGFjaGluLlVwZGF0ZVVzZXJSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EjYKBUxvZ2luEhUub2RhY2hpbi5Mb2dpblJlcXVlc3QaFi5vZGFjaGluLkxvZ2luUmVzcG9uc2USQgoLQ3JlYXRlR3JvdXASGy5vZGFjaGluLkNyZWF0ZUdyb3VwUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJACgpJbnZpdGVVc2VyEhoub2RhY2hpbi5JbnZpdGVVc2VyUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJMChBBY2NlcHRJbnZpdGF0aW9uEiAub2RhY2hpbi5BY2NlcHRJbnZpdGF0aW9uUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJICg5SZWdpc3RlclJld2FyZBIeLm9kYWNoaW4uUmVnaXN0ZXJSZXdhcmRSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EkQKDERlbGV0ZVJld2FyZBIcLm9kYWNoaW4uRGVsZXRlUmV3YXJkUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJOChFSZWdpc3RlckFsbG93YW5jZRIhLm9kYWNoaW4uUmVnaXN0ZXJBbGxvd2FuY2VSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EkoKD1VwZGF0ZUFsbG93YW5jZRIfLm9kYWNoaW4uVXBkYXRlQWxsb3dhbmNlUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJICgtHZXRVc2VySW5mbxIbLm9kYWNoaW4uR2V0VXNlckluZm9SZXF1ZXN0Ghwub2RhY2hpbi5HZXRVc2VySW5mb1Jlc3BvbnNlEkEKCkdldE93bkluZm8SFi5nb29nbGUucHJvdG9idWYuRW1wdHkaGy5vZGFjaGluLkdldE93bkluZm9SZXNwb25zZRJOCg1HZXRSZXdhcmRMaXN0Eh0ub2RhY2hpbi5HZXRSZXdhcmRMaXN0UmVxdWVzdBoeLm9kYWNoaW4uR2V0UmV3YXJkTGlzdFJlc3BvbnNlYgZwcm90bzM", [file_google_protobuf_empty, file_buf_validate_validate]);
 
 /**
  * @generated from message odachin.Alloance
@@ -106,6 +106,63 @@ export const Reward_TypeSchema: GenEnum<Reward_Type> = /*@__PURE__*/
   enumDesc(file_v1_odachin_odachin, 1, 0);
 
 /**
+ * @generated from message odachin.RewardInfo
+ */
+export type RewardInfo = Message<"odachin.RewardInfo"> & {
+  /**
+   * @generated from field: uint64 reward_period_id = 1;
+   */
+  rewardPeriodId: bigint;
+
+  /**
+   * @generated from field: string from_user_id = 2;
+   */
+  fromUserId: string;
+
+  /**
+   * @generated from field: string to_user_id = 3;
+   */
+  toUserId: string;
+
+  /**
+   * @generated from field: double amount = 4;
+   */
+  amount: number;
+
+  /**
+   * @generated from field: odachin.Reward.Type reward_type = 5;
+   */
+  rewardType: Reward_Type;
+
+  /**
+   * @generated from field: string title = 6;
+   */
+  title: string;
+
+  /**
+   * @generated from field: string description = 7;
+   */
+  description: string;
+
+  /**
+   * @generated from field: bool isCompleted = 8;
+   */
+  isCompleted: boolean;
+
+  /**
+   * @generated from field: bool isEditable = 9;
+   */
+  isEditable: boolean;
+};
+
+/**
+ * Describes the message odachin.RewardInfo.
+ * Use `create(RewardInfoSchema)` to create a new message.
+ */
+export const RewardInfoSchema: GenMessage<RewardInfo> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_odachin, 2);
+
+/**
  * @generated from message odachin.CreateUserRequest
  */
 export type CreateUserRequest = Message<"odachin.CreateUserRequest"> & {
@@ -140,7 +197,7 @@ export type CreateUserRequest = Message<"odachin.CreateUserRequest"> & {
  * Use `create(CreateUserRequestSchema)` to create a new message.
  */
 export const CreateUserRequestSchema: GenMessage<CreateUserRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 2);
+  messageDesc(file_v1_odachin_odachin, 3);
 
 /**
  * @generated from message odachin.CreateUserResponse
@@ -157,7 +214,7 @@ export type CreateUserResponse = Message<"odachin.CreateUserResponse"> & {
  * Use `create(CreateUserResponseSchema)` to create a new message.
  */
 export const CreateUserResponseSchema: GenMessage<CreateUserResponse> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 3);
+  messageDesc(file_v1_odachin_odachin, 4);
 
 /**
  * @generated from message odachin.UpdateUserRequest
@@ -184,7 +241,7 @@ export type UpdateUserRequest = Message<"odachin.UpdateUserRequest"> & {
  * Use `create(UpdateUserRequestSchema)` to create a new message.
  */
 export const UpdateUserRequestSchema: GenMessage<UpdateUserRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 4);
+  messageDesc(file_v1_odachin_odachin, 5);
 
 /**
  * @generated from message odachin.LoginRequest
@@ -206,7 +263,7 @@ export type LoginRequest = Message<"odachin.LoginRequest"> & {
  * Use `create(LoginRequestSchema)` to create a new message.
  */
 export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 5);
+  messageDesc(file_v1_odachin_odachin, 6);
 
 /**
  * @generated from message odachin.LoginResponse
@@ -223,7 +280,7 @@ export type LoginResponse = Message<"odachin.LoginResponse"> & {
  * Use `create(LoginResponseSchema)` to create a new message.
  */
 export const LoginResponseSchema: GenMessage<LoginResponse> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 6);
+  messageDesc(file_v1_odachin_odachin, 7);
 
 /**
  * @generated from message odachin.CreateGroupRequest
@@ -240,7 +297,7 @@ export type CreateGroupRequest = Message<"odachin.CreateGroupRequest"> & {
  * Use `create(CreateGroupRequestSchema)` to create a new message.
  */
 export const CreateGroupRequestSchema: GenMessage<CreateGroupRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 7);
+  messageDesc(file_v1_odachin_odachin, 8);
 
 /**
  * @generated from message odachin.InviteUserRequest
@@ -257,7 +314,7 @@ export type InviteUserRequest = Message<"odachin.InviteUserRequest"> & {
  * Use `create(InviteUserRequestSchema)` to create a new message.
  */
 export const InviteUserRequestSchema: GenMessage<InviteUserRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 8);
+  messageDesc(file_v1_odachin_odachin, 9);
 
 /**
  * @generated from message odachin.AcceptInvitationRequest
@@ -274,7 +331,7 @@ export type AcceptInvitationRequest = Message<"odachin.AcceptInvitationRequest">
  * Use `create(AcceptInvitationRequestSchema)` to create a new message.
  */
 export const AcceptInvitationRequestSchema: GenMessage<AcceptInvitationRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 9);
+  messageDesc(file_v1_odachin_odachin, 10);
 
 /**
  * @generated from message odachin.RegisterRewardRequest
@@ -311,7 +368,7 @@ export type RegisterRewardRequest = Message<"odachin.RegisterRewardRequest"> & {
  * Use `create(RegisterRewardRequestSchema)` to create a new message.
  */
 export const RegisterRewardRequestSchema: GenMessage<RegisterRewardRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 10);
+  messageDesc(file_v1_odachin_odachin, 11);
 
 /**
  * @generated from message odachin.DeleteRewardRequest
@@ -328,7 +385,7 @@ export type DeleteRewardRequest = Message<"odachin.DeleteRewardRequest"> & {
  * Use `create(DeleteRewardRequestSchema)` to create a new message.
  */
 export const DeleteRewardRequestSchema: GenMessage<DeleteRewardRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 11);
+  messageDesc(file_v1_odachin_odachin, 12);
 
 /**
  * @generated from message odachin.RegisterAllowanceRequest
@@ -370,7 +427,7 @@ export type RegisterAllowanceRequest = Message<"odachin.RegisterAllowanceRequest
  * Use `create(RegisterAllowanceRequestSchema)` to create a new message.
  */
 export const RegisterAllowanceRequestSchema: GenMessage<RegisterAllowanceRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 12);
+  messageDesc(file_v1_odachin_odachin, 13);
 
 /**
  * @generated from message odachin.UpdateAllowanceRequest
@@ -412,7 +469,7 @@ export type UpdateAllowanceRequest = Message<"odachin.UpdateAllowanceRequest"> &
  * Use `create(UpdateAllowanceRequestSchema)` to create a new message.
  */
 export const UpdateAllowanceRequestSchema: GenMessage<UpdateAllowanceRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 13);
+  messageDesc(file_v1_odachin_odachin, 14);
 
 /**
  * @generated from message odachin.GetUserInfoRequest
@@ -429,7 +486,7 @@ export type GetUserInfoRequest = Message<"odachin.GetUserInfoRequest"> & {
  * Use `create(GetUserInfoRequestSchema)` to create a new message.
  */
 export const GetUserInfoRequestSchema: GenMessage<GetUserInfoRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 14);
+  messageDesc(file_v1_odachin_odachin, 15);
 
 /**
  * @generated from message odachin.GetUserInfoResponse
@@ -461,7 +518,7 @@ export type GetUserInfoResponse = Message<"odachin.GetUserInfoResponse"> & {
  * Use `create(GetUserInfoResponseSchema)` to create a new message.
  */
 export const GetUserInfoResponseSchema: GenMessage<GetUserInfoResponse> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 15);
+  messageDesc(file_v1_odachin_odachin, 16);
 
 /**
  * @generated from message odachin.GetOwnInfoResponse
@@ -478,9 +535,9 @@ export type GetOwnInfoResponse = Message<"odachin.GetOwnInfoResponse"> & {
   email: string;
 
   /**
-   * @generated from field: string avater_image_url = 3;
+   * @generated from field: optional string avater_image_url = 3;
    */
-  avaterImageUrl: string;
+  avaterImageUrl?: string;
 };
 
 /**
@@ -488,7 +545,41 @@ export type GetOwnInfoResponse = Message<"odachin.GetOwnInfoResponse"> & {
  * Use `create(GetOwnInfoResponseSchema)` to create a new message.
  */
 export const GetOwnInfoResponseSchema: GenMessage<GetOwnInfoResponse> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_odachin, 16);
+  messageDesc(file_v1_odachin_odachin, 17);
+
+/**
+ * @generated from message odachin.GetRewardListRequest
+ */
+export type GetRewardListRequest = Message<"odachin.GetRewardListRequest"> & {
+  /**
+   * @generated from field: odachin.Reward.Type reward_type = 1;
+   */
+  rewardType: Reward_Type;
+};
+
+/**
+ * Describes the message odachin.GetRewardListRequest.
+ * Use `create(GetRewardListRequestSchema)` to create a new message.
+ */
+export const GetRewardListRequestSchema: GenMessage<GetRewardListRequest> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_odachin, 18);
+
+/**
+ * @generated from message odachin.GetRewardListResponse
+ */
+export type GetRewardListResponse = Message<"odachin.GetRewardListResponse"> & {
+  /**
+   * @generated from field: repeated odachin.RewardInfo reward_list = 1;
+   */
+  rewardList: RewardInfo[];
+};
+
+/**
+ * Describes the message odachin.GetRewardListResponse.
+ * Use `create(GetRewardListResponseSchema)` to create a new message.
+ */
+export const GetRewardListResponseSchema: GenMessage<GetRewardListResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_odachin, 19);
 
 /**
  * @generated from enum odachin.Status
@@ -687,6 +778,14 @@ export const OdachinService: GenService<{
     methodKind: "unary";
     input: typeof EmptySchema;
     output: typeof GetOwnInfoResponseSchema;
+  },
+  /**
+   * @generated from rpc odachin.OdachinService.GetRewardList
+   */
+  getRewardList: {
+    methodKind: "unary";
+    input: typeof GetRewardListRequestSchema;
+    output: typeof GetRewardListResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_v1_odachin_odachin, 0);

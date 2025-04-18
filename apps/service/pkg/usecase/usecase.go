@@ -35,6 +35,7 @@ type UseCase interface {
 	UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error
 	GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error)
 	GetOwnInfo(ctx context.Context) (*models.User, error)
+	GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) ([]models.RewardPeriod, error)
 }
 
 type UseCaseImpl struct {
@@ -234,6 +235,7 @@ func (u *UseCaseImpl) AcceptInvitation(ctx context.Context, req *odachin.AcceptI
 func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error {
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
+		fmt.Println("user_id: ", user_id)
 		reward := &models.Reward{
 			FromUserID:  user_id,
 			ToUserID:    req.ToUserId,
@@ -242,7 +244,6 @@ func (u *UseCaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterR
 			Description: req.Description,
 			Amount:      float64(req.Amount),
 		}
-
 		err := u.rewardRepository.Save(tx, reward)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
@@ -348,12 +349,12 @@ func (u *UseCaseImpl) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoR
 
 func (u *UseCaseImpl) GetOwnInfo(ctx context.Context) (*models.User, error) {
 	var userInfo models.User
-	var err2 error
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
-		userInfo, err2 = u.userRepository.Get(tx, user_id)
-		if err2 != nil {
-			return status.Errorf(codes.Internal, "database error: %v", err2)
+		var err error
+		userInfo, err = u.userRepository.Get(tx, user_id)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
@@ -361,6 +362,24 @@ func (u *UseCaseImpl) GetOwnInfo(ctx context.Context) (*models.User, error) {
 		return nil, err
 	}
 	return &userInfo, nil
+}
+
+// TODO 過去のものをGetできるようにする
+func (u *UseCaseImpl) GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) ([]models.RewardPeriod, error) {
+	var rewards []models.RewardPeriod
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		var err error
+		rewards, err = u.rewardPeriodRepository.GetWithReward(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND is_editable = ?", user_id, req.RewardType.String(), true)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return nil, err
+	}
+	return rewards, nil
 }
 
 func ProtoToMap(msg proto.Message) (map[string]interface{}, error) {

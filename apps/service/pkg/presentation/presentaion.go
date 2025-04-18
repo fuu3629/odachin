@@ -145,3 +145,11 @@ func (s *ServerStruct) GetOwnInfo(ctx context.Context, req *emptypb.Empty) (*oda
 	}
 	return dto.ToOwnInfoResponse(userInfo), nil
 }
+
+func (s *ServerStruct) GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) (*odachin.GetRewardListResponse, error) {
+	rewardList, err := s.useCase.GetRewardList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return dto.ToGetRewardListResponse(rewardList), nil
+}
