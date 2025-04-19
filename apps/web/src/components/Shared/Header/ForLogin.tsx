@@ -1,15 +1,17 @@
 import { Menu, Avatar, Icon, Text } from '@chakra-ui/react';
 import { IoMdPerson, IoMdSettings } from 'react-icons/io';
 
-export interface ForLoginProps {}
+export interface ForLoginProps {
+  avaterImageUrl?: string;
+}
 
-export function ForLogin({}: ForLoginProps) {
+export function ForLogin({ avaterImageUrl }: ForLoginProps) {
   return (
     <>
       <Menu.Root closeOnSelect={true} positioning={{ placement: 'bottom-end' }}>
         <Menu.Trigger>
           <Avatar.Root _hover={{ cursor: 'pointer' }} size='lg'>
-            <Avatar.Image></Avatar.Image>
+            <Avatar.Image src={avaterImageUrl}></Avatar.Image>
           </Avatar.Root>
         </Menu.Trigger>
         <Menu.Positioner>

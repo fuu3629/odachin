@@ -20,6 +20,8 @@ import (
 // protoのコンパイルseviceで
 // buf generate proto
 
+//TODO Dockerfile作る
+
 // TODO connect対応にする
 func main() {
 	err := godotenv.Load()

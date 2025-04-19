@@ -20,19 +20,20 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	OdachinService_CreateUser_FullMethodName        = "/odachin.OdachinService/CreateUser"
-	OdachinService_UpdateUser_FullMethodName        = "/odachin.OdachinService/UpdateUser"
-	OdachinService_Login_FullMethodName             = "/odachin.OdachinService/Login"
-	OdachinService_CreateGroup_FullMethodName       = "/odachin.OdachinService/CreateGroup"
-	OdachinService_InviteUser_FullMethodName        = "/odachin.OdachinService/InviteUser"
-	OdachinService_AcceptInvitation_FullMethodName  = "/odachin.OdachinService/AcceptInvitation"
-	OdachinService_RegisterReward_FullMethodName    = "/odachin.OdachinService/RegisterReward"
-	OdachinService_DeleteReward_FullMethodName      = "/odachin.OdachinService/DeleteReward"
-	OdachinService_RegisterAllowance_FullMethodName = "/odachin.OdachinService/RegisterAllowance"
-	OdachinService_UpdateAllowance_FullMethodName   = "/odachin.OdachinService/UpdateAllowance"
-	OdachinService_GetUserInfo_FullMethodName       = "/odachin.OdachinService/GetUserInfo"
-	OdachinService_GetOwnInfo_FullMethodName        = "/odachin.OdachinService/GetOwnInfo"
-	OdachinService_GetRewardList_FullMethodName     = "/odachin.OdachinService/GetRewardList"
+	OdachinService_CreateUser_FullMethodName                = "/odachin.OdachinService/CreateUser"
+	OdachinService_UpdateUser_FullMethodName                = "/odachin.OdachinService/UpdateUser"
+	OdachinService_Login_FullMethodName                     = "/odachin.OdachinService/Login"
+	OdachinService_CreateGroup_FullMethodName               = "/odachin.OdachinService/CreateGroup"
+	OdachinService_InviteUser_FullMethodName                = "/odachin.OdachinService/InviteUser"
+	OdachinService_AcceptInvitation_FullMethodName          = "/odachin.OdachinService/AcceptInvitation"
+	OdachinService_RegisterReward_FullMethodName            = "/odachin.OdachinService/RegisterReward"
+	OdachinService_DeleteReward_FullMethodName              = "/odachin.OdachinService/DeleteReward"
+	OdachinService_RegisterAllowance_FullMethodName         = "/odachin.OdachinService/RegisterAllowance"
+	OdachinService_UpdateAllowance_FullMethodName           = "/odachin.OdachinService/UpdateAllowance"
+	OdachinService_GetUserInfo_FullMethodName               = "/odachin.OdachinService/GetUserInfo"
+	OdachinService_GetOwnInfo_FullMethodName                = "/odachin.OdachinService/GetOwnInfo"
+	OdachinService_GetRewardList_FullMethodName             = "/odachin.OdachinService/GetRewardList"
+	OdachinService_GetUncompletedRewardCount_FullMethodName = "/odachin.OdachinService/GetUncompletedRewardCount"
 )
 
 // OdachinServiceClient is the client API for OdachinService service.
@@ -53,6 +54,7 @@ type OdachinServiceClient interface {
 	GetUserInfo(ctx context.Context, in *GetUserInfoRequest, opts ...grpc.CallOption) (*GetUserInfoResponse, error)
 	GetOwnInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetOwnInfoResponse, error)
 	GetRewardList(ctx context.Context, in *GetRewardListRequest, opts ...grpc.CallOption) (*GetRewardListResponse, error)
+	GetUncompletedRewardCount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetUncompletedRewardCountResponse, error)
 }
 
 type odachinServiceClient struct {
@@ -180,6 +182,15 @@ func (c *odachinServiceClient) GetRewardList(ctx context.Context, in *GetRewardL
 	return out, nil
 }
 
+func (c *odachinServiceClient) GetUncompletedRewardCount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetUncompletedRewardCountResponse, error) {
+	out := new(GetUncompletedRewardCountResponse)
+	err := c.cc.Invoke(ctx, OdachinService_GetUncompletedRewardCount_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OdachinServiceServer is the server API for OdachinService service.
 // All implementations must embed UnimplementedOdachinServiceServer
 // for forward compatibility
@@ -198,6 +209,7 @@ type OdachinServiceServer interface {
 	GetUserInfo(context.Context, *GetUserInfoRequest) (*GetUserInfoResponse, error)
 	GetOwnInfo(context.Context, *emptypb.Empty) (*GetOwnInfoResponse, error)
 	GetRewardList(context.Context, *GetRewardListRequest) (*GetRewardListResponse, error)
+	GetUncompletedRewardCount(context.Context, *emptypb.Empty) (*GetUncompletedRewardCountResponse, error)
 	mustEmbedUnimplementedOdachinServiceServer()
 }
 
@@ -243,6 +255,9 @@ func (UnimplementedOdachinServiceServer) GetOwnInfo(context.Context, *emptypb.Em
 }
 func (UnimplementedOdachinServiceServer) GetRewardList(context.Context, *GetRewardListRequest) (*GetRewardListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRewardList not implemented")
+}
+func (UnimplementedOdachinServiceServer) GetUncompletedRewardCount(context.Context, *emptypb.Empty) (*GetUncompletedRewardCountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUncompletedRewardCount not implemented")
 }
 func (UnimplementedOdachinServiceServer) mustEmbedUnimplementedOdachinServiceServer() {}
 
@@ -491,6 +506,24 @@ func _OdachinService_GetRewardList_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OdachinService_GetUncompletedRewardCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OdachinServiceServer).GetUncompletedRewardCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OdachinService_GetUncompletedRewardCount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OdachinServiceServer).GetUncompletedRewardCount(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OdachinService_ServiceDesc is the grpc.ServiceDesc for OdachinService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -549,6 +582,10 @@ var OdachinService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRewardList",
 			Handler:    _OdachinService_GetRewardList_Handler,
+		},
+		{
+			MethodName: "GetUncompletedRewardCount",
+			Handler:    _OdachinService_GetUncompletedRewardCount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

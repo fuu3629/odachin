@@ -19,6 +19,7 @@ service OdachinService {
   rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
   rpc GetOwnInfo(google.protobuf.Empty) returns (GetOwnInfoResponse);
   rpc GetRewardList(GetRewardListRequest) returns (GetRewardListResponse);
+  rpc GetUncompletedRewardCount(google.protobuf.Empty) returns (GetUncompletedRewardCountResponse);
 }
 
 enum Status {
@@ -161,4 +162,10 @@ message GetRewardListRequest {
 
 message GetRewardListResponse {
   repeated RewardInfo reward_list = 1;
+}
+
+message GetUncompletedRewardCountResponse{
+  uint32 daily_count = 1;
+  uint32 weekly_count = 2;
+  uint32 monthly_count = 3;
 }

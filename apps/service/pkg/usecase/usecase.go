@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -36,6 +37,7 @@ type UseCase interface {
 	GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*models.User, error)
 	GetOwnInfo(ctx context.Context) (*models.User, error)
 	GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) ([]models.RewardPeriod, error)
+	GetUncompletedRewardCount(ctx context.Context) (*odachin.GetUncompletedRewardCountResponse, error)
 }
 
 type UseCaseImpl struct {
@@ -380,6 +382,36 @@ func (u *UseCaseImpl) GetRewardList(ctx context.Context, req *odachin.GetRewardL
 		return nil, err
 	}
 	return rewards, nil
+}
+
+func (u *UseCaseImpl) GetUncompletedRewardCount(ctx context.Context) (*odachin.GetUncompletedRewardCountResponse, error) {
+	var rewardCount odachin.GetUncompletedRewardCountResponse
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		now := time.Now()
+		daily_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND is_completed = ?", user_id, "DAILY", now, now, false)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		weekly_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND is_completed = ?", user_id, "WEEKLY", now, now, false)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		monthly_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND is_completed = ?", user_id, "MONTHLY", now, now, false)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		rewardCount = odachin.GetUncompletedRewardCountResponse{
+			DailyCount:   daily_count,
+			WeeklyCount:  weekly_count,
+			MonthlyCount: monthly_count,
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return nil, err
+	}
+	return &rewardCount, nil
 }
 
 func ProtoToMap(msg proto.Message) (map[string]interface{}, error) {

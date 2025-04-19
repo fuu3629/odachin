@@ -153,3 +153,11 @@ func (s *ServerStruct) GetRewardList(ctx context.Context, req *odachin.GetReward
 	}
 	return dto.ToGetRewardListResponse(rewardList), nil
 }
+
+func (s *ServerStruct) GetUncompletedRewardCount(ctx context.Context, req *emptypb.Empty) (*odachin.GetUncompletedRewardCountResponse, error) {
+	rewardCount, err := s.useCase.GetUncompletedRewardCount(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return rewardCount, nil
+}

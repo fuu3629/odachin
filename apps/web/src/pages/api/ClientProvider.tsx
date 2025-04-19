@@ -1,8 +1,14 @@
-import { createClient } from '@connectrpc/connect';
+import { createClient, Interceptor } from '@connectrpc/connect';
 import { createGrpcWebTransport } from '@connectrpc/connect-web';
 import { OdachinService } from '@/__generated__/v1/odachin/odachin_pb';
 
-export function clientProvider() {
+export function clientProvider(token?: string) {
+  const authInterceptor: Interceptor = (next) => async (req) => {
+    if (token != null && token !== undefined) {
+      req.header.set('authorization', `${token}`);
+    }
+    return await next(req);
+  };
   const transport = createGrpcWebTransport({
     baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL as string,
   });
