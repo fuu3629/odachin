@@ -59,14 +59,8 @@ export function RewardTable({ rewardType }: RewardTableProps) {
 
   return (
     <>
-      <Table.Root
-        borderColor='yellow.400'
-        borderTopRadius={24}
-        borderWidth={2}
-        showColumnBorder
-        variant='outline'
-      >
-        <Table.Header bgColor='yellow.400'>
+      <Table.Root borderColor='yellow.400' borderTopRadius={24} showColumnBorder variant='outline'>
+        <Table.Header bgColor='yellow.400' borderColor='yellow.400' borderXWidth={4}>
           <Table.Row>
             <Table.ColumnHeader textAlign='center' w='25%'>
               <Text fontSize='lg' fontWeight='semibold'>
