@@ -21,6 +21,7 @@
   },
   "editor.linkedEditing": true,
   "protoc": {
+    "clang-format.style": "google",
     "options": ["-I=~/.cache/buf/v1/module/data/buf.build"]
   },
   "typescript.tsdk": "./apps/web/node_modules/typescript/lib"

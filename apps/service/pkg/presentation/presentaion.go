@@ -16,12 +16,20 @@ import (
 )
 
 type ServerStruct struct {
-	useCase usecase.UseCase
-	odachin.UnimplementedOdachinServiceServer
+	authUsecase      usecase.AuthUsecase
+	familyUsecase    usecase.FamilyUsecase
+	allowanceUsecase usecase.AllowanceUsecase
+	rewardUsecase    usecase.RewardUsecase
+	odachin.UnimplementedAuthServiceServer
+	odachin.UnimplementedFamilyServiceServer
+	odachin.UnimplementedAllowanceServiceServer
+	odachin.UnimplementedRewardServiceServer
 }
 
 // TODO Roleによる認可を実装する
+// TODO serviceのメソッド名を変更する
 func (s *ServerStruct) AuthFuncOverride(ctx context.Context, fullMethodName string) (context.Context, error) {
+	fmt.Println("AuthFuncOverride", fullMethodName)
 	if fullMethodName == "/odachin.OdachinService/CreateUser" || fullMethodName == "/odachin.OdachinService/Login" {
 		return ctx, nil
 	}
@@ -46,12 +54,21 @@ func (s *ServerStruct) AuthFuncOverride(ctx context.Context, fullMethodName stri
 }
 
 func NewServer(grpcServer *grpc.Server, db *gorm.DB) {
-	userGrpc := &ServerStruct{useCase: usecase.New(db)}
-	odachin.RegisterOdachinServiceServer(grpcServer, userGrpc)
+	userGrpc := &ServerStruct{
+		authUsecase:      usecase.NewAuthUsecase(db),
+		familyUsecase:    usecase.NewFamilyUsecase(db),
+		allowanceUsecase: usecase.NewAllowanceUsecase(db),
+		rewardUsecase:    usecase.NewRewardUsecase(db),
+	}
+	// odachin.RegisterOdachinServiceServer(grpcServer, userGrpc)
+	odachin.RegisterAuthServiceServer(grpcServer, userGrpc)
+	odachin.RegisterFamilyServiceServer(grpcServer, userGrpc)
+	odachin.RegisterAllowanceServiceServer(grpcServer, userGrpc)
+	odachin.RegisterRewardServiceServer(grpcServer, userGrpc)
 }
 
 func (s *ServerStruct) CreateUser(ctx context.Context, req *odachin.CreateUserRequest) (*odachin.CreateUserResponse, error) {
-	token, err := s.useCase.CreateUser(ctx, req)
+	token, err := s.authUsecase.CreateUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +76,7 @@ func (s *ServerStruct) CreateUser(ctx context.Context, req *odachin.CreateUserRe
 }
 
 func (s *ServerStruct) UpdateUser(ctx context.Context, req *odachin.UpdateUserRequest) (*emptypb.Empty, error) {
-	err := s.useCase.UpdateUser(ctx, req)
+	err := s.authUsecase.UpdateUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +84,7 @@ func (s *ServerStruct) UpdateUser(ctx context.Context, req *odachin.UpdateUserRe
 }
 
 func (s *ServerStruct) Login(ctx context.Context, req *odachin.LoginRequest) (*odachin.LoginResponse, error) {
-	token, err := s.useCase.Login(ctx, req)
+	token, err := s.authUsecase.Login(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +92,7 @@ func (s *ServerStruct) Login(ctx context.Context, req *odachin.LoginRequest) (*o
 }
 
 func (s *ServerStruct) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) (*emptypb.Empty, error) {
-	err := s.useCase.CreateGroup(ctx, req)
+	err := s.familyUsecase.CreateGroup(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
@@ -83,7 +100,7 @@ func (s *ServerStruct) CreateGroup(ctx context.Context, req *odachin.CreateGroup
 }
 
 func (s *ServerStruct) InviteUser(ctx context.Context, req *odachin.InviteUserRequest) (*emptypb.Empty, error) {
-	err := s.useCase.InviteUser(ctx, req)
+	err := s.familyUsecase.InviteUser(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
@@ -91,7 +108,7 @@ func (s *ServerStruct) InviteUser(ctx context.Context, req *odachin.InviteUserRe
 }
 
 func (s *ServerStruct) AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) (*emptypb.Empty, error) {
-	err := s.useCase.AcceptInvitation(ctx, req)
+	err := s.familyUsecase.AcceptInvitation(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
@@ -99,7 +116,7 @@ func (s *ServerStruct) AcceptInvitation(ctx context.Context, req *odachin.Accept
 }
 
 func (s *ServerStruct) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) (*emptypb.Empty, error) {
-	err := s.useCase.RegisterReward(ctx, req)
+	err := s.rewardUsecase.RegisterReward(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
@@ -107,7 +124,7 @@ func (s *ServerStruct) RegisterReward(ctx context.Context, req *odachin.Register
 }
 
 func (s *ServerStruct) DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) (*emptypb.Empty, error) {
-	err := s.useCase.DeleteReward(ctx, req)
+	err := s.rewardUsecase.DeleteReward(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
@@ -115,7 +132,7 @@ func (s *ServerStruct) DeleteReward(ctx context.Context, req *odachin.DeleteRewa
 }
 
 func (s *ServerStruct) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) (*emptypb.Empty, error) {
-	err := s.useCase.RegisterAllowance(ctx, req)
+	err := s.allowanceUsecase.RegisterAllowance(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
@@ -123,7 +140,7 @@ func (s *ServerStruct) RegisterAllowance(ctx context.Context, req *odachin.Regis
 }
 
 func (s *ServerStruct) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) (*emptypb.Empty, error) {
-	err := s.useCase.UpdateAllowance(ctx, req)
+	err := s.allowanceUsecase.UpdateAllowance(ctx, req)
 	if err != nil {
 		return nil, nil
 	}
@@ -131,7 +148,7 @@ func (s *ServerStruct) UpdateAllowance(ctx context.Context, req *odachin.UpdateA
 }
 
 func (s *ServerStruct) GetUserInfo(ctx context.Context, req *odachin.GetUserInfoRequest) (*odachin.GetUserInfoResponse, error) {
-	userInfo, err := s.useCase.GetUserInfo(ctx, req)
+	userInfo, err := s.authUsecase.GetUserInfo(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +156,7 @@ func (s *ServerStruct) GetUserInfo(ctx context.Context, req *odachin.GetUserInfo
 }
 
 func (s *ServerStruct) GetOwnInfo(ctx context.Context, req *emptypb.Empty) (*odachin.GetOwnInfoResponse, error) {
-	userInfo, err := s.useCase.GetOwnInfo(ctx)
+	userInfo, err := s.authUsecase.GetOwnInfo(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +164,7 @@ func (s *ServerStruct) GetOwnInfo(ctx context.Context, req *emptypb.Empty) (*oda
 }
 
 func (s *ServerStruct) GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) (*odachin.GetRewardListResponse, error) {
-	rewardList, err := s.useCase.GetRewardList(ctx, req)
+	rewardList, err := s.rewardUsecase.GetRewardList(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +172,7 @@ func (s *ServerStruct) GetRewardList(ctx context.Context, req *odachin.GetReward
 }
 
 func (s *ServerStruct) GetUncompletedRewardCount(ctx context.Context, req *emptypb.Empty) (*odachin.GetUncompletedRewardCountResponse, error) {
-	rewardCount, err := s.useCase.GetUncompletedRewardCount(ctx)
+	rewardCount, err := s.rewardUsecase.GetUncompletedRewardCount(ctx)
 	if err != nil {
 		return nil, err
 	}

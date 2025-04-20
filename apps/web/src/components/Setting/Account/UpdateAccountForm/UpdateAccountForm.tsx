@@ -16,7 +16,8 @@ import {
 import { useContext, useEffect } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { useUpdateAccountForm } from './lib';
-import { clientProvider } from '@/pages/api/ClientProvider';
+import { AuthService } from '@/__generated__/v1/odachin/auth_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface UpdateAccountFormProps {}
@@ -30,6 +31,7 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
     reset,
   } = useUpdateAccountForm();
   const cookies = useContext(CokiesContext);
+  const client = useClient(AuthService);
   const file = watch('avatar');
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +39,6 @@ export function UpdateAccountForm({}: UpdateAccountFormProps) {
         console.error('No authentication token found');
         return;
       }
-      const client = clientProvider();
       try {
         const res = await client.getOwnInfo(
           {},

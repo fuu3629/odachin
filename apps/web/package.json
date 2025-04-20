@@ -13,7 +13,7 @@
     "fix:eslint": "npm run lint:eslint -- --fix",
     "fix:prettier": "npm run lint:prettier -- --write",
     "format": "prettier --write --ignore-path .gitignore './**/*.{js,jsx,ts,tsx,json}'",
-    "gen:services": "buf generate ../service/proto/v1/odachin/odachin.proto"
+    "gen:services": "buf generate"
   },
   "dependencies": {
     "@bufbuild/buf": "^1.29.0",

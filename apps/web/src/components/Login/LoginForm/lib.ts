@@ -2,7 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { setCookie } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { clientProvider } from '@/pages/api/ClientProvider';
+import { AuthService } from '@/__generated__/v1/odachin/auth_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 
 export const loginFormSchema = z.object({
   userId: z.string().min(1, 'ユーザーIDは必須です'),
@@ -15,8 +16,8 @@ export const useLoginForm = () => {
   const { register, handleSubmit, formState } = useForm<LoginFormSchemaType>({
     resolver: zodResolver(loginFormSchema),
   });
+  const client = useClient(AuthService);
   const onSubmit = async (data: LoginFormSchemaType) => {
-    const client = clientProvider();
     const req = {
       userId: data.userId,
       password: data.password,

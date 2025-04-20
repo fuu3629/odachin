@@ -1,11 +1,15 @@
 package assets
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
+	"github.com/iancoleman/strcase"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 func Log(message string) {
@@ -14,6 +18,29 @@ func Log(message string) {
 	fmt.Println(message)
 	fmt.Println("")
 	fmt.Println("------------------------------")
+}
+
+func ProtoToMap(msg proto.Message) (map[string]interface{}, error) {
+	jsonBytes, err := protojson.Marshal(msg)
+	if err != nil {
+		return nil, err
+	}
+
+	var result map[string]interface{}
+	if err := json.Unmarshal(jsonBytes, &result); err != nil {
+		return nil, err
+	}
+	// Convert keys to snake_case
+	result = ToSnakeCaseMap(result)
+	return result, nil
+}
+func ToSnakeCaseMap(m map[string]interface{}) map[string]interface{} {
+	result := make(map[string]interface{})
+	for k, v := range m {
+		snakeKey := strcase.ToSnake(k)
+		result[snakeKey] = v
+	}
+	return result
 }
 
 func MakePeriod(req *odachin.RegisterRewardRequest, reward *models.Reward) *models.RewardPeriod {

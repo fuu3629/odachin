@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { clientProvider } from '@/pages/api/ClientProvider';
+import { AuthService } from '@/__generated__/v1/odachin/auth_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export const updateAccountFormSchema = z.object({
@@ -27,12 +28,12 @@ export const useUpdateAccountForm = () => {
   const { register, handleSubmit, formState, ...rest } = useForm<UpdateAccountFormSchemaType>({
     resolver: zodResolver(updateAccountFormSchema),
   });
+  const client = useClient(AuthService);
   const onSubmit = async (data: UpdateAccountFormSchemaType) => {
     if (!cookies || !cookies.authorization) {
       console.error('No authentication token found');
       return;
     }
-    const client = clientProvider();
     const file = await fileToUint8Array(data.avatar);
     const req = {
       name: data.userName,

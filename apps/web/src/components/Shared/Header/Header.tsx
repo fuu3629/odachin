@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { useContext, useState, useEffect } from 'react';
 import { ForLogin } from './ForLogin';
 import { ForUnLogin } from './ForUnLogin';
-import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
-import { clientProvider } from '@/pages/api/ClientProvider';
+import { AuthService, GetOwnInfoResponse } from '@/__generated__/v1/odachin/auth_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface HeaderProps {}
@@ -17,6 +17,7 @@ const pacifico = Pacifico({
 
 export function Header({}: HeaderProps) {
   const cookies = useContext(CokiesContext);
+  const client = useClient(AuthService);
   const router = useRouter();
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   useEffect(() => {
@@ -25,7 +26,6 @@ export function Header({}: HeaderProps) {
       return;
     }
     const fetchData = async () => {
-      const client = clientProvider();
       const req = {};
       try {
         const res = await client.getOwnInfo(req, {

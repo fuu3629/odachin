@@ -1,0 +1,22 @@
+syntax = "proto3";
+package odachin.family;
+import "google/protobuf/empty.proto";
+import "buf/validate/validate.proto";
+
+service FamilyService {
+  rpc CreateGroup(CreateGroupRequest) returns (google.protobuf.Empty);
+  rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
+  rpc AcceptInvitation(AcceptInvitationRequest) returns (google.protobuf.Empty);
+}
+
+message CreateGroupRequest {
+  string family_name = 1 [ (buf.validate.field).string.min_len = 1 ];
+}
+
+message InviteUserRequest {
+  string to_user_id = 1 [ (buf.validate.field).string.min_len = 1 ];
+}
+
+message AcceptInvitationRequest {
+  uint64 invitation_id = 1 [ (buf.validate.field).int64.gte = 1 ];
+}

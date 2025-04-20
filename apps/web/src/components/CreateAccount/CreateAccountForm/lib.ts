@@ -2,7 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { setCookie } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { clientProvider } from '@/pages/api/ClientProvider';
+import { AuthService } from '@/__generated__/v1/odachin/auth_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 
 export const createAccountFormSchema = z.object({
   userId: z.string().min(1, 'User ID must be at least 1 characters'),
@@ -17,8 +18,8 @@ export const useCreateAccountForm = () => {
   const { register, handleSubmit, formState, ...rest } = useForm<CreateAccountFormSchemaType>({
     resolver: zodResolver(createAccountFormSchema),
   });
+  const client = useClient(AuthService);
   const onSubmit = async (data: CreateAccountFormSchemaType) => {
-    const client = clientProvider();
     const req = {
       userId: data.userId,
       name: data.userName,

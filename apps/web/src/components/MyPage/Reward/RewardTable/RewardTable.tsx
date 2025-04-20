@@ -2,8 +2,8 @@ import { Button, Center, Link, Table, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import { CompletedTag } from './CompletedTag';
-import { Reward_Type } from '@/__generated__/v1/odachin/odachin_pb';
-import { clientProvider } from '@/pages/api/ClientProvider';
+import { Reward_Type, RewardService } from '@/__generated__/v1/odachin/reward_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 import unauthorizedPage from '@/pages/unauthorized';
 
@@ -20,7 +20,7 @@ export interface RewardPeriodItem {
 }
 
 export function RewardTable({ rewardType }: RewardTableProps) {
-  const client = clientProvider();
+  const client = useClient(RewardService);
   const cookies = useContext(CokiesContext);
   const [items, setItems] = useState<RewardPeriodItem[]>([]);
   console.log('rewardType;Page', rewardType, typeof rewardType);

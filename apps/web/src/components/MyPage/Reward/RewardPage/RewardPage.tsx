@@ -1,19 +1,20 @@
 import { Box, Tabs, VStack, Text, Float, Circle } from '@chakra-ui/react';
-import { useContext, useEffect, useState } from 'react';
+import { use, useContext, useEffect, useState } from 'react';
 import { RewardTable } from '../RewardTable';
 import { RewardFloat } from './RewardFloat';
 import {
-  GetUncompletedRewardCountResponse,
+  RewardService,
   Reward_Type,
-} from '@/__generated__/v1/odachin/odachin_pb';
-import { clientProvider } from '@/pages/api/ClientProvider';
+  GetUncompletedRewardCountResponse,
+} from '@/__generated__/v1/odachin/reward_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 import unauthorizedPage from '@/pages/unauthorized';
 
 export interface RewardPageProps {}
 
 export function RewardPage({}: RewardPageProps) {
-  const client = clientProvider();
+  const client = useClient(RewardService);
   const cookies = useContext(CokiesContext);
   const [rewardType, setRewardType] = useState<Reward_Type>(Reward_Type.DAILY);
   const [count, setCount] = useState<GetUncompletedRewardCountResponse>();

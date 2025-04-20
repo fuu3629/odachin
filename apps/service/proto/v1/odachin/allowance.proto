@@ -1,0 +1,50 @@
+syntax = "proto3";
+package odachin.allowance;
+import "google/protobuf/empty.proto";
+import "buf/validate/validate.proto";
+
+service AllowanceService {
+  rpc RegisterAllowance(RegisterAllowanceRequest)
+      returns (google.protobuf.Empty);
+  rpc UpdateAllowance(UpdateAllowanceRequest) returns (google.protobuf.Empty);
+}
+
+message Alloance {
+  enum Type {
+    EVERY_N_DAY = 0; // n日ごと
+    WEEKLY = 1;      // 毎週
+    MONTHLY = 2;     // 毎月
+  }
+}
+
+enum DayOfWeek {
+  MONDAY = 0;
+  TUESDAY = 1;
+  WEDNESDAY = 2;
+  THURSDAY = 3;
+  FRIDAY = 4;
+  SATURDAY = 5;
+  SUNDAY = 6;
+}
+
+message RegisterAllowanceRequest {
+  string to_user_id = 1 [ (buf.validate.field).string.min_len = 1 ];
+  double amount = 2 [ (buf.validate.field).double.gt = 0 ];
+  Alloance.Type interval_type = 3
+      [ (buf.validate.field).enum.defined_only = true ];
+  optional uint32 interval = 4 [ (buf.validate.field).int32.gte = 1 ];
+  optional uint32 date = 5 [
+    (buf.validate.field).int32.gte = 1,
+    (buf.validate.field).int32.lte = 31
+  ];
+  optional DayOfWeek day_of_week = 6;
+}
+
+message UpdateAllowanceRequest {
+  uint64 allowance_id = 1 [ (buf.validate.field).int64.gte = 1 ];
+  optional double amount = 2 [ (buf.validate.field).double.gt = 0 ];
+  optional Alloance.Type interval_type = 3;
+  optional uint32 interval = 4;
+  optional uint32 date = 5;
+  optional DayOfWeek day_of_week = 6;
+}

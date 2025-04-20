@@ -2,8 +2,8 @@ import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@ch
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
-import { GetOwnInfoResponse } from '@/__generated__/v1/odachin/odachin_pb';
-import { clientProvider } from '@/pages/api/ClientProvider';
+import { AuthService, GetOwnInfoResponse } from '@/__generated__/v1/odachin/auth_pb';
+import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 import unauthorizedPage from '@/pages/unauthorized';
 export interface MyPageProps {}
@@ -12,6 +12,7 @@ export interface MyPageProps {}
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
   const router = useRouter();
+  const client = useClient(AuthService);
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   useEffect(() => {
     if (!cookies || !cookies.authorization) {
@@ -20,7 +21,6 @@ export function MyPage({}: MyPageProps) {
       return;
     }
     const fetchData = async () => {
-      const client = clientProvider();
       const req = {};
       try {
         const res = await client.getOwnInfo(req, {
