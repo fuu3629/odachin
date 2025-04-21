@@ -5,6 +5,14 @@ import (
 	"github.com/fuu3629/odachin/apps/service/internal/models"
 )
 
+func uintToUint64Pointer(value *uint) *uint64 {
+	if value == nil {
+		return nil
+	}
+	converted := uint64(*value)
+	return &converted
+}
+
 func ToUserInfoResponse(u *models.User) *odachin.GetUserInfoResponse {
 	return &odachin.GetUserInfoResponse{
 		UserId:         u.UserID,
@@ -19,6 +27,9 @@ func ToOwnInfoResponse(u *models.User) *odachin.GetOwnInfoResponse {
 		Name:           u.UserName,
 		Email:          u.Email,
 		AvaterImageUrl: u.AvatarImageUrl,
+		Role:           odachin.Role(odachin.Role_value[u.Role]),
+		FamilyId:       uintToUint64Pointer(u.FamilyID),
+		UserId:         u.UserID,
 	}
 }
 
@@ -39,5 +50,22 @@ func ToGetRewardListResponse(r []models.RewardPeriod) *odachin.GetRewardListResp
 	}
 	return &odachin.GetRewardListResponse{
 		RewardList: rewardList,
+	}
+}
+
+func ToGetFamilyInfoResponse(members []models.User, family *models.Family) *odachin.GetFamilyInfoResponse {
+	familyMembers := make([]*odachin.FamilyUser, len(members))
+	for i, member := range members {
+		familyMembers[i] = &odachin.FamilyUser{
+			UserId:         member.UserID,
+			Name:           member.UserName,
+			Role:           odachin.Role(odachin.Role_value[member.Role]),
+			AvatarImageUrl: member.AvatarImageUrl,
+		}
+	}
+	return &odachin.GetFamilyInfoResponse{
+		FamilyId:      uint64(family.FamilyID),
+		FamilyName:    family.FamilyName,
+		FamilyMembers: familyMembers,
 	}
 }

@@ -17,10 +17,8 @@ import (
 	"google.golang.org/grpc"
 )
 
-// protoのコンパイルseviceで
-// buf generate proto
-
 //TODO Dockerfile作る
+//TODO test作る
 
 // TODO connect対応にする
 func main() {

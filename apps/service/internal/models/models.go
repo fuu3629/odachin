@@ -83,8 +83,8 @@ type RewardPeriod struct {
 type Invitation struct {
 	InvitationID uint   `gorm:"primaryKey;autoIncrement"`
 	FamilyID     *uint  `gorm:"index"`
-	FromUserID   string `gorm:"index"`
-	ToUserID     string `gorm:"index"`
+	FromUserID   string `gorm:"index:idx_user_pair,unique"`
+	ToUserID     string `gorm:"index:idx_user_pair,unique"`
 	IsAccepted   bool
 	CreatedAt    time.Time
 	UpdatedAt    time.Time

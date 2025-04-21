@@ -36,7 +36,13 @@ export function MyPage({}: MyPageProps) {
   }, []);
 
   const menuItems = [
-    { icon: FaUser, label: '家族情報', onCLick: () => {} },
+    {
+      icon: FaUser,
+      label: '家族情報',
+      onCLick: () => {
+        router.push('myPage/family');
+      },
+    },
     { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
     {
       icon: FaCog,

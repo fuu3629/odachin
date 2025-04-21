@@ -2,11 +2,20 @@ syntax = "proto3";
 package odachin.family;
 import "google/protobuf/empty.proto";
 import "buf/validate/validate.proto";
+import "v1/odachin/auth.proto";
 
 service FamilyService {
   rpc CreateGroup(CreateGroupRequest) returns (google.protobuf.Empty);
+  rpc GetFamilyInfo(google.protobuf.Empty) returns (GetFamilyInfoResponse);
   rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
   rpc AcceptInvitation(AcceptInvitationRequest) returns (google.protobuf.Empty);
+}
+
+message FamilyUser {
+  string user_id = 1;
+  string name = 2;
+  optional string avatar_image_url = 3;
+  odachin.auth.Role role = 4;
 }
 
 message CreateGroupRequest {
@@ -19,4 +28,10 @@ message InviteUserRequest {
 
 message AcceptInvitationRequest {
   uint64 invitation_id = 1 [ (buf.validate.field).int64.gte = 1 ];
+}
+
+message GetFamilyInfoResponse {
+  repeated FamilyUser family_members = 1;
+  string family_name = 2;
+  uint64 family_id = 3;
 }

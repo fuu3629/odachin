@@ -16,6 +16,7 @@ type FamilyUsecase interface {
 	CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) error
 	InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error
 	AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error
+	GetFamilyInfo(ctx context.Context) ([]models.User, *models.Family, error)
 }
 
 type FamilyUsecaseImpl struct {
@@ -113,4 +114,31 @@ func (u *FamilyUsecaseImpl) AcceptInvitation(ctx context.Context, req *odachin.A
 		return err
 	}
 	return nil
+}
+
+func (u *FamilyUsecaseImpl) GetFamilyInfo(ctx context.Context) ([]models.User, *models.Family, error) {
+	var members []models.User
+	var family models.Family
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		var err error
+		user, err := u.userRepository.Get(tx, user_id)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		if user.FamilyID == nil {
+			return status.Errorf(codes.NotFound, "user is not in family")
+		}
+		family, err = u.familyRepository.Get(tx, *user.FamilyID)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		members, err = u.userRepository.GetByConditions(tx, "family_id = ?", family.FamilyID)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	})
+
+	return members, &family, err
 }

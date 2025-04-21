@@ -27,10 +27,9 @@ type ServerStruct struct {
 }
 
 // TODO Roleによる認可を実装する
-// TODO serviceのメソッド名を変更する
 func (s *ServerStruct) AuthFuncOverride(ctx context.Context, fullMethodName string) (context.Context, error) {
 	fmt.Println("AuthFuncOverride", fullMethodName)
-	if fullMethodName == "/odachin.OdachinService/CreateUser" || fullMethodName == "/odachin.OdachinService/Login" {
+	if fullMethodName == "/odachin.auth.AuthService/CreateUser" || fullMethodName == "/odachin.auth.AuthService/Login" {
 		return ctx, nil
 	}
 	tokenString, err := auth.AuthFromMD(ctx, "Bearer")
@@ -177,4 +176,12 @@ func (s *ServerStruct) GetUncompletedRewardCount(ctx context.Context, req *empty
 		return nil, err
 	}
 	return rewardCount, nil
+}
+
+func (s *ServerStruct) GetFamilyInfo(ctx context.Context, req *emptypb.Empty) (*odachin.GetFamilyInfoResponse, error) {
+	member, family, err := s.familyUsecase.GetFamilyInfo(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return dto.ToGetFamilyInfoResponse(member, family), nil
 }

@@ -54,4 +54,7 @@ message GetOwnInfoResponse {
   string name = 1;
   string email = 2;
   optional string avater_image_url = 3;
+  Role role = 4;
+  string user_id = 5;
+  optional uint64 family_id = 6;
 }

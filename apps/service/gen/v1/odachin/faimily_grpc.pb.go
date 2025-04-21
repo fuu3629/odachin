@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	FamilyService_CreateGroup_FullMethodName      = "/odachin.family.FamilyService/CreateGroup"
+	FamilyService_GetFamilyInfo_FullMethodName    = "/odachin.family.FamilyService/GetFamilyInfo"
 	FamilyService_InviteUser_FullMethodName       = "/odachin.family.FamilyService/InviteUser"
 	FamilyService_AcceptInvitation_FullMethodName = "/odachin.family.FamilyService/AcceptInvitation"
 )
@@ -30,6 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FamilyServiceClient interface {
 	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetFamilyInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetFamilyInfoResponse, error)
 	InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
@@ -45,6 +47,15 @@ func NewFamilyServiceClient(cc grpc.ClientConnInterface) FamilyServiceClient {
 func (c *familyServiceClient) CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, FamilyService_CreateGroup_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *familyServiceClient) GetFamilyInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetFamilyInfoResponse, error) {
+	out := new(GetFamilyInfoResponse)
+	err := c.cc.Invoke(ctx, FamilyService_GetFamilyInfo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -74,6 +85,7 @@ func (c *familyServiceClient) AcceptInvitation(ctx context.Context, in *AcceptIn
 // for forward compatibility
 type FamilyServiceServer interface {
 	CreateGroup(context.Context, *CreateGroupRequest) (*emptypb.Empty, error)
+	GetFamilyInfo(context.Context, *emptypb.Empty) (*GetFamilyInfoResponse, error)
 	InviteUser(context.Context, *InviteUserRequest) (*emptypb.Empty, error)
 	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedFamilyServiceServer()
@@ -85,6 +97,9 @@ type UnimplementedFamilyServiceServer struct {
 
 func (UnimplementedFamilyServiceServer) CreateGroup(context.Context, *CreateGroupRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
+}
+func (UnimplementedFamilyServiceServer) GetFamilyInfo(context.Context, *emptypb.Empty) (*GetFamilyInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFamilyInfo not implemented")
 }
 func (UnimplementedFamilyServiceServer) InviteUser(context.Context, *InviteUserRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InviteUser not implemented")
@@ -119,6 +134,24 @@ func _FamilyService_CreateGroup_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FamilyServiceServer).CreateGroup(ctx, req.(*CreateGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FamilyService_GetFamilyInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FamilyServiceServer).GetFamilyInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FamilyService_GetFamilyInfo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FamilyServiceServer).GetFamilyInfo(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -169,6 +202,10 @@ var FamilyService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateGroup",
 			Handler:    _FamilyService_CreateGroup_Handler,
+		},
+		{
+			MethodName: "GetFamilyInfo",
+			Handler:    _FamilyService_GetFamilyInfo_Handler,
 		},
 		{
 			MethodName: "InviteUser",

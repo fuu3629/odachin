@@ -7,13 +7,47 @@ import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1
 import type { EmptySchema } from "@bufbuild/protobuf/wkt";
 import { file_google_protobuf_empty } from "@bufbuild/protobuf/wkt";
 import { file_buf_validate_validate } from "../../buf/validate/validate_pb";
+import type { Role } from "./auth_pb";
+import { file_v1_odachin_auth } from "./auth_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file v1/odachin/faimily.proto.
  */
 export const file_v1_odachin_faimily: GenFile = /*@__PURE__*/
-  fileDesc("Chh2MS9vZGFjaGluL2ZhaW1pbHkucHJvdG8SDm9kYWNoaW4uZmFtaWx5IjIKEkNyZWF0ZUdyb3VwUmVxdWVzdBIcCgtmYW1pbHlfbmFtZRgBIAEoCUIHukgEcgIQASIwChFJbnZpdGVVc2VyUmVxdWVzdBIbCgp0b191c2VyX2lkGAEgASgJQge6SARyAhABIjkKF0FjY2VwdEludml0YXRpb25SZXF1ZXN0Eh4KDWludml0YXRpb25faWQYASABKARCB7pIBCICKAEy+AEKDUZhbWlseVNlcnZpY2USSQoLQ3JlYXRlR3JvdXASIi5vZGFjaGluLmZhbWlseS5DcmVhdGVHcm91cFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSRwoKSW52aXRlVXNlchIhLm9kYWNoaW4uZmFtaWx5Lkludml0ZVVzZXJSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5ElMKEEFjY2VwdEludml0YXRpb24SJy5vZGFjaGluLmZhbWlseS5BY2NlcHRJbnZpdGF0aW9uUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eWIGcHJvdG8z", [file_google_protobuf_empty, file_buf_validate_validate]);
+  fileDesc("Chh2MS9vZGFjaGluL2ZhaW1pbHkucHJvdG8SDm9kYWNoaW4uZmFtaWx5IoEBCgpGYW1pbHlVc2VyEg8KB3VzZXJfaWQYASABKAkSDAoEbmFtZRgCIAEoCRIdChBhdmF0YXJfaW1hZ2VfdXJsGAMgASgJSACIAQESIAoEcm9sZRgEIAEoDjISLm9kYWNoaW4uYXV0aC5Sb2xlQhMKEV9hdmF0YXJfaW1hZ2VfdXJsIjIKEkNyZWF0ZUdyb3VwUmVxdWVzdBIcCgtmYW1pbHlfbmFtZRgBIAEoCUIHukgEcgIQASIwChFJbnZpdGVVc2VyUmVxdWVzdBIbCgp0b191c2VyX2lkGAEgASgJQge6SARyAhABIjkKF0FjY2VwdEludml0YXRpb25SZXF1ZXN0Eh4KDWludml0YXRpb25faWQYASABKARCB7pIBCICKAEicwoVR2V0RmFtaWx5SW5mb1Jlc3BvbnNlEjIKDmZhbWlseV9tZW1iZXJzGAEgAygLMhoub2RhY2hpbi5mYW1pbHkuRmFtaWx5VXNlchITCgtmYW1pbHlfbmFtZRgCIAEoCRIRCglmYW1pbHlfaWQYAyABKAQyyAIKDUZhbWlseVNlcnZpY2USSQoLQ3JlYXRlR3JvdXASIi5vZGFjaGluLmZhbWlseS5DcmVhdGVHcm91cFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSTgoNR2V0RmFtaWx5SW5mbxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRolLm9kYWNoaW4uZmFtaWx5LkdldEZhbWlseUluZm9SZXNwb25zZRJHCgpJbnZpdGVVc2VyEiEub2RhY2hpbi5mYW1pbHkuSW52aXRlVXNlclJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSUwoQQWNjZXB0SW52aXRhdGlvbhInLm9kYWNoaW4uZmFtaWx5LkFjY2VwdEludml0YXRpb25SZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5YgZwcm90bzM", [file_google_protobuf_empty, file_buf_validate_validate, file_v1_odachin_auth]);
+
+/**
+ * @generated from message odachin.family.FamilyUser
+ */
+export type FamilyUser = Message<"odachin.family.FamilyUser"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: optional string avatar_image_url = 3;
+   */
+  avatarImageUrl?: string;
+
+  /**
+   * @generated from field: odachin.auth.Role role = 4;
+   */
+  role: Role;
+};
+
+/**
+ * Describes the message odachin.family.FamilyUser.
+ * Use `create(FamilyUserSchema)` to create a new message.
+ */
+export const FamilyUserSchema: GenMessage<FamilyUser> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_faimily, 0);
 
 /**
  * @generated from message odachin.family.CreateGroupRequest
@@ -30,7 +64,7 @@ export type CreateGroupRequest = Message<"odachin.family.CreateGroupRequest"> & 
  * Use `create(CreateGroupRequestSchema)` to create a new message.
  */
 export const CreateGroupRequestSchema: GenMessage<CreateGroupRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_faimily, 0);
+  messageDesc(file_v1_odachin_faimily, 1);
 
 /**
  * @generated from message odachin.family.InviteUserRequest
@@ -47,7 +81,7 @@ export type InviteUserRequest = Message<"odachin.family.InviteUserRequest"> & {
  * Use `create(InviteUserRequestSchema)` to create a new message.
  */
 export const InviteUserRequestSchema: GenMessage<InviteUserRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_faimily, 1);
+  messageDesc(file_v1_odachin_faimily, 2);
 
 /**
  * @generated from message odachin.family.AcceptInvitationRequest
@@ -64,7 +98,34 @@ export type AcceptInvitationRequest = Message<"odachin.family.AcceptInvitationRe
  * Use `create(AcceptInvitationRequestSchema)` to create a new message.
  */
 export const AcceptInvitationRequestSchema: GenMessage<AcceptInvitationRequest> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_faimily, 2);
+  messageDesc(file_v1_odachin_faimily, 3);
+
+/**
+ * @generated from message odachin.family.GetFamilyInfoResponse
+ */
+export type GetFamilyInfoResponse = Message<"odachin.family.GetFamilyInfoResponse"> & {
+  /**
+   * @generated from field: repeated odachin.family.FamilyUser family_members = 1;
+   */
+  familyMembers: FamilyUser[];
+
+  /**
+   * @generated from field: string family_name = 2;
+   */
+  familyName: string;
+
+  /**
+   * @generated from field: uint64 family_id = 3;
+   */
+  familyId: bigint;
+};
+
+/**
+ * Describes the message odachin.family.GetFamilyInfoResponse.
+ * Use `create(GetFamilyInfoResponseSchema)` to create a new message.
+ */
+export const GetFamilyInfoResponseSchema: GenMessage<GetFamilyInfoResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_faimily, 4);
 
 /**
  * @generated from service odachin.family.FamilyService
@@ -77,6 +138,14 @@ export const FamilyService: GenService<{
     methodKind: "unary";
     input: typeof CreateGroupRequestSchema;
     output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc odachin.family.FamilyService.GetFamilyInfo
+   */
+  getFamilyInfo: {
+    methodKind: "unary";
+    input: typeof EmptySchema;
+    output: typeof GetFamilyInfoResponseSchema;
   },
   /**
    * @generated from rpc odachin.family.FamilyService.InviteUser

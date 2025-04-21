@@ -22,7 +22,6 @@ export const useLoginForm = () => {
       userId: data.userId,
       password: data.password,
     };
-    const res = await client.login(req);
     try {
       const res = await client.login(req);
       setCookie(null, 'authorization', res.token, {

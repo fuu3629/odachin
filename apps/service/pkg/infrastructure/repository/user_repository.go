@@ -7,6 +7,7 @@ import (
 
 type UserRepository interface {
 	Get(tx *gorm.DB, id string) (models.User, error)
+	GetByConditions(tx *gorm.DB, condition string, args ...interface{}) ([]models.User, error)
 	Save(tx *gorm.DB, param *models.User) error
 	Update(tx *gorm.DB, user map[string]interface{}) error
 }
@@ -23,6 +24,14 @@ func (r *UserRepositoryImpl) Get(tx *gorm.DB, id string) (models.User, error) {
 		return models.User{}, err
 	}
 	return user, nil
+}
+
+func (r *UserRepositoryImpl) GetByConditions(tx *gorm.DB, condition string, args ...interface{}) ([]models.User, error) {
+	var users []models.User
+	if err := tx.Where(condition, args...).Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 func (r *UserRepositoryImpl) Save(tx *gorm.DB, user *models.User) error {
