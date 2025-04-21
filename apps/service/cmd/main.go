@@ -18,6 +18,7 @@ import (
 )
 
 //TODO Dockerfile作る
+//TODO 自動デプロイ作る
 //TODO test作る
 
 // TODO connect対応にする

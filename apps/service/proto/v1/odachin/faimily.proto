@@ -9,6 +9,8 @@ service FamilyService {
   rpc GetFamilyInfo(google.protobuf.Empty) returns (GetFamilyInfoResponse);
   rpc InviteUser(InviteUserRequest) returns (google.protobuf.Empty);
   rpc AcceptInvitation(AcceptInvitationRequest) returns (google.protobuf.Empty);
+  rpc GetInvitationList(google.protobuf.Empty)
+      returns (GetInvitationListResponse);
 }
 
 message FamilyUser {
@@ -34,4 +36,15 @@ message GetFamilyInfoResponse {
   repeated FamilyUser family_members = 1;
   string family_name = 2;
   uint64 family_id = 3;
+}
+
+message InvitationMember {
+  string user_id = 1;
+  string name = 2;
+  optional string avatar_image_url = 3;
+  uint64 invitation_id = 4;
+}
+
+message GetInvitationListResponse {
+  repeated InvitationMember invitation_members = 1;
 }

@@ -17,6 +17,7 @@ type FamilyUsecase interface {
 	InviteUser(ctx context.Context, req *odachin.InviteUserRequest) error
 	AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) error
 	GetFamilyInfo(ctx context.Context) ([]models.User, *models.Family, error)
+	GetInvitationList(ctx context.Context) ([]*odachin.InvitationMember, error)
 }
 
 type FamilyUsecaseImpl struct {
@@ -141,4 +142,35 @@ func (u *FamilyUsecaseImpl) GetFamilyInfo(ctx context.Context) ([]models.User, *
 	})
 
 	return members, &family, err
+}
+
+func (u *FamilyUsecaseImpl) GetInvitationList(ctx context.Context) ([]*odachin.InvitationMember, error) {
+	var invitationList []*odachin.InvitationMember
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		user, err := u.userRepository.Get(tx, user_id)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		invitations, err := u.invitationRepository.GetByFamilyId(tx, *user.FamilyID)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		for _, invitation := range invitations {
+			user, err := u.userRepository.Get(tx, invitation.ToUserID)
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+			//TODO 直す
+			invitationList = append(invitationList, &odachin.InvitationMember{
+				UserId:         user.UserID,
+				Name:           user.UserName,
+				AvatarImageUrl: user.AvatarImageUrl,
+				InvitationId:   uint64(invitation.InvitationID),
+			})
+		}
+		return nil
+	})
+
+	return invitationList, err
 }

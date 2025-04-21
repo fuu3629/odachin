@@ -3,7 +3,11 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { AddFamilyDialog } from './AddFamilyDialog';
 import { FamilyAvatar } from './FamilyAvatar';
-import { FamilyService, GetFamilyInfoResponse } from '@/__generated__/v1/odachin/faimily_pb';
+import {
+  FamilyService,
+  GetFamilyInfoResponse,
+  GetInvitationListResponse,
+} from '@/__generated__/v1/odachin/faimily_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
@@ -14,6 +18,7 @@ export function FamilyPage({}: FamilyPageProps) {
   const router = useRouter();
   const client = useClient(FamilyService);
   const [familyInfo, setuserInfo] = useState<GetFamilyInfoResponse>();
+  const [invitingUser, setInvitingUser] = useState<GetInvitationListResponse>();
   useEffect(() => {
     if (!cookies || !cookies.authorization) {
       console.error('No authentication token found');
@@ -26,6 +31,11 @@ export function FamilyPage({}: FamilyPageProps) {
           headers: { authorization: cookies.authorization },
         });
         setuserInfo(res);
+        //TODO家族がない時、別ページに遷移
+        const res2 = await client.getInvitationList(req, {
+          headers: { authorization: cookies.authorization },
+        });
+        setInvitingUser(res2);
       } catch (error) {
         router.push('/login');
         console.error('Error fetching user info:', error);
@@ -39,10 +49,10 @@ export function FamilyPage({}: FamilyPageProps) {
         <VStack py='5%' w='60%'>
           <Box mb='12px' textAlign='left' w='100%'>
             <Text fontWeight='semibold' textStyle='2xl'>
-              家族一覧
+              {familyInfo?.familyName}
             </Text>
           </Box>
-          <HStack w='100%'>
+          <HStack mb={24} w='100%'>
             {familyInfo?.familyMembers.map((member) => (
               <FamilyAvatar
                 avatarUrl={member.avatarImageUrl}
@@ -52,6 +62,21 @@ export function FamilyPage({}: FamilyPageProps) {
               />
             ))}
             <AddFamilyDialog></AddFamilyDialog>
+          </HStack>
+          <Box mb='12px' textAlign='left' w='100%'>
+            <Text fontWeight='semibold' textStyle='2xl'>
+              招待中のユーザー
+            </Text>
+          </Box>
+          <HStack mb={24} w='100%'>
+            {invitingUser?.invitationMembers.map((member) => (
+              <FamilyAvatar
+                avatarUrl={member.avatarImageUrl}
+                key={member.userId}
+                userId={member.userId}
+                userName={member.name}
+              />
+            ))}
           </HStack>
         </VStack>
       </VStack>

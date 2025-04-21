@@ -10,6 +10,8 @@ type InvitationRepository interface {
 	Save(tx *gorm.DB, param *models.Invitation) error
 	Update(tx *gorm.DB, param *models.Invitation) error
 	GetByToUserId(tx *gorm.DB, id string) ([]models.Invitation, error)
+	GetByFromUserId(tx *gorm.DB, id string) ([]models.Invitation, error)
+	GetByFamilyId(tx *gorm.DB, id uint) ([]models.Invitation, error)
 }
 
 type InvitationRepositoryImpl struct {
@@ -44,6 +46,22 @@ func (r *InvitationRepositoryImpl) Update(tx *gorm.DB, invitation *models.Invita
 func (r *InvitationRepositoryImpl) GetByToUserId(tx *gorm.DB, id string) ([]models.Invitation, error) {
 	var invitation []models.Invitation
 	if err := tx.Where("to_user_id = ?", id).Find(&invitation).Error; err != nil {
+		return []models.Invitation{}, err
+	}
+	return invitation, nil
+}
+
+func (r *InvitationRepositoryImpl) GetByFromUserId(tx *gorm.DB, id string) ([]models.Invitation, error) {
+	var invitation []models.Invitation
+	if err := tx.Where("from_user_id = ?", id).Find(&invitation).Error; err != nil {
+		return []models.Invitation{}, err
+	}
+	return invitation, nil
+}
+
+func (r *InvitationRepositoryImpl) GetByFamilyId(tx *gorm.DB, id uint) ([]models.Invitation, error) {
+	var invitation []models.Invitation
+	if err := tx.Where("family_id = ?", id).Find(&invitation).Error; err != nil {
 		return []models.Invitation{}, err
 	}
 	return invitation, nil

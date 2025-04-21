@@ -25,9 +25,9 @@ export function AddFamilyDialog({}: AddFamilyDialogProps) {
   const client = useClient(FamilyService);
   const authClient = useClient(AuthService);
   const cookies = useContext(CokiesContext);
-  const router = useRouter();
   const [userId, setUserId] = useState<string>('');
   const [confirmUserInfo, setConfirmUserInfo] = useState<GetUserInfoResponse>();
+  const [open, setOpen] = useState(false);
   const onCLick = async () => {
     if (!cookies || !cookies.authorization) {
       console.error('No authentication token found');
@@ -40,8 +40,11 @@ export function AddFamilyDialog({}: AddFamilyDialogProps) {
       await client.inviteUser(req, {
         headers: { authorization: cookies.authorization },
       });
+      setOpen(false);
     } catch (error) {
       console.error('Error inviting family member:', error);
+      setOpen(false);
+      alert('招待に失敗しました');
     }
   };
   const onClickConfirm = async () => {
@@ -63,7 +66,7 @@ export function AddFamilyDialog({}: AddFamilyDialogProps) {
   };
   return (
     <>
-      <Dialog.Root>
+      <Dialog.Root onOpenChange={(e) => setOpen(e.open)} open={open} placement='center'>
         <Dialog.Trigger asChild>
           <VStack gapY={4} w='156px'>
             <IconButton

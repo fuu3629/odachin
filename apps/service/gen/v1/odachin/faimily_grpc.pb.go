@@ -20,10 +20,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	FamilyService_CreateGroup_FullMethodName      = "/odachin.family.FamilyService/CreateGroup"
-	FamilyService_GetFamilyInfo_FullMethodName    = "/odachin.family.FamilyService/GetFamilyInfo"
-	FamilyService_InviteUser_FullMethodName       = "/odachin.family.FamilyService/InviteUser"
-	FamilyService_AcceptInvitation_FullMethodName = "/odachin.family.FamilyService/AcceptInvitation"
+	FamilyService_CreateGroup_FullMethodName       = "/odachin.family.FamilyService/CreateGroup"
+	FamilyService_GetFamilyInfo_FullMethodName     = "/odachin.family.FamilyService/GetFamilyInfo"
+	FamilyService_InviteUser_FullMethodName        = "/odachin.family.FamilyService/InviteUser"
+	FamilyService_AcceptInvitation_FullMethodName  = "/odachin.family.FamilyService/AcceptInvitation"
+	FamilyService_GetInvitationList_FullMethodName = "/odachin.family.FamilyService/GetInvitationList"
 )
 
 // FamilyServiceClient is the client API for FamilyService service.
@@ -34,6 +35,7 @@ type FamilyServiceClient interface {
 	GetFamilyInfo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetFamilyInfoResponse, error)
 	InviteUser(ctx context.Context, in *InviteUserRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	AcceptInvitation(ctx context.Context, in *AcceptInvitationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetInvitationList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetInvitationListResponse, error)
 }
 
 type familyServiceClient struct {
@@ -80,6 +82,15 @@ func (c *familyServiceClient) AcceptInvitation(ctx context.Context, in *AcceptIn
 	return out, nil
 }
 
+func (c *familyServiceClient) GetInvitationList(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetInvitationListResponse, error) {
+	out := new(GetInvitationListResponse)
+	err := c.cc.Invoke(ctx, FamilyService_GetInvitationList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FamilyServiceServer is the server API for FamilyService service.
 // All implementations must embed UnimplementedFamilyServiceServer
 // for forward compatibility
@@ -88,6 +99,7 @@ type FamilyServiceServer interface {
 	GetFamilyInfo(context.Context, *emptypb.Empty) (*GetFamilyInfoResponse, error)
 	InviteUser(context.Context, *InviteUserRequest) (*emptypb.Empty, error)
 	AcceptInvitation(context.Context, *AcceptInvitationRequest) (*emptypb.Empty, error)
+	GetInvitationList(context.Context, *emptypb.Empty) (*GetInvitationListResponse, error)
 	mustEmbedUnimplementedFamilyServiceServer()
 }
 
@@ -106,6 +118,9 @@ func (UnimplementedFamilyServiceServer) InviteUser(context.Context, *InviteUserR
 }
 func (UnimplementedFamilyServiceServer) AcceptInvitation(context.Context, *AcceptInvitationRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AcceptInvitation not implemented")
+}
+func (UnimplementedFamilyServiceServer) GetInvitationList(context.Context, *emptypb.Empty) (*GetInvitationListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInvitationList not implemented")
 }
 func (UnimplementedFamilyServiceServer) mustEmbedUnimplementedFamilyServiceServer() {}
 
@@ -192,6 +207,24 @@ func _FamilyService_AcceptInvitation_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FamilyService_GetInvitationList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FamilyServiceServer).GetInvitationList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FamilyService_GetInvitationList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FamilyServiceServer).GetInvitationList(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FamilyService_ServiceDesc is the grpc.ServiceDesc for FamilyService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -214,6 +247,10 @@ var FamilyService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AcceptInvitation",
 			Handler:    _FamilyService_AcceptInvitation_Handler,
+		},
+		{
+			MethodName: "GetInvitationList",
+			Handler:    _FamilyService_GetInvitationList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

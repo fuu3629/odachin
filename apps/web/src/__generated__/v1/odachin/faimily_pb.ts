@@ -15,7 +15,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/faimily.proto.
  */
 export const file_v1_odachin_faimily: GenFile = /*@__PURE__*/
-  fileDesc("Chh2MS9vZGFjaGluL2ZhaW1pbHkucHJvdG8SDm9kYWNoaW4uZmFtaWx5IoEBCgpGYW1pbHlVc2VyEg8KB3VzZXJfaWQYASABKAkSDAoEbmFtZRgCIAEoCRIdChBhdmF0YXJfaW1hZ2VfdXJsGAMgASgJSACIAQESIAoEcm9sZRgEIAEoDjISLm9kYWNoaW4uYXV0aC5Sb2xlQhMKEV9hdmF0YXJfaW1hZ2VfdXJsIjIKEkNyZWF0ZUdyb3VwUmVxdWVzdBIcCgtmYW1pbHlfbmFtZRgBIAEoCUIHukgEcgIQASIwChFJbnZpdGVVc2VyUmVxdWVzdBIbCgp0b191c2VyX2lkGAEgASgJQge6SARyAhABIjkKF0FjY2VwdEludml0YXRpb25SZXF1ZXN0Eh4KDWludml0YXRpb25faWQYASABKARCB7pIBCICKAEicwoVR2V0RmFtaWx5SW5mb1Jlc3BvbnNlEjIKDmZhbWlseV9tZW1iZXJzGAEgAygLMhoub2RhY2hpbi5mYW1pbHkuRmFtaWx5VXNlchITCgtmYW1pbHlfbmFtZRgCIAEoCRIRCglmYW1pbHlfaWQYAyABKAQyyAIKDUZhbWlseVNlcnZpY2USSQoLQ3JlYXRlR3JvdXASIi5vZGFjaGluLmZhbWlseS5DcmVhdGVHcm91cFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSTgoNR2V0RmFtaWx5SW5mbxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRolLm9kYWNoaW4uZmFtaWx5LkdldEZhbWlseUluZm9SZXNwb25zZRJHCgpJbnZpdGVVc2VyEiEub2RhY2hpbi5mYW1pbHkuSW52aXRlVXNlclJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSUwoQQWNjZXB0SW52aXRhdGlvbhInLm9kYWNoaW4uZmFtaWx5LkFjY2VwdEludml0YXRpb25SZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5YgZwcm90bzM", [file_google_protobuf_empty, file_buf_validate_validate, file_v1_odachin_auth]);
+  fileDesc("Chh2MS9vZGFjaGluL2ZhaW1pbHkucHJvdG8SDm9kYWNoaW4uZmFtaWx5IoEBCgpGYW1pbHlVc2VyEg8KB3VzZXJfaWQYASABKAkSDAoEbmFtZRgCIAEoCRIdChBhdmF0YXJfaW1hZ2VfdXJsGAMgASgJSACIAQESIAoEcm9sZRgEIAEoDjISLm9kYWNoaW4uYXV0aC5Sb2xlQhMKEV9hdmF0YXJfaW1hZ2VfdXJsIjIKEkNyZWF0ZUdyb3VwUmVxdWVzdBIcCgtmYW1pbHlfbmFtZRgBIAEoCUIHukgEcgIQASIwChFJbnZpdGVVc2VyUmVxdWVzdBIbCgp0b191c2VyX2lkGAEgASgJQge6SARyAhABIjkKF0FjY2VwdEludml0YXRpb25SZXF1ZXN0Eh4KDWludml0YXRpb25faWQYASABKARCB7pIBCICKAEicwoVR2V0RmFtaWx5SW5mb1Jlc3BvbnNlEjIKDmZhbWlseV9tZW1iZXJzGAEgAygLMhoub2RhY2hpbi5mYW1pbHkuRmFtaWx5VXNlchITCgtmYW1pbHlfbmFtZRgCIAEoCRIRCglmYW1pbHlfaWQYAyABKAQifAoQSW52aXRhdGlvbk1lbWJlchIPCgd1c2VyX2lkGAEgASgJEgwKBG5hbWUYAiABKAkSHQoQYXZhdGFyX2ltYWdlX3VybBgDIAEoCUgAiAEBEhUKDWludml0YXRpb25faWQYBCABKARCEwoRX2F2YXRhcl9pbWFnZV91cmwiWQoZR2V0SW52aXRhdGlvbkxpc3RSZXNwb25zZRI8ChJpbnZpdGF0aW9uX21lbWJlcnMYASADKAsyIC5vZGFjaGluLmZhbWlseS5JbnZpdGF0aW9uTWVtYmVyMqADCg1GYW1pbHlTZXJ2aWNlEkkKC0NyZWF0ZUdyb3VwEiIub2RhY2hpbi5mYW1pbHkuQ3JlYXRlR3JvdXBSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Ek4KDUdldEZhbWlseUluZm8SFi5nb29nbGUucHJvdG9idWYuRW1wdHkaJS5vZGFjaGluLmZhbWlseS5HZXRGYW1pbHlJbmZvUmVzcG9uc2USRwoKSW52aXRlVXNlchIhLm9kYWNoaW4uZmFtaWx5Lkludml0ZVVzZXJSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5ElMKEEFjY2VwdEludml0YXRpb24SJy5vZGFjaGluLmZhbWlseS5BY2NlcHRJbnZpdGF0aW9uUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJWChFHZXRJbnZpdGF0aW9uTGlzdBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRopLm9kYWNoaW4uZmFtaWx5LkdldEludml0YXRpb25MaXN0UmVzcG9uc2ViBnByb3RvMw", [file_google_protobuf_empty, file_buf_validate_validate, file_v1_odachin_auth]);
 
 /**
  * @generated from message odachin.family.FamilyUser
@@ -128,6 +128,55 @@ export const GetFamilyInfoResponseSchema: GenMessage<GetFamilyInfoResponse> = /*
   messageDesc(file_v1_odachin_faimily, 4);
 
 /**
+ * @generated from message odachin.family.InvitationMember
+ */
+export type InvitationMember = Message<"odachin.family.InvitationMember"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: optional string avatar_image_url = 3;
+   */
+  avatarImageUrl?: string;
+
+  /**
+   * @generated from field: uint64 invitation_id = 4;
+   */
+  invitationId: bigint;
+};
+
+/**
+ * Describes the message odachin.family.InvitationMember.
+ * Use `create(InvitationMemberSchema)` to create a new message.
+ */
+export const InvitationMemberSchema: GenMessage<InvitationMember> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_faimily, 5);
+
+/**
+ * @generated from message odachin.family.GetInvitationListResponse
+ */
+export type GetInvitationListResponse = Message<"odachin.family.GetInvitationListResponse"> & {
+  /**
+   * @generated from field: repeated odachin.family.InvitationMember invitation_members = 1;
+   */
+  invitationMembers: InvitationMember[];
+};
+
+/**
+ * Describes the message odachin.family.GetInvitationListResponse.
+ * Use `create(GetInvitationListResponseSchema)` to create a new message.
+ */
+export const GetInvitationListResponseSchema: GenMessage<GetInvitationListResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_faimily, 6);
+
+/**
  * @generated from service odachin.family.FamilyService
  */
 export const FamilyService: GenService<{
@@ -162,6 +211,14 @@ export const FamilyService: GenService<{
     methodKind: "unary";
     input: typeof AcceptInvitationRequestSchema;
     output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc odachin.family.FamilyService.GetInvitationList
+   */
+  getInvitationList: {
+    methodKind: "unary";
+    input: typeof EmptySchema;
+    output: typeof GetInvitationListResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_v1_odachin_faimily, 0);

@@ -185,3 +185,11 @@ func (s *ServerStruct) GetFamilyInfo(ctx context.Context, req *emptypb.Empty) (*
 	}
 	return dto.ToGetFamilyInfoResponse(member, family), nil
 }
+
+func (s *ServerStruct) GetInvitationList(ctx context.Context, req *emptypb.Empty) (*odachin.GetInvitationListResponse, error) {
+	invitationList, err := s.familyUsecase.GetInvitationList(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &odachin.GetInvitationListResponse{InvitationMembers: invitationList}, nil
+}
