@@ -53,6 +53,26 @@ func ToGetRewardListResponse(r []models.RewardPeriod) *odachin.GetRewardListResp
 	}
 }
 
+func ToGetChildRewardListResponse(r []models.Reward) *odachin.GetChildRewardListResponse {
+	rewardList := make([]*odachin.RewardInfo, len(r))
+	for i, reward := range r {
+		rewardList[i] = &odachin.RewardInfo{
+			RewardPeriodId: uint64(reward.RewardID),
+			FromUserId:     reward.FromUserID,
+			ToUserId:       reward.ToUserID,
+			Amount:         reward.Amount,
+			RewardType:     odachin.Reward_Type(odachin.Reward_Type_value[reward.PeriodType]),
+			Title:          reward.Title,
+			Description:    reward.Description,
+			IsCompleted:    false,
+			IsEditable:     true,
+		}
+	}
+	return &odachin.GetChildRewardListResponse{
+		RewardList: rewardList,
+	}
+}
+
 func ToGetFamilyInfoResponse(members []models.User, family *models.Family) *odachin.GetFamilyInfoResponse {
 	familyMembers := make([]*odachin.FamilyUser, len(members))
 	for i, member := range members {

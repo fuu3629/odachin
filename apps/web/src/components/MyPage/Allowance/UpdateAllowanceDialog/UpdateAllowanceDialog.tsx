@@ -9,8 +9,11 @@ import {
   RadioGroup,
   Select,
   createListCollection,
+  Icon,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
+import { CiCircleCheck } from 'react-icons/ci';
 import { AllowanceItem } from '../AllowancePage';
 import { UpdateAccountFormSchemaType, useUpdateAccountForm } from './lib';
 import { Alloance_Type, DayOfWeek } from '@/__generated__/v1/odachin/allowance_pb';
@@ -43,6 +46,7 @@ for (let i = 1; i <= 31; i++) {
 const dateFrameworks = createListCollection({ items: dateOptions });
 
 export function UpdateAllowanceDialog({ allowanceItem }: UpdateAllowanceDialogProps) {
+  const [message, setMessage] = useState<boolean | undefined>(undefined);
   const defaultValues: UpdateAccountFormSchemaType = {
     amount: String(allowanceItem.amount),
     allowanceType: Alloance_Type[allowanceItem.allowanceType] as keyof typeof Alloance_Type,
@@ -57,7 +61,7 @@ export function UpdateAllowanceDialog({ allowanceItem }: UpdateAllowanceDialogPr
     onSubmit,
     formState: { errors },
     watch,
-  } = useUpdateAccountForm(defaultValues, allowanceItem);
+  } = useUpdateAccountForm(defaultValues, allowanceItem, setMessage);
 
   return (
     <>
@@ -225,6 +229,26 @@ export function UpdateAllowanceDialog({ allowanceItem }: UpdateAllowanceDialogPr
                         </Text>
                       )}
                     </>
+                  )}
+                  {message === true && (
+                    <HStack>
+                      <Icon color='green.500'>
+                        <CiCircleCheck />
+                      </Icon>
+                      <Text color='green.500' fontSize='sm'>
+                        お小遣いを更新しました
+                      </Text>
+                    </HStack>
+                  )}
+                  {message === false && (
+                    <HStack>
+                      <Icon color='red.500'>
+                        <CiCircleCheck />
+                      </Icon>
+                      <Text color='red.500' fontSize='sm'>
+                        お小遣いの更新に失敗しました
+                      </Text>
+                    </HStack>
                   )}
                 </Dialog.Body>
                 <Dialog.Footer>

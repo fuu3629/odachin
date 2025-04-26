@@ -1,63 +1,89 @@
-import { Button, Center, Link, Table, Text } from '@chakra-ui/react';
+import { Center, Link, Table, Tabs, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
-import { CompletedTag } from './CompletedTag';
+import { RewardFloat } from '../../Reward/RewardPage';
+import { RewardDeleteDiadlog } from './RewardDeleteDiadlog';
+import { SelectedUser } from './RewardSettingPage';
 import { Reward_Type, RewardService } from '@/__generated__/v1/odachin/reward_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
-import unauthorizedPage from '@/pages/unauthorized';
 
-export interface RewardTableProps {
-  rewardType: Reward_Type;
+export interface RewardSettingTableProps {
+  selectedUser?: SelectedUser;
 }
 
-export interface RewardPeriodItem {
+export interface RewardItem {
   id: bigint;
   title: string;
   description: string;
+  name?: string;
   amount: number;
-  isCompleted: boolean;
 }
 
-export function RewardTable({ rewardType }: RewardTableProps) {
+export function RewardSettingTable({ selectedUser }: RewardSettingTableProps) {
   const client = useClient(RewardService);
   const cookies = useContext(CokiesContext);
-  const [items, setItems] = useState<RewardPeriodItem[]>([]);
+  const [rewardType, setRewardType] = useState<Reward_Type>(Reward_Type.DAILY);
+  const [items, setItems] = useState<RewardItem[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       if (!cookies || !cookies.authorization) {
-        unauthorizedPage();
         console.error('No authentication token found');
         return;
       }
-      const res = await client.getRewardList(
-        { rewardType: rewardType },
-        {
+      try {
+        const req = { childId: selectedUser?.id, rewardType: rewardType };
+        const res2 = await client.getChildRewardList(req, {
           headers: { authorization: cookies?.authorization },
-        },
-      );
-      const rewards = res.rewardList.map((reward) => {
-        return {
-          id: reward.rewardPeriodId,
-          title: reward.title,
-          description: reward.description,
-          amount: reward.amount,
-          isCompleted: reward.isCompleted,
-        };
-      });
-      setItems(rewards);
+        });
+        const rewards = res2.rewardList.map((reward) => {
+          return {
+            id: reward.rewardPeriodId,
+            title: reward.title,
+            description: reward.description,
+            amount: reward.amount,
+            name: selectedUser?.name,
+          };
+        });
+        setItems(rewards);
+      } catch (error) {
+        console.error('Error fetching reward list:', error);
+      }
     };
-    try {
-      fetchData();
-    } catch (error) {
-      console.error('Error fetching reward list:', error);
-    }
-  }, [rewardType]);
-
+    fetchData();
+  }, [selectedUser, rewardType]);
   return (
     <>
-      <Table.Root borderColor='yellow.400' borderTopRadius={24} showColumnBorder variant='outline'>
+      <Tabs.Root
+        colorPalette='orange'
+        defaultValue={Reward_Type.DAILY.toString()}
+        fitted
+        onValueChange={(e) => setRewardType(Number(e.value) as Reward_Type)}
+        variant='subtle'
+      >
+        <Tabs.List>
+          <Tabs.Trigger borderTopRadius='24px' value={Reward_Type.DAILY.toString()}>
+            <RewardFloat count={0}></RewardFloat>
+            <Text fontWeight='semibold' textStyle='2xl'>
+              毎日のミッション
+            </Text>
+          </Tabs.Trigger>
+          <Tabs.Trigger borderTopRadius={24} value={Reward_Type.WEEKLY.toString()}>
+            <RewardFloat count={0}></RewardFloat>
+            <Text fontWeight='semibold' textStyle='2xl'>
+              毎週のミッション
+            </Text>
+          </Tabs.Trigger>
+          <Tabs.Trigger borderTopRadius={24} value={Reward_Type.MONTHLY.toString()}>
+            <RewardFloat count={0}></RewardFloat>
+            <Text fontWeight='semibold' textStyle='2xl'>
+              毎月のミッション
+            </Text>
+          </Tabs.Trigger>
+        </Tabs.List>
+      </Tabs.Root>
+      <Table.Root borderColor='yellow.400' showColumnBorder variant='outline'>
         <Table.Header bgColor='yellow.400' borderColor='yellow.400' borderXWidth={4}>
           <Table.Row>
             <Table.ColumnHeader textAlign='center' w='25%'>
@@ -77,12 +103,7 @@ export function RewardTable({ rewardType }: RewardTableProps) {
             </Table.ColumnHeader>
             <Table.ColumnHeader textAlign='center'>
               <Text fontSize='lg' fontWeight='semibold'>
-                状態
-              </Text>
-            </Table.ColumnHeader>
-            <Table.ColumnHeader textAlign='center'>
-              <Text fontSize='lg' fontWeight='semibold'>
-                申請
+                削除
               </Text>
             </Table.ColumnHeader>
           </Table.Row>
@@ -119,19 +140,8 @@ export function RewardTable({ rewardType }: RewardTableProps) {
                     </Text>
                   </Table.Cell>
                   <Table.Cell>
-                    <CompletedTag isCompleted={item.isCompleted}></CompletedTag>
-                  </Table.Cell>
-                  <Table.Cell>
                     <Center>
-                      <Button
-                        colorPalette={item.isCompleted ? 'gray' : 'orange'}
-                        disabled={item.isCompleted}
-                        size='sm'
-                      >
-                        <Text fontWeight='semibold' textAlign='center'>
-                          {item.isCompleted ? '完了済み' : '申請する'}
-                        </Text>
-                      </Button>
+                      <RewardDeleteDiadlog rewardItem={item}></RewardDeleteDiadlog>
                     </Center>
                   </Table.Cell>
                 </Table.Row>

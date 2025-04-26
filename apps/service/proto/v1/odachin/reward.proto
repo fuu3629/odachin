@@ -3,10 +3,13 @@ package odachin.reward;
 import "google/protobuf/empty.proto";
 import "buf/validate/validate.proto";
 
+// TODO 申請と報酬の取得の実装
 service RewardService {
   rpc RegisterReward(RegisterRewardRequest) returns (google.protobuf.Empty);
   rpc DeleteReward(DeleteRewardRequest) returns (google.protobuf.Empty);
   rpc GetRewardList(GetRewardListRequest) returns (GetRewardListResponse);
+  rpc GetChildRewardList(GetChildRewardListRequest)
+      returns (GetChildRewardListResponse);
   rpc GetUncompletedRewardCount(google.protobuf.Empty)
       returns (GetUncompletedRewardCountResponse);
 }
@@ -40,7 +43,7 @@ message RegisterRewardRequest {
 }
 
 message DeleteRewardRequest {
-  uint64 reward_id = 1 [ (buf.validate.field).int64.gte = 1 ];
+  uint64 reward_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
 }
 
 message GetRewardListRequest {
@@ -48,6 +51,13 @@ message GetRewardListRequest {
 }
 
 message GetRewardListResponse { repeated RewardInfo reward_list = 1; }
+
+message GetChildRewardListRequest {
+  string child_id = 1 [ (buf.validate.field).string.min_len = 1 ];
+  Reward.Type reward_type = 2 [ (buf.validate.field).enum.defined_only = true ];
+}
+
+message GetChildRewardListResponse { repeated RewardInfo reward_list = 1; }
 
 message GetUncompletedRewardCountResponse {
   uint32 daily_count = 1;

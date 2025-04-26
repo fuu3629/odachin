@@ -8,6 +8,7 @@ import (
 type RewardRepository interface {
 	Get(tx *gorm.DB, id uint) (models.Reward, error)
 	GetWithPeriodByUserId(tx *gorm.DB, id string) ([]models.Reward, error)
+	GetByCondition(tx *gorm.DB, condition string, args ...interface{}) ([]models.Reward, error)
 	Save(tx *gorm.DB, param *models.Reward) error
 	Update(tx *gorm.DB, param *models.Reward) error
 	Delete(tx *gorm.DB, id uint) error
@@ -32,6 +33,14 @@ func (r *RewardRepositoryImpl) Get(tx *gorm.DB, id uint) (models.Reward, error) 
 func (r *RewardRepositoryImpl) GetWithPeriodByUserId(tx *gorm.DB, id string) ([]models.Reward, error) {
 	var reward []models.Reward
 	if err := tx.Preload("RewardPeriods").Where("to_user_id = ?", id).Find(&reward).Error; err != nil {
+		return []models.Reward{}, err
+	}
+	return reward, nil
+}
+
+func (r *RewardRepositoryImpl) GetByCondition(tx *gorm.DB, condition string, args ...interface{}) ([]models.Reward, error) {
+	var reward []models.Reward
+	if err := tx.Where(condition, args...).Find(&reward).Error; err != nil {
 		return []models.Reward{}, err
 	}
 	return reward, nil

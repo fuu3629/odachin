@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/reward.proto.
  */
 export const file_v1_odachin_reward: GenFile = /*@__PURE__*/
-  fileDesc("Chd2MS9vZGFjaGluL3Jld2FyZC5wcm90bxIOb2RhY2hpbi5yZXdhcmQiNAoGUmV3YXJkIioKBFR5cGUSCQoFREFJTFkQABIKCgZXRUVLTFkQARILCgdNT05USExZEAIipgIKClJld2FyZEluZm8SIQoQcmV3YXJkX3BlcmlvZF9pZBgBIAEoBEIHukgEIgIoARIdCgxmcm9tX3VzZXJfaWQYAiABKAlCB7pIBHICEAESGwoKdG9fdXNlcl9pZBgDIAEoCUIHukgEcgIQARIeCgZhbW91bnQYBCABKAFCDrpICxIJIQAAAAAAAAAAEjoKC3Jld2FyZF90eXBlGAUgASgOMhsub2RhY2hpbi5yZXdhcmQuUmV3YXJkLlR5cGVCCLpIBYIBAhABEhYKBXRpdGxlGAYgASgJQge6SARyAhABEhwKC2Rlc2NyaXB0aW9uGAcgASgJQge6SARyAhABEhMKC2lzQ29tcGxldGVkGAggASgIEhIKCmlzRWRpdGFibGUYCSABKAgixgEKFVJlZ2lzdGVyUmV3YXJkUmVxdWVzdBIbCgp0b191c2VyX2lkGAEgASgJQge6SARyAhABEh4KBmFtb3VudBgCIAEoAUIOukgLEgkhAAAAAAAAAAASOgoLcmV3YXJkX3R5cGUYAyABKA4yGy5vZGFjaGluLnJld2FyZC5SZXdhcmQuVHlwZUIIukgFggECEAESFgoFdGl0bGUYBCABKAlCB7pIBHICEAESHAoLZGVzY3JpcHRpb24YBSABKAlCB7pIBHICEAEiMQoTRGVsZXRlUmV3YXJkUmVxdWVzdBIaCglyZXdhcmRfaWQYASABKARCB7pIBCICKAEiUgoUR2V0UmV3YXJkTGlzdFJlcXVlc3QSOgoLcmV3YXJkX3R5cGUYASABKA4yGy5vZGFjaGluLnJld2FyZC5SZXdhcmQuVHlwZUIIukgFggECEAEiSAoVR2V0UmV3YXJkTGlzdFJlc3BvbnNlEi8KC3Jld2FyZF9saXN0GAEgAygLMhoub2RhY2hpbi5yZXdhcmQuUmV3YXJkSW5mbyJlCiFHZXRVbmNvbXBsZXRlZFJld2FyZENvdW50UmVzcG9uc2USEwoLZGFpbHlfY291bnQYASABKA0SFAoMd2Vla2x5X2NvdW50GAIgASgNEhUKDW1vbnRobHlfY291bnQYAyABKA0y8wIKDVJld2FyZFNlcnZpY2USTwoOUmVnaXN0ZXJSZXdhcmQSJS5vZGFjaGluLnJld2FyZC5SZWdpc3RlclJld2FyZFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSSwoMRGVsZXRlUmV3YXJkEiMub2RhY2hpbi5yZXdhcmQuRGVsZXRlUmV3YXJkUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJcCg1HZXRSZXdhcmRMaXN0EiQub2RhY2hpbi5yZXdhcmQuR2V0UmV3YXJkTGlzdFJlcXVlc3QaJS5vZGFjaGluLnJld2FyZC5HZXRSZXdhcmRMaXN0UmVzcG9uc2USZgoZR2V0VW5jb21wbGV0ZWRSZXdhcmRDb3VudBIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoxLm9kYWNoaW4ucmV3YXJkLkdldFVuY29tcGxldGVkUmV3YXJkQ291bnRSZXNwb25zZWIGcHJvdG8z", [file_google_protobuf_empty, file_buf_validate_validate]);
+  fileDesc("Chd2MS9vZGFjaGluL3Jld2FyZC5wcm90bxIOb2RhY2hpbi5yZXdhcmQiNAoGUmV3YXJkIioKBFR5cGUSCQoFREFJTFkQABIKCgZXRUVLTFkQARILCgdNT05USExZEAIipgIKClJld2FyZEluZm8SIQoQcmV3YXJkX3BlcmlvZF9pZBgBIAEoBEIHukgEIgIoARIdCgxmcm9tX3VzZXJfaWQYAiABKAlCB7pIBHICEAESGwoKdG9fdXNlcl9pZBgDIAEoCUIHukgEcgIQARIeCgZhbW91bnQYBCABKAFCDrpICxIJIQAAAAAAAAAAEjoKC3Jld2FyZF90eXBlGAUgASgOMhsub2RhY2hpbi5yZXdhcmQuUmV3YXJkLlR5cGVCCLpIBYIBAhABEhYKBXRpdGxlGAYgASgJQge6SARyAhABEhwKC2Rlc2NyaXB0aW9uGAcgASgJQge6SARyAhABEhMKC2lzQ29tcGxldGVkGAggASgIEhIKCmlzRWRpdGFibGUYCSABKAgixgEKFVJlZ2lzdGVyUmV3YXJkUmVxdWVzdBIbCgp0b191c2VyX2lkGAEgASgJQge6SARyAhABEh4KBmFtb3VudBgCIAEoAUIOukgLEgkhAAAAAAAAAAASOgoLcmV3YXJkX3R5cGUYAyABKA4yGy5vZGFjaGluLnJld2FyZC5SZXdhcmQuVHlwZUIIukgFggECEAESFgoFdGl0bGUYBCABKAlCB7pIBHICEAESHAoLZGVzY3JpcHRpb24YBSABKAlCB7pIBHICEAEiMQoTRGVsZXRlUmV3YXJkUmVxdWVzdBIaCglyZXdhcmRfaWQYASABKARCB7pIBDICKAEiUgoUR2V0UmV3YXJkTGlzdFJlcXVlc3QSOgoLcmV3YXJkX3R5cGUYASABKA4yGy5vZGFjaGluLnJld2FyZC5SZXdhcmQuVHlwZUIIukgFggECEAEiSAoVR2V0UmV3YXJkTGlzdFJlc3BvbnNlEi8KC3Jld2FyZF9saXN0GAEgAygLMhoub2RhY2hpbi5yZXdhcmQuUmV3YXJkSW5mbyJyChlHZXRDaGlsZFJld2FyZExpc3RSZXF1ZXN0EhkKCGNoaWxkX2lkGAEgASgJQge6SARyAhABEjoKC3Jld2FyZF90eXBlGAIgASgOMhsub2RhY2hpbi5yZXdhcmQuUmV3YXJkLlR5cGVCCLpIBYIBAhABIk0KGkdldENoaWxkUmV3YXJkTGlzdFJlc3BvbnNlEi8KC3Jld2FyZF9saXN0GAEgAygLMhoub2RhY2hpbi5yZXdhcmQuUmV3YXJkSW5mbyJlCiFHZXRVbmNvbXBsZXRlZFJld2FyZENvdW50UmVzcG9uc2USEwoLZGFpbHlfY291bnQYASABKA0SFAoMd2Vla2x5X2NvdW50GAIgASgNEhUKDW1vbnRobHlfY291bnQYAyABKA0y4AMKDVJld2FyZFNlcnZpY2USTwoOUmVnaXN0ZXJSZXdhcmQSJS5vZGFjaGluLnJld2FyZC5SZWdpc3RlclJld2FyZFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSSwoMRGVsZXRlUmV3YXJkEiMub2RhY2hpbi5yZXdhcmQuRGVsZXRlUmV3YXJkUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJcCg1HZXRSZXdhcmRMaXN0EiQub2RhY2hpbi5yZXdhcmQuR2V0UmV3YXJkTGlzdFJlcXVlc3QaJS5vZGFjaGluLnJld2FyZC5HZXRSZXdhcmRMaXN0UmVzcG9uc2USawoSR2V0Q2hpbGRSZXdhcmRMaXN0Eikub2RhY2hpbi5yZXdhcmQuR2V0Q2hpbGRSZXdhcmRMaXN0UmVxdWVzdBoqLm9kYWNoaW4ucmV3YXJkLkdldENoaWxkUmV3YXJkTGlzdFJlc3BvbnNlEmYKGUdldFVuY29tcGxldGVkUmV3YXJkQ291bnQSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaMS5vZGFjaGluLnJld2FyZC5HZXRVbmNvbXBsZXRlZFJld2FyZENvdW50UmVzcG9uc2ViBnByb3RvMw", [file_google_protobuf_empty, file_buf_validate_validate]);
 
 /**
  * @generated from message odachin.reward.Reward
@@ -206,6 +206,45 @@ export const GetRewardListResponseSchema: GenMessage<GetRewardListResponse> = /*
   messageDesc(file_v1_odachin_reward, 5);
 
 /**
+ * @generated from message odachin.reward.GetChildRewardListRequest
+ */
+export type GetChildRewardListRequest = Message<"odachin.reward.GetChildRewardListRequest"> & {
+  /**
+   * @generated from field: string child_id = 1;
+   */
+  childId: string;
+
+  /**
+   * @generated from field: odachin.reward.Reward.Type reward_type = 2;
+   */
+  rewardType: Reward_Type;
+};
+
+/**
+ * Describes the message odachin.reward.GetChildRewardListRequest.
+ * Use `create(GetChildRewardListRequestSchema)` to create a new message.
+ */
+export const GetChildRewardListRequestSchema: GenMessage<GetChildRewardListRequest> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_reward, 6);
+
+/**
+ * @generated from message odachin.reward.GetChildRewardListResponse
+ */
+export type GetChildRewardListResponse = Message<"odachin.reward.GetChildRewardListResponse"> & {
+  /**
+   * @generated from field: repeated odachin.reward.RewardInfo reward_list = 1;
+   */
+  rewardList: RewardInfo[];
+};
+
+/**
+ * Describes the message odachin.reward.GetChildRewardListResponse.
+ * Use `create(GetChildRewardListResponseSchema)` to create a new message.
+ */
+export const GetChildRewardListResponseSchema: GenMessage<GetChildRewardListResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_reward, 7);
+
+/**
  * @generated from message odachin.reward.GetUncompletedRewardCountResponse
  */
 export type GetUncompletedRewardCountResponse = Message<"odachin.reward.GetUncompletedRewardCountResponse"> & {
@@ -230,9 +269,11 @@ export type GetUncompletedRewardCountResponse = Message<"odachin.reward.GetUncom
  * Use `create(GetUncompletedRewardCountResponseSchema)` to create a new message.
  */
 export const GetUncompletedRewardCountResponseSchema: GenMessage<GetUncompletedRewardCountResponse> = /*@__PURE__*/
-  messageDesc(file_v1_odachin_reward, 6);
+  messageDesc(file_v1_odachin_reward, 8);
 
 /**
+ * TODO 申請と報酬の取得の実装
+ *
  * @generated from service odachin.reward.RewardService
  */
 export const RewardService: GenService<{
@@ -259,6 +300,14 @@ export const RewardService: GenService<{
     methodKind: "unary";
     input: typeof GetRewardListRequestSchema;
     output: typeof GetRewardListResponseSchema;
+  },
+  /**
+   * @generated from rpc odachin.reward.RewardService.GetChildRewardList
+   */
+  getChildRewardList: {
+    methodKind: "unary";
+    input: typeof GetChildRewardListRequestSchema;
+    output: typeof GetChildRewardListResponseSchema;
   },
   /**
    * @generated from rpc odachin.reward.RewardService.GetUncompletedRewardCount

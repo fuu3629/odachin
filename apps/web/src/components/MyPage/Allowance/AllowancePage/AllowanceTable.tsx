@@ -1,6 +1,6 @@
 import { Table, Center, Button, Text, Link, Avatar } from '@chakra-ui/react';
 import { CiWarning } from 'react-icons/ci';
-import { IoIosAddCircleOutline } from 'react-icons/io';
+import { AddAllowanceDialog } from '../AddAllowanceDialog';
 import { UpdateAllowanceDialog } from '../UpdateAllowanceDialog';
 import {
   Alloance_Type,
@@ -32,8 +32,6 @@ const AllowanceTypeDict = {
 };
 
 export function AllowanceTable({ allowanceList }: AllowanceTableProps) {
-  const client = useClient(AllowanceService);
-  const handleAddUser = () => {};
   return (
     <>
       <Table.Root borderColor='yellow.400' borderTopRadius={24} showColumnBorder variant='outline'>
@@ -116,12 +114,9 @@ export function AllowanceTable({ allowanceList }: AllowanceTableProps) {
           )}
           <Table.Row>
             <Table.Cell borderColor='yellow.400' borderWidth={4} colSpan={5} textAlign='center'>
-              <Link onClick={() => {}}>
-                <IoIosAddCircleOutline size='1.5em' />
-                <Text fontSize='lg' fontWeight='semibold'>
-                  ユーザーを追加する
-                </Text>
-              </Link>
+              <Center>
+                <AddAllowanceDialog></AddAllowanceDialog>
+              </Center>
             </Table.Cell>
           </Table.Row>
         </Table.Body>

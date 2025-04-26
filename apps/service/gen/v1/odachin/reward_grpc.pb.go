@@ -23,6 +23,7 @@ const (
 	RewardService_RegisterReward_FullMethodName            = "/odachin.reward.RewardService/RegisterReward"
 	RewardService_DeleteReward_FullMethodName              = "/odachin.reward.RewardService/DeleteReward"
 	RewardService_GetRewardList_FullMethodName             = "/odachin.reward.RewardService/GetRewardList"
+	RewardService_GetChildRewardList_FullMethodName        = "/odachin.reward.RewardService/GetChildRewardList"
 	RewardService_GetUncompletedRewardCount_FullMethodName = "/odachin.reward.RewardService/GetUncompletedRewardCount"
 )
 
@@ -33,6 +34,7 @@ type RewardServiceClient interface {
 	RegisterReward(ctx context.Context, in *RegisterRewardRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteReward(ctx context.Context, in *DeleteRewardRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetRewardList(ctx context.Context, in *GetRewardListRequest, opts ...grpc.CallOption) (*GetRewardListResponse, error)
+	GetChildRewardList(ctx context.Context, in *GetChildRewardListRequest, opts ...grpc.CallOption) (*GetChildRewardListResponse, error)
 	GetUncompletedRewardCount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetUncompletedRewardCountResponse, error)
 }
 
@@ -71,6 +73,15 @@ func (c *rewardServiceClient) GetRewardList(ctx context.Context, in *GetRewardLi
 	return out, nil
 }
 
+func (c *rewardServiceClient) GetChildRewardList(ctx context.Context, in *GetChildRewardListRequest, opts ...grpc.CallOption) (*GetChildRewardListResponse, error) {
+	out := new(GetChildRewardListResponse)
+	err := c.cc.Invoke(ctx, RewardService_GetChildRewardList_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *rewardServiceClient) GetUncompletedRewardCount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetUncompletedRewardCountResponse, error) {
 	out := new(GetUncompletedRewardCountResponse)
 	err := c.cc.Invoke(ctx, RewardService_GetUncompletedRewardCount_FullMethodName, in, out, opts...)
@@ -87,6 +98,7 @@ type RewardServiceServer interface {
 	RegisterReward(context.Context, *RegisterRewardRequest) (*emptypb.Empty, error)
 	DeleteReward(context.Context, *DeleteRewardRequest) (*emptypb.Empty, error)
 	GetRewardList(context.Context, *GetRewardListRequest) (*GetRewardListResponse, error)
+	GetChildRewardList(context.Context, *GetChildRewardListRequest) (*GetChildRewardListResponse, error)
 	GetUncompletedRewardCount(context.Context, *emptypb.Empty) (*GetUncompletedRewardCountResponse, error)
 	mustEmbedUnimplementedRewardServiceServer()
 }
@@ -103,6 +115,9 @@ func (UnimplementedRewardServiceServer) DeleteReward(context.Context, *DeleteRew
 }
 func (UnimplementedRewardServiceServer) GetRewardList(context.Context, *GetRewardListRequest) (*GetRewardListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRewardList not implemented")
+}
+func (UnimplementedRewardServiceServer) GetChildRewardList(context.Context, *GetChildRewardListRequest) (*GetChildRewardListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetChildRewardList not implemented")
 }
 func (UnimplementedRewardServiceServer) GetUncompletedRewardCount(context.Context, *emptypb.Empty) (*GetUncompletedRewardCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUncompletedRewardCount not implemented")
@@ -174,6 +189,24 @@ func _RewardService_GetRewardList_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RewardService_GetChildRewardList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetChildRewardListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RewardServiceServer).GetChildRewardList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RewardService_GetChildRewardList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RewardServiceServer).GetChildRewardList(ctx, req.(*GetChildRewardListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RewardService_GetUncompletedRewardCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
@@ -210,6 +243,10 @@ var RewardService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRewardList",
 			Handler:    _RewardService_GetRewardList_Handler,
+		},
+		{
+			MethodName: "GetChildRewardList",
+			Handler:    _RewardService_GetChildRewardList_Handler,
 		},
 		{
 			MethodName: "GetUncompletedRewardCount",

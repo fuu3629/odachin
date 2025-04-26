@@ -19,6 +19,7 @@ type RewardUsecase interface {
 	RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error
 	DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error
 	GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) ([]models.RewardPeriod, error)
+	GetChildRewardList(ctx context.Context, req *odachin.GetChildRewardListRequest) ([]models.Reward, error)
 	GetUncompletedRewardCount(ctx context.Context) (*odachin.GetUncompletedRewardCountResponse, error)
 }
 
@@ -84,8 +85,26 @@ func (u *RewardUsecaseImpl) GetRewardList(ctx context.Context, req *odachin.GetR
 	var rewards []models.RewardPeriod
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
+		now := time.Now()
 		var err error
-		rewards, err = u.rewardPeriodRepository.GetWithReward(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND is_editable = ?", user_id, req.RewardType.String(), true)
+		rewards, err = u.rewardPeriodRepository.GetWithReward(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ?", user_id, req.RewardType.String(), now, now)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return nil, err
+	}
+	return rewards, nil
+}
+
+func (u *RewardUsecaseImpl) GetChildRewardList(ctx context.Context, req *odachin.GetChildRewardListRequest) ([]models.Reward, error) {
+	var rewards []models.Reward
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		var err error
+		rewards, err = u.rewardRepository.GetByCondition(tx, "from_user_id = ? AND to_user_id = ? AND period_type = ?", user_id, req.ChildId, req.RewardType.String())
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}

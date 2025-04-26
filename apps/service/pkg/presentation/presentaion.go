@@ -59,7 +59,6 @@ func NewServer(grpcServer *grpc.Server, db *gorm.DB) {
 		allowanceUsecase: usecase.NewAllowanceUsecase(db),
 		rewardUsecase:    usecase.NewRewardUsecase(db),
 	}
-	// odachin.RegisterOdachinServiceServer(grpcServer, userGrpc)
 	odachin.RegisterAuthServiceServer(grpcServer, userGrpc)
 	odachin.RegisterFamilyServiceServer(grpcServer, userGrpc)
 	odachin.RegisterAllowanceServiceServer(grpcServer, userGrpc)
@@ -169,6 +168,14 @@ func (s *ServerStruct) GetRewardList(ctx context.Context, req *odachin.GetReward
 		return nil, err
 	}
 	return dto.ToGetRewardListResponse(rewardList), nil
+}
+
+func (s *ServerStruct) GetChildRewardList(ctx context.Context, req *odachin.GetChildRewardListRequest) (*odachin.GetChildRewardListResponse, error) {
+	rewardList, err := s.rewardUsecase.GetChildRewardList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return dto.ToGetChildRewardListResponse(rewardList), nil
 }
 
 func (s *ServerStruct) GetUncompletedRewardCount(ctx context.Context, req *emptypb.Empty) (*odachin.GetUncompletedRewardCountResponse, error) {

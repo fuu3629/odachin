@@ -57,6 +57,9 @@ export function FamilyPage({}: FamilyPageProps) {
               <FamilyAvatar
                 avatarUrl={member.avatarImageUrl}
                 key={member.userId}
+                onClick={() => {
+                  router.push(`/myPage/family/${member.userId}`);
+                }}
                 userId={member.userId}
                 userName={member.name}
               />

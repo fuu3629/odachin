@@ -1,7 +1,7 @@
 import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
+import { FaUser, FaLaptop, FaCog, FaTrophy, FaPiggyBank } from 'react-icons/fa';
 import { AuthService, GetOwnInfoResponse, Role } from '@/__generated__/v1/odachin/auth_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
@@ -39,6 +39,20 @@ export function MyPage({}: MyPageProps) {
     userInfo?.role === Role.PARENT
       ? [
           {
+            icon: FaPiggyBank,
+            label: 'お小遣い',
+            onCLick: () => {
+              router.push('myPage/allowance');
+            },
+          },
+          {
+            icon: FaTrophy,
+            label: 'ミッションを管理',
+            onCLick: () => {
+              router.push('myPage/rewardSetting');
+            },
+          },
+          {
             icon: FaUser,
             label: '家族情報',
             onCLick: () => {
@@ -48,13 +62,6 @@ export function MyPage({}: MyPageProps) {
           { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
           {
             icon: FaCog,
-            label: 'お小遣い',
-            onCLick: () => {
-              router.push('myPage/allowance');
-            },
-          },
-          {
-            icon: FaCog,
             label: '設定',
             onCLick: () => {
               router.push('setting/account');
@@ -62,6 +69,18 @@ export function MyPage({}: MyPageProps) {
           },
         ]
       : [
+          {
+            icon: FaTrophy,
+            label: 'ミッション',
+            onCLick: () => {
+              router.push('myPage/reward');
+            },
+          },
+          {
+            icon: FaTrophy,
+            label: '使う',
+            onCLick: () => {},
+          },
           { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
           {
             icon: FaCog,
@@ -88,7 +107,7 @@ export function MyPage({}: MyPageProps) {
         </VStack>
         <Box maxW='800px' mt={10} px={4} w='full'>
           <Text fontSize='lg' fontWeight='bold' mb={4}>
-            マイメニュー
+            メニュー
           </Text>
           <Grid gap={6} px={4} templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }}>
             {menuItems.map((item, index) => (

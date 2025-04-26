@@ -1,6 +1,6 @@
 import { RewardPage } from '@/components/MyPage/Reward/RewardPage';
 
-export default function Reward() {
+export default function reward() {
   return (
     <>
       <RewardPage></RewardPage>

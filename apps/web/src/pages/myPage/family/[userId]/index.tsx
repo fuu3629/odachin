@@ -4,7 +4,7 @@ import { FamilyUserPage } from '@/components/MyPage/Family/FamilyUserPage/Family
 interface Props {
   userId: string;
 }
-
+//TODO
 export default function FamilyUser({ userId }: Props) {
   return <FamilyUserPage userId={userId}></FamilyUserPage>;
 }

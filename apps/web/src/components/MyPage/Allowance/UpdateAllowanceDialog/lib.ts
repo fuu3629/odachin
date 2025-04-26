@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useContext } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { AllowanceItem } from '../AllowancePage';
@@ -59,6 +59,7 @@ export type UpdateAccountFormSchemaType = z.infer<typeof updateAccountFormSchema
 export const useUpdateAccountForm = (
   defaultValues: UpdateAccountFormSchemaType,
   allowanceItem: AllowanceItem,
+  setMessage: Dispatch<SetStateAction<boolean | undefined>>,
 ) => {
   const client = useClient(AllowanceService);
   const cokkies = useContext(CokiesContext);
@@ -87,14 +88,14 @@ export const useUpdateAccountForm = (
       date: date,
       dayOfWeek: dayOfWeek,
     };
-    console.log(req);
     try {
       const res = await client.updateAllowance(req, {
         headers: { authorization: cokkies.authorization },
       });
-      console.log('Update allowance response:', res);
+      setMessage(true);
     } catch (error) {
       console.error('Error updating allowance:', error);
+      setMessage(false);
     }
   };
   return { register, onSubmit: handleSubmit(onSubmit), formState, ...rest };

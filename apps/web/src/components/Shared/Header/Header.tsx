@@ -31,7 +31,6 @@ export function Header({}: HeaderProps) {
         const res = await client.getOwnInfo(req, {
           headers: { authorization: cookies.authorization },
         });
-        console.log('res', res);
         setuserInfo(res);
       } catch (error) {
         router.push('/login');

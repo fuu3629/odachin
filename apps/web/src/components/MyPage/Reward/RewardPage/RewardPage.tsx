@@ -40,7 +40,6 @@ export function RewardPage({}: RewardPageProps) {
       console.error('Error fetching reward list:', error);
     }
   }, []);
-  console.log('count', count);
   return (
     <>
       <VStack bgColor='white' minH='100vh' textAlign='center' w='100%'>
