@@ -65,7 +65,7 @@ type Reward struct {
 	Amount        float64
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
-	RewardPeriods []RewardPeriod `gorm:"foreignKey:RewardID"`
+	RewardPeriods []RewardPeriod `gorm:"foreignKey:RewardID;constraint:OnDelete:CASCADE;"`
 }
 
 type RewardPeriod struct {
