@@ -69,3 +69,27 @@ func ToGetFamilyInfoResponse(members []models.User, family *models.Family) *odac
 		FamilyMembers: familyMembers,
 	}
 }
+
+func ToGetAllowanceByFromUserIdResponse(allowanceList []models.Allowance, userList []models.User) *odachin.GetAllowanceByFromUserIdResponse {
+	allowances := make([]*odachin.Allowance, len(allowanceList))
+	for i, allowance := range allowanceList {
+		var dayOfWeek *odachin.DayOfWeek
+		if allowance.DayOfWeek != nil {
+			dayOfWeekValue := odachin.DayOfWeek(odachin.DayOfWeek_value[*allowance.DayOfWeek])
+			dayOfWeek = &dayOfWeekValue
+		}
+		allowances[i] = &odachin.Allowance{
+			AllowanceId:    uint64(allowance.AllowanceID),
+			ToUserId:       allowance.ToUserID,
+			ToUserName:     userList[i].UserName,
+			Amount:         allowance.Amount,
+			IntervalType:   odachin.Alloance_Type(odachin.Alloance_Type_value[allowance.IntervalType]),
+			Date:           allowance.Date,
+			DayOfWeek:      dayOfWeek,
+			AvatarImageUrl: userList[i].AvatarImageUrl,
+		}
+	}
+	return &odachin.GetAllowanceByFromUserIdResponse{
+		Allowances: allowances,
+	}
+}

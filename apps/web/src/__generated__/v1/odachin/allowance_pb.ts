@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/allowance.proto.
  */
 export const file_v1_odachin_allowance: GenFile = /*@__PURE__*/
-  fileDesc("Chp2MS9vZGFjaGluL2FsbG93YW5jZS5wcm90bxIRb2RhY2hpbi5hbGxvd2FuY2UiPAoIQWxsb2FuY2UiMAoEVHlwZRIPCgtFVkVSWV9OX0RBWRAAEgoKBldFRUtMWRABEgsKB01PTlRITFkQAiK2AgoYUmVnaXN0ZXJBbGxvd2FuY2VSZXF1ZXN0EhsKCnRvX3VzZXJfaWQYASABKAlCB7pIBHICEAESHgoGYW1vdW50GAIgASgBQg66SAsSCSEAAAAAAAAAABJBCg1pbnRlcnZhbF90eXBlGAMgASgOMiAub2RhY2hpbi5hbGxvd2FuY2UuQWxsb2FuY2UuVHlwZUIIukgFggECEAESHgoIaW50ZXJ2YWwYBCABKA1CB7pIBBoCKAFIAIgBARIcCgRkYXRlGAUgASgNQgm6SAYaBBgfKAFIAYgBARI2CgtkYXlfb2Zfd2VlaxgGIAEoDjIcLm9kYWNoaW4uYWxsb3dhbmNlLkRheU9mV2Vla0gCiAEBQgsKCV9pbnRlcnZhbEIHCgVfZGF0ZUIOCgxfZGF5X29mX3dlZWsivwIKFlVwZGF0ZUFsbG93YW5jZVJlcXVlc3QSHQoMYWxsb3dhbmNlX2lkGAEgASgEQge6SAQiAigBEiMKBmFtb3VudBgCIAEoAUIOukgLEgkhAAAAAAAAAABIAIgBARI8Cg1pbnRlcnZhbF90eXBlGAMgASgOMiAub2RhY2hpbi5hbGxvd2FuY2UuQWxsb2FuY2UuVHlwZUgBiAEBEhUKCGludGVydmFsGAQgASgNSAKIAQESEQoEZGF0ZRgFIAEoDUgDiAEBEjYKC2RheV9vZl93ZWVrGAYgASgOMhwub2RhY2hpbi5hbGxvd2FuY2UuRGF5T2ZXZWVrSASIAQFCCQoHX2Ftb3VudEIQCg5faW50ZXJ2YWxfdHlwZUILCglfaW50ZXJ2YWxCBwoFX2RhdGVCDgoMX2RheV9vZl93ZWVrKmcKCURheU9mV2VlaxIKCgZNT05EQVkQABILCgdUVUVTREFZEAESDQoJV0VETkVTREFZEAISDAoIVEhVUlNEQVkQAxIKCgZGUklEQVkQBBIMCghTQVRVUkRBWRAFEgoKBlNVTkRBWRAGMsIBChBBbGxvd2FuY2VTZXJ2aWNlElgKEVJlZ2lzdGVyQWxsb3dhbmNlEisub2RhY2hpbi5hbGxvd2FuY2UuUmVnaXN0ZXJBbGxvd2FuY2VSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5ElQKD1VwZGF0ZUFsbG93YW5jZRIpLm9kYWNoaW4uYWxsb3dhbmNlLlVwZGF0ZUFsbG93YW5jZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHliBnByb3RvMw", [file_google_protobuf_empty, file_buf_validate_validate]);
+  fileDesc("Chp2MS9vZGFjaGluL2FsbG93YW5jZS5wcm90bxIRb2RhY2hpbi5hbGxvd2FuY2UiNgoIQWxsb2FuY2UiKgoEVHlwZRIJCgVEQUlMWRAAEgoKBldFRUtMWRABEgsKB01PTlRITFkQAiKJAgoYUmVnaXN0ZXJBbGxvd2FuY2VSZXF1ZXN0EhsKCnRvX3VzZXJfaWQYASABKAlCB7pIBHICEAESHgoGYW1vdW50GAIgASgBQg66SAsSCSEAAAAAAAAAABJBCg1pbnRlcnZhbF90eXBlGAMgASgOMiAub2RhY2hpbi5hbGxvd2FuY2UuQWxsb2FuY2UuVHlwZUIIukgFggECEAESHAoEZGF0ZRgEIAEoDUIJukgGGgQYHygBSACIAQESNgoLZGF5X29mX3dlZWsYBSABKA4yHC5vZGFjaGluLmFsbG93YW5jZS5EYXlPZldlZWtIAYgBAUIHCgVfZGF0ZUIOCgxfZGF5X29mX3dlZWsimwIKFlVwZGF0ZUFsbG93YW5jZVJlcXVlc3QSHQoMYWxsb3dhbmNlX2lkGAEgASgEQge6SAQyAigBEiMKBmFtb3VudBgCIAEoAUIOukgLEgkhAAAAAAAAAABIAIgBARI8Cg1pbnRlcnZhbF90eXBlGAMgASgOMiAub2RhY2hpbi5hbGxvd2FuY2UuQWxsb2FuY2UuVHlwZUgBiAEBEhEKBGRhdGUYBCABKA1IAogBARI2CgtkYXlfb2Zfd2VlaxgFIAEoDjIcLm9kYWNoaW4uYWxsb3dhbmNlLkRheU9mV2Vla0gDiAEBQgkKB19hbW91bnRCEAoOX2ludGVydmFsX3R5cGVCBwoFX2RhdGVCDgoMX2RheV9vZl93ZWVrIqwCCglBbGxvd2FuY2USFAoMYWxsb3dhbmNlX2lkGAEgASgEEhIKCnRvX3VzZXJfaWQYAiABKAkSFAoMdG9fdXNlcl9uYW1lGAMgASgJEg4KBmFtb3VudBgEIAEoARI3Cg1pbnRlcnZhbF90eXBlGAUgASgOMiAub2RhY2hpbi5hbGxvd2FuY2UuQWxsb2FuY2UuVHlwZRIRCgRkYXRlGAYgASgNSACIAQESNgoLZGF5X29mX3dlZWsYByABKA4yHC5vZGFjaGluLmFsbG93YW5jZS5EYXlPZldlZWtIAYgBARIdChBhdmF0YXJfaW1hZ2VfdXJsGAggASgJSAKIAQFCBwoFX2RhdGVCDgoMX2RheV9vZl93ZWVrQhMKEV9hdmF0YXJfaW1hZ2VfdXJsIlQKIEdldEFsbG93YW5jZUJ5RnJvbVVzZXJJZFJlc3BvbnNlEjAKCmFsbG93YW5jZXMYASADKAsyHC5vZGFjaGluLmFsbG93YW5jZS5BbGxvd2FuY2UqZwoJRGF5T2ZXZWVrEgoKBk1PTkRBWRAAEgsKB1RVRVNEQVkQARINCglXRURORVNEQVkQAhIMCghUSFVSU0RBWRADEgoKBkZSSURBWRAEEgwKCFNBVFVSREFZEAUSCgoGU1VOREFZEAYyqwIKEEFsbG93YW5jZVNlcnZpY2USWAoRUmVnaXN0ZXJBbGxvd2FuY2USKy5vZGFjaGluLmFsbG93YW5jZS5SZWdpc3RlckFsbG93YW5jZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSVAoPVXBkYXRlQWxsb3dhbmNlEikub2RhY2hpbi5hbGxvd2FuY2UuVXBkYXRlQWxsb3dhbmNlUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJnChhHZXRBbGxvd2FuY2VCeUZyb21Vc2VySWQSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaMy5vZGFjaGluLmFsbG93YW5jZS5HZXRBbGxvd2FuY2VCeUZyb21Vc2VySWRSZXNwb25zZWIGcHJvdG8z", [file_google_protobuf_empty, file_buf_validate_validate]);
 
 /**
  * @generated from message odachin.allowance.Alloance
@@ -33,11 +33,11 @@ export const AlloanceSchema: GenMessage<Alloance> = /*@__PURE__*/
  */
 export enum Alloance_Type {
   /**
-   * n日ごと
+   * 毎日
    *
-   * @generated from enum value: EVERY_N_DAY = 0;
+   * @generated from enum value: DAILY = 0;
    */
-  EVERY_N_DAY = 0,
+  DAILY = 0,
 
   /**
    * 毎週
@@ -80,17 +80,12 @@ export type RegisterAllowanceRequest = Message<"odachin.allowance.RegisterAllowa
   intervalType: Alloance_Type;
 
   /**
-   * @generated from field: optional uint32 interval = 4;
-   */
-  interval?: number;
-
-  /**
-   * @generated from field: optional uint32 date = 5;
+   * @generated from field: optional uint32 date = 4;
    */
   date?: number;
 
   /**
-   * @generated from field: optional odachin.allowance.DayOfWeek day_of_week = 6;
+   * @generated from field: optional odachin.allowance.DayOfWeek day_of_week = 5;
    */
   dayOfWeek?: DayOfWeek;
 };
@@ -122,17 +117,12 @@ export type UpdateAllowanceRequest = Message<"odachin.allowance.UpdateAllowanceR
   intervalType?: Alloance_Type;
 
   /**
-   * @generated from field: optional uint32 interval = 4;
-   */
-  interval?: number;
-
-  /**
-   * @generated from field: optional uint32 date = 5;
+   * @generated from field: optional uint32 date = 4;
    */
   date?: number;
 
   /**
-   * @generated from field: optional odachin.allowance.DayOfWeek day_of_week = 6;
+   * @generated from field: optional odachin.allowance.DayOfWeek day_of_week = 5;
    */
   dayOfWeek?: DayOfWeek;
 };
@@ -143,6 +133,75 @@ export type UpdateAllowanceRequest = Message<"odachin.allowance.UpdateAllowanceR
  */
 export const UpdateAllowanceRequestSchema: GenMessage<UpdateAllowanceRequest> = /*@__PURE__*/
   messageDesc(file_v1_odachin_allowance, 2);
+
+/**
+ * @generated from message odachin.allowance.Allowance
+ */
+export type Allowance = Message<"odachin.allowance.Allowance"> & {
+  /**
+   * @generated from field: uint64 allowance_id = 1;
+   */
+  allowanceId: bigint;
+
+  /**
+   * @generated from field: string to_user_id = 2;
+   */
+  toUserId: string;
+
+  /**
+   * @generated from field: string to_user_name = 3;
+   */
+  toUserName: string;
+
+  /**
+   * @generated from field: double amount = 4;
+   */
+  amount: number;
+
+  /**
+   * @generated from field: odachin.allowance.Alloance.Type interval_type = 5;
+   */
+  intervalType: Alloance_Type;
+
+  /**
+   * @generated from field: optional uint32 date = 6;
+   */
+  date?: number;
+
+  /**
+   * @generated from field: optional odachin.allowance.DayOfWeek day_of_week = 7;
+   */
+  dayOfWeek?: DayOfWeek;
+
+  /**
+   * @generated from field: optional string avatar_image_url = 8;
+   */
+  avatarImageUrl?: string;
+};
+
+/**
+ * Describes the message odachin.allowance.Allowance.
+ * Use `create(AllowanceSchema)` to create a new message.
+ */
+export const AllowanceSchema: GenMessage<Allowance> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_allowance, 3);
+
+/**
+ * @generated from message odachin.allowance.GetAllowanceByFromUserIdResponse
+ */
+export type GetAllowanceByFromUserIdResponse = Message<"odachin.allowance.GetAllowanceByFromUserIdResponse"> & {
+  /**
+   * @generated from field: repeated odachin.allowance.Allowance allowances = 1;
+   */
+  allowances: Allowance[];
+};
+
+/**
+ * Describes the message odachin.allowance.GetAllowanceByFromUserIdResponse.
+ * Use `create(GetAllowanceByFromUserIdResponseSchema)` to create a new message.
+ */
+export const GetAllowanceByFromUserIdResponseSchema: GenMessage<GetAllowanceByFromUserIdResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_allowance, 4);
 
 /**
  * @generated from enum odachin.allowance.DayOfWeek
@@ -209,6 +268,14 @@ export const AllowanceService: GenService<{
     methodKind: "unary";
     input: typeof UpdateAllowanceRequestSchema;
     output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc odachin.allowance.AllowanceService.GetAllowanceByFromUserId
+   */
+  getAllowanceByFromUserId: {
+    methodKind: "unary";
+    input: typeof EmptySchema;
+    output: typeof GetAllowanceByFromUserIdResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_v1_odachin_allowance, 0);

@@ -20,8 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	AllowanceService_RegisterAllowance_FullMethodName = "/odachin.allowance.AllowanceService/RegisterAllowance"
-	AllowanceService_UpdateAllowance_FullMethodName   = "/odachin.allowance.AllowanceService/UpdateAllowance"
+	AllowanceService_RegisterAllowance_FullMethodName        = "/odachin.allowance.AllowanceService/RegisterAllowance"
+	AllowanceService_UpdateAllowance_FullMethodName          = "/odachin.allowance.AllowanceService/UpdateAllowance"
+	AllowanceService_GetAllowanceByFromUserId_FullMethodName = "/odachin.allowance.AllowanceService/GetAllowanceByFromUserId"
 )
 
 // AllowanceServiceClient is the client API for AllowanceService service.
@@ -30,6 +31,7 @@ const (
 type AllowanceServiceClient interface {
 	RegisterAllowance(ctx context.Context, in *RegisterAllowanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateAllowance(ctx context.Context, in *UpdateAllowanceRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	GetAllowanceByFromUserId(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetAllowanceByFromUserIdResponse, error)
 }
 
 type allowanceServiceClient struct {
@@ -58,12 +60,22 @@ func (c *allowanceServiceClient) UpdateAllowance(ctx context.Context, in *Update
 	return out, nil
 }
 
+func (c *allowanceServiceClient) GetAllowanceByFromUserId(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GetAllowanceByFromUserIdResponse, error) {
+	out := new(GetAllowanceByFromUserIdResponse)
+	err := c.cc.Invoke(ctx, AllowanceService_GetAllowanceByFromUserId_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AllowanceServiceServer is the server API for AllowanceService service.
 // All implementations must embed UnimplementedAllowanceServiceServer
 // for forward compatibility
 type AllowanceServiceServer interface {
 	RegisterAllowance(context.Context, *RegisterAllowanceRequest) (*emptypb.Empty, error)
 	UpdateAllowance(context.Context, *UpdateAllowanceRequest) (*emptypb.Empty, error)
+	GetAllowanceByFromUserId(context.Context, *emptypb.Empty) (*GetAllowanceByFromUserIdResponse, error)
 	mustEmbedUnimplementedAllowanceServiceServer()
 }
 
@@ -76,6 +88,9 @@ func (UnimplementedAllowanceServiceServer) RegisterAllowance(context.Context, *R
 }
 func (UnimplementedAllowanceServiceServer) UpdateAllowance(context.Context, *UpdateAllowanceRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAllowance not implemented")
+}
+func (UnimplementedAllowanceServiceServer) GetAllowanceByFromUserId(context.Context, *emptypb.Empty) (*GetAllowanceByFromUserIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllowanceByFromUserId not implemented")
 }
 func (UnimplementedAllowanceServiceServer) mustEmbedUnimplementedAllowanceServiceServer() {}
 
@@ -126,6 +141,24 @@ func _AllowanceService_UpdateAllowance_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AllowanceService_GetAllowanceByFromUserId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AllowanceServiceServer).GetAllowanceByFromUserId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AllowanceService_GetAllowanceByFromUserId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AllowanceServiceServer).GetAllowanceByFromUserId(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AllowanceService_ServiceDesc is the grpc.ServiceDesc for AllowanceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -140,6 +173,10 @@ var AllowanceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateAllowance",
 			Handler:    _AllowanceService_UpdateAllowance_Handler,
+		},
+		{
+			MethodName: "GetAllowanceByFromUserId",
+			Handler:    _AllowanceService_GetAllowanceByFromUserId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

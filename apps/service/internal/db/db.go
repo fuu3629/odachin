@@ -35,7 +35,7 @@ BEGIN
     create type role_enum AS ENUM ('CHILD', 'PARENT');
   END IF;
 	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'interval_enum') THEN
-		create type interval_enum AS ENUM ('EVERY_N_DAY', 'MONTHLY', 'WEEKLY');
+		create type interval_enum AS ENUM ('DAILY', 'MONTHLY', 'WEEKLY');
 	END IF;
 	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'dayofweek_enum') THEN
 		create type dayofweek_enum AS ENUM ('MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY');

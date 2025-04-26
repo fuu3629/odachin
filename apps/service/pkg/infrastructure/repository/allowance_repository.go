@@ -9,6 +9,7 @@ type AllowanceRepository interface {
 	Get(tx *gorm.DB, id uint) (models.Allowance, error)
 	Save(tx *gorm.DB, param *models.Allowance) error
 	Update(tx *gorm.DB, param map[string]interface{}) error
+	GetAllowanceByCondition(tx *gorm.DB, condition string, args ...interface{}) ([]models.Allowance, error)
 }
 
 type AllowanceRepositoryImpl struct {
@@ -24,6 +25,14 @@ func (r *AllowanceRepositoryImpl) Get(tx *gorm.DB, id uint) (models.Allowance, e
 		return models.Allowance{}, err
 	}
 	return allowance, nil
+}
+
+func (r *AllowanceRepositoryImpl) GetAllowanceByCondition(tx *gorm.DB, condition string, args ...interface{}) ([]models.Allowance, error) {
+	var allowances []models.Allowance
+	if err := tx.Where(condition, args...).Find(&allowances).Error; err != nil {
+		return nil, err
+	}
+	return allowances, nil
 }
 
 func (r *AllowanceRepositoryImpl) Save(tx *gorm.DB, allowance *models.Allowance) error {

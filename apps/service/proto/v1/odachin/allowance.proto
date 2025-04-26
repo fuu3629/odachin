@@ -7,13 +7,15 @@ service AllowanceService {
   rpc RegisterAllowance(RegisterAllowanceRequest)
       returns (google.protobuf.Empty);
   rpc UpdateAllowance(UpdateAllowanceRequest) returns (google.protobuf.Empty);
+  rpc GetAllowanceByFromUserId(google.protobuf.Empty)
+      returns (GetAllowanceByFromUserIdResponse);
 }
 
 message Alloance {
   enum Type {
-    EVERY_N_DAY = 0; // n日ごと
-    WEEKLY = 1;      // 毎週
-    MONTHLY = 2;     // 毎月
+    DAILY = 0;   // 毎日
+    WEEKLY = 1;  // 毎週
+    MONTHLY = 2; // 毎月
   }
 }
 
@@ -32,19 +34,30 @@ message RegisterAllowanceRequest {
   double amount = 2 [ (buf.validate.field).double.gt = 0 ];
   Alloance.Type interval_type = 3
       [ (buf.validate.field).enum.defined_only = true ];
-  optional uint32 interval = 4 [ (buf.validate.field).int32.gte = 1 ];
-  optional uint32 date = 5 [
+  optional uint32 date = 4 [
     (buf.validate.field).int32.gte = 1,
     (buf.validate.field).int32.lte = 31
   ];
-  optional DayOfWeek day_of_week = 6;
+  optional DayOfWeek day_of_week = 5;
 }
 
 message UpdateAllowanceRequest {
-  uint64 allowance_id = 1 [ (buf.validate.field).int64.gte = 1 ];
+  uint64 allowance_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
   optional double amount = 2 [ (buf.validate.field).double.gt = 0 ];
   optional Alloance.Type interval_type = 3;
-  optional uint32 interval = 4;
-  optional uint32 date = 5;
-  optional DayOfWeek day_of_week = 6;
+  optional uint32 date = 4;
+  optional DayOfWeek day_of_week = 5;
 }
+
+message Allowance {
+  uint64 allowance_id = 1;
+  string to_user_id = 2;
+  string to_user_name = 3;
+  double amount = 4;
+  Alloance.Type interval_type = 5;
+  optional uint32 date = 6;
+  optional DayOfWeek day_of_week = 7;
+  optional string avatar_image_url = 8;
+}
+
+message GetAllowanceByFromUserIdResponse { repeated Allowance allowances = 1; }

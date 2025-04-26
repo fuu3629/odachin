@@ -20,6 +20,9 @@ import (
 //TODO Dockerfile作る
 //TODO 自動デプロイ作る
 //TODO test作る
+//TODO transaction系ちゃんとする
+//TODO wallet系実装する
+//TODO ROLE系の認証
 
 // TODO connect対応にする
 func main() {

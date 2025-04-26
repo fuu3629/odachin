@@ -48,8 +48,7 @@ type Allowance struct {
 	FromUserID   string `gorm:"index"`
 	ToUserID     string `gorm:"index"`
 	Amount       float64
-	IntervalType string `gorm:"type: interval_enum"`
-	Interval     *uint32
+	IntervalType string `gorm:"type: period_enum"`
 	Date         *uint32
 	DayOfWeek    *string `gorm:"type: dayofweek_enum"`
 	CreatedAt    time.Time

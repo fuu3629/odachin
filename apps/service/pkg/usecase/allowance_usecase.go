@@ -16,16 +16,19 @@ import (
 type AllowanceUsecase interface {
 	RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) error
 	UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error
+	GetAllowanceByFromUserId(ctx context.Context) ([]models.Allowance, []models.User, error)
 }
 
 type AllowanceUsecaseImpl struct {
 	db                  *gorm.DB
+	userRepository      repository.UserRepository
 	allowanceRepository repository.AllowanceRepository
 }
 
 func NewAllowanceUsecase(db *gorm.DB) AllowanceUsecase {
 	return &AllowanceUsecaseImpl{
 		db:                  db,
+		userRepository:      repository.NewUserRepository(),
 		allowanceRepository: repository.NewAllowanceRepository(),
 	}
 }
@@ -45,7 +48,6 @@ func (u *AllowanceUsecaseImpl) RegisterAllowance(ctx context.Context, req *odach
 			ToUserID:     req.ToUserId,
 			Amount:       req.Amount,
 			IntervalType: req.IntervalType.String(),
-			Interval:     req.Interval,
 			Date:         req.Date,
 			DayOfWeek:    dayOfWeek,
 		}
@@ -62,6 +64,7 @@ func (u *AllowanceUsecaseImpl) RegisterAllowance(ctx context.Context, req *odach
 }
 
 // TODO ROLEの確認を行う
+// TODO 要改修
 func (u *AllowanceUsecaseImpl) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) error {
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		updateFields, err := assets.ProtoToMap(req)
@@ -78,4 +81,29 @@ func (u *AllowanceUsecaseImpl) UpdateAllowance(ctx context.Context, req *odachin
 		return err
 	}
 	return nil
+}
+
+func (u *AllowanceUsecaseImpl) GetAllowanceByFromUserId(ctx context.Context) ([]models.Allowance, []models.User, error) {
+	var allowanceList []models.Allowance
+	var to_user []models.User
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		var err error
+		allowanceList, err = u.allowanceRepository.GetAllowanceByCondition(tx, "from_user_id = ?", user_id)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		to_user = make([]models.User, len(allowanceList))
+		for i, allowance := range allowanceList {
+			to_user[i], err = u.userRepository.Get(tx, allowance.ToUserID)
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+	return allowanceList, to_user, nil
 }

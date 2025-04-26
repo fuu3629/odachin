@@ -2,7 +2,7 @@ import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@ch
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog } from 'react-icons/fa';
-import { AuthService, GetOwnInfoResponse } from '@/__generated__/v1/odachin/auth_pb';
+import { AuthService, GetOwnInfoResponse, Role } from '@/__generated__/v1/odachin/auth_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 import unauthorizedPage from '@/pages/unauthorized';
@@ -35,23 +35,42 @@ export function MyPage({}: MyPageProps) {
     fetchData();
   }, []);
 
-  const menuItems = [
-    {
-      icon: FaUser,
-      label: '家族情報',
-      onCLick: () => {
-        router.push('myPage/family');
-      },
-    },
-    { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
-    {
-      icon: FaCog,
-      label: '設定',
-      onCLick: () => {
-        router.push('setting/account');
-      },
-    },
-  ];
+  const menuItems =
+    userInfo?.role === Role.PARENT
+      ? [
+          {
+            icon: FaUser,
+            label: '家族情報',
+            onCLick: () => {
+              router.push('myPage/family');
+            },
+          },
+          { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
+          {
+            icon: FaCog,
+            label: 'お小遣い',
+            onCLick: () => {
+              router.push('myPage/allowance');
+            },
+          },
+          {
+            icon: FaCog,
+            label: '設定',
+            onCLick: () => {
+              router.push('setting/account');
+            },
+          },
+        ]
+      : [
+          { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
+          {
+            icon: FaCog,
+            label: '設定',
+            onCLick: () => {
+              router.push('setting/account');
+            },
+          },
+        ];
 
   return (
     <Box bg='white' minH='100vh' w='100%'>
@@ -98,7 +117,6 @@ export function MyPage({}: MyPageProps) {
               </GridItem>
             ))}
           </Grid>
-          ;
         </Box>
       </Flex>
     </Box>

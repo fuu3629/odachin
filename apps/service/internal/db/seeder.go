@@ -1,10 +1,13 @@
 package database
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
 	"github.com/fuu3629/odachin/apps/service/pkg/assets"
+	"github.com/fuu3629/odachin/apps/service/pkg/usecase"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -80,6 +83,59 @@ func Seed(db *gorm.DB) error {
 	if err := db.Create(&child_belong).Error; err != nil {
 		fmt.Printf("%+v", err)
 	}
+
+	// Create a default allowance
+	allowance := models.Allowance{
+		FromUserID:   "parent2",
+		ToUserID:     "child2",
+		Amount:       100,
+		IntervalType: "DAILY",
+	}
+	if err := db.Create(&allowance).Error; err != nil {
+		fmt.Printf("%+v", err)
+	}
+
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "user_id", "parent2")
+
+	// Create a default reward
+	req := &odachin.RegisterRewardRequest{
+		ToUserId:    "child2",
+		Amount:      100,
+		RewardType:  0,
+		Title:       "宿題をする",
+		Description: "宿題をすることができたら100円あげるよ",
+	}
+	reward_usecase := usecase.NewRewardUsecase(db)
+	err2 := reward_usecase.RegisterReward(ctx, req)
+	if err2 != nil {
+		fmt.Printf("Failed to register reward: %+v\n", err2)
+	}
+
+	req2 := &odachin.RegisterRewardRequest{
+		ToUserId:    "child2",
+		Amount:      1000,
+		RewardType:  1,
+		Title:       "宿題をする",
+		Description: "宿題をすること",
+	}
+	err2 = reward_usecase.RegisterReward(ctx, req2)
+	if err2 != nil {
+		fmt.Printf("Failed to register reward: %+v\n", err2)
+	}
+
+	req3 := &odachin.RegisterRewardRequest{
+		ToUserId:    "child2",
+		Amount:      10000,
+		RewardType:  2,
+		Title:       "宿題をする",
+		Description: "宿題をすること",
+	}
+	err2 = reward_usecase.RegisterReward(ctx, req3)
+	if err2 != nil {
+		fmt.Printf("Failed to register reward: %+v\n", err2)
+	}
+
 	assets.Log("Database seeded successfully🍀")
 	return nil
 }

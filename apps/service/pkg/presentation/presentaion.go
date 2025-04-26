@@ -93,7 +93,7 @@ func (s *ServerStruct) Login(ctx context.Context, req *odachin.LoginRequest) (*o
 func (s *ServerStruct) CreateGroup(ctx context.Context, req *odachin.CreateGroupRequest) (*emptypb.Empty, error) {
 	err := s.familyUsecase.CreateGroup(ctx, req)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return nil, nil
 }
@@ -101,7 +101,7 @@ func (s *ServerStruct) CreateGroup(ctx context.Context, req *odachin.CreateGroup
 func (s *ServerStruct) InviteUser(ctx context.Context, req *odachin.InviteUserRequest) (*emptypb.Empty, error) {
 	err := s.familyUsecase.InviteUser(ctx, req)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return nil, nil
 }
@@ -109,7 +109,7 @@ func (s *ServerStruct) InviteUser(ctx context.Context, req *odachin.InviteUserRe
 func (s *ServerStruct) AcceptInvitation(ctx context.Context, req *odachin.AcceptInvitationRequest) (*emptypb.Empty, error) {
 	err := s.familyUsecase.AcceptInvitation(ctx, req)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return nil, nil
 }
@@ -117,7 +117,7 @@ func (s *ServerStruct) AcceptInvitation(ctx context.Context, req *odachin.Accept
 func (s *ServerStruct) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) (*emptypb.Empty, error) {
 	err := s.rewardUsecase.RegisterReward(ctx, req)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return nil, nil
 }
@@ -125,7 +125,7 @@ func (s *ServerStruct) RegisterReward(ctx context.Context, req *odachin.Register
 func (s *ServerStruct) DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) (*emptypb.Empty, error) {
 	err := s.rewardUsecase.DeleteReward(ctx, req)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return nil, nil
 }
@@ -133,15 +133,16 @@ func (s *ServerStruct) DeleteReward(ctx context.Context, req *odachin.DeleteRewa
 func (s *ServerStruct) RegisterAllowance(ctx context.Context, req *odachin.RegisterAllowanceRequest) (*emptypb.Empty, error) {
 	err := s.allowanceUsecase.RegisterAllowance(ctx, req)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return nil, nil
 }
 
 func (s *ServerStruct) UpdateAllowance(ctx context.Context, req *odachin.UpdateAllowanceRequest) (*emptypb.Empty, error) {
+	fmt.Println("UpdateAllowance")
 	err := s.allowanceUsecase.UpdateAllowance(ctx, req)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	return nil, nil
 }
@@ -192,4 +193,12 @@ func (s *ServerStruct) GetInvitationList(ctx context.Context, req *emptypb.Empty
 		return nil, err
 	}
 	return &odachin.GetInvitationListResponse{InvitationMembers: invitationList}, nil
+}
+
+func (s *ServerStruct) GetAllowanceByFromUserId(ctx context.Context, req *emptypb.Empty) (*odachin.GetAllowanceByFromUserIdResponse, error) {
+	allowanceList, userList, err := s.allowanceUsecase.GetAllowanceByFromUserId(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return dto.ToGetAllowanceByFromUserIdResponse(allowanceList, userList), nil
 }
