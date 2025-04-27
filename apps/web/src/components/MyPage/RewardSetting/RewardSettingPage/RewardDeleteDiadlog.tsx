@@ -1,5 +1,5 @@
 import { Dialog, Button, Portal, CloseButton, DataList, VStack, Text } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { RewardItem } from './RewardSettingTable';
 import { RewardService } from '@/__generated__/v1/odachin/reward_pb';
 import { useClient } from '@/pages/api/ClientProvider';
@@ -7,25 +7,31 @@ import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface RewardDeleteDiadlogProps {
   rewardItem?: RewardItem;
+  setRefreshKey: Dispatch<SetStateAction<number>>;
 }
 
-export function RewardDeleteDiadlog({ rewardItem }: RewardDeleteDiadlogProps) {
+export function RewardDeleteDiadlog({ rewardItem, setRefreshKey }: RewardDeleteDiadlogProps) {
   const client = useClient(RewardService);
   const cookies = useContext(CokiesContext);
-  const onClick = () => {
+  const [open, setOpen] = useState(false);
+  const onClick = async () => {
     if (!rewardItem) return;
     if (!cookies || !cookies.authorization) {
       console.error('No authentication token found');
       return;
     }
     const req = { rewardId: rewardItem.id };
-    client.deleteReward(req, { headers: { authorization: cookies?.authorization } }).then((res) => {
-      console.log('Reward deleted:', res);
-    });
+    try {
+      const _ = await client.deleteReward(req);
+      setRefreshKey((prev) => prev + 1);
+      setOpen(false);
+    } catch (error) {
+      console.error('Error deleting reward:', error);
+    }
   };
   return (
     <>
-      <Dialog.Root>
+      <Dialog.Root onOpenChange={(e) => setOpen(e.open)} open={open}>
         <Dialog.Trigger asChild>
           <Button colorPalette='red' variant='surface'>
             削除

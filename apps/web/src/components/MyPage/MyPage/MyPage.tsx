@@ -5,10 +5,9 @@ import { FaUser, FaLaptop, FaCog, FaTrophy, FaPiggyBank } from 'react-icons/fa';
 import { AuthService, GetOwnInfoResponse, Role } from '@/__generated__/v1/odachin/auth_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
-import unauthorizedPage from '@/pages/unauthorized';
+
 export interface MyPageProps {}
 
-//TODO ROLEで分岐する
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
   const router = useRouter();
@@ -21,10 +20,8 @@ export function MyPage({}: MyPageProps) {
         const res = await client.getOwnInfo(req);
         setuserInfo(res);
       } catch (error) {
-        console.log('Error fetching user info:', error.message);
-        console.error('Error fetching user info:', error);
-        alert('認証に失敗しました。');
         router.push('/login');
+        alert('Login failed');
       }
     };
     fetchData();

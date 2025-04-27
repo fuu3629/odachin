@@ -143,7 +143,10 @@ export function RewardSettingTable({ selectedUser }: RewardSettingTableProps) {
                   </Table.Cell>
                   <Table.Cell>
                     <Center>
-                      <RewardDeleteDiadlog rewardItem={item}></RewardDeleteDiadlog>
+                      <RewardDeleteDiadlog
+                        rewardItem={item}
+                        setRefreshKey={setRefreshKey}
+                      ></RewardDeleteDiadlog>
                     </Center>
                   </Table.Cell>
                 </Table.Row>
