@@ -23,6 +23,7 @@ export function AllowancePage({}: AllowancePageProps) {
   const router = useRouter();
   const client = useClient(AllowanceService);
   const [allowanceInfo, setAllowanceInfo] = useState<AllowanceItem[]>();
+  const [refreshKey, setRefreshKey] = useState(0);
   useEffect(() => {
     if (!cookies || !cookies.authorization) {
       console.error('No authentication token found');
@@ -64,12 +65,15 @@ export function AllowancePage({}: AllowancePageProps) {
       }
     };
     fetchData();
-  }, []);
+  }, [refreshKey]);
   return (
     <>
       <VStack h='90vh' w='100vw'>
         <Box mt='3%' w='60%'>
-          <AllowanceTable allowanceList={allowanceInfo}></AllowanceTable>
+          <AllowanceTable
+            allowanceList={allowanceInfo}
+            setRefreshKey={setRefreshKey}
+          ></AllowanceTable>
         </Box>
       </VStack>
     </>

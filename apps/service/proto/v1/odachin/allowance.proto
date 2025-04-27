@@ -34,10 +34,7 @@ message RegisterAllowanceRequest {
   double amount = 2 [ (buf.validate.field).double.gt = 0 ];
   Alloance.Type interval_type = 3
       [ (buf.validate.field).enum.defined_only = true ];
-  optional uint32 date = 4 [
-    (buf.validate.field).int32.gte = 1,
-    (buf.validate.field).int32.lte = 31
-  ];
+  optional uint32 date = 4;
   optional DayOfWeek day_of_week = 5;
 }
 

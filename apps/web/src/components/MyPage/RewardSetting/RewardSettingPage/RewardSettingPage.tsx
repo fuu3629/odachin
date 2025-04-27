@@ -4,13 +4,12 @@ import { FamilyAvatar } from '../../Family/FamilyPage/FamilyAvatar';
 import { RewardSettingTable } from './RewardSettingTable';
 import { Role } from '@/__generated__/v1/odachin/auth_pb';
 import { FamilyService, FamilyUser } from '@/__generated__/v1/odachin/faimily_pb';
-import { RewardService } from '@/__generated__/v1/odachin/reward_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface RewardSettingPageProps {}
 
-const ringCss = defineStyle({
+export const ringCss = defineStyle({
   outlineWidth: '2px',
   outlineColor: 'orange.500',
   outlineOffset: '4px',

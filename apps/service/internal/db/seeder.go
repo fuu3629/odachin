@@ -12,7 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// TODO シードもっとちゃんとする
 func Seed(db *gorm.DB) error {
 	assets.Log("Seeding database...🌱")
 

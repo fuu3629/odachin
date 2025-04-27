@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dispatch, SetStateAction, useContext } from 'react';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Reward_Type, RewardService } from '@/__generated__/v1/odachin/reward_pb';
 import { useClient } from '@/pages/api/ClientProvider';

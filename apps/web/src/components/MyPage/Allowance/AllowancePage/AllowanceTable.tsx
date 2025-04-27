@@ -1,13 +1,9 @@
 import { Table, Center, Button, Text, Link, Avatar } from '@chakra-ui/react';
+import { Dispatch, SetStateAction } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import { AddAllowanceDialog } from '../AddAllowanceDialog';
 import { UpdateAllowanceDialog } from '../UpdateAllowanceDialog';
-import {
-  Alloance_Type,
-  AllowanceService,
-  DayOfWeek,
-} from '@/__generated__/v1/odachin/allowance_pb';
-import { useClient } from '@/pages/api/ClientProvider';
+import { Alloance_Type, DayOfWeek } from '@/__generated__/v1/odachin/allowance_pb';
 
 export interface AllowanceItem {
   id: bigint;
@@ -22,6 +18,7 @@ export interface AllowanceItem {
 }
 
 export interface AllowanceTableProps {
+  setRefreshKey: Dispatch<SetStateAction<number>>;
   allowanceList?: AllowanceItem[];
 }
 
@@ -31,7 +28,7 @@ const AllowanceTypeDict = {
   [Alloance_Type.DAILY]: '毎日',
 };
 
-export function AllowanceTable({ allowanceList }: AllowanceTableProps) {
+export function AllowanceTable({ setRefreshKey, allowanceList }: AllowanceTableProps) {
   return (
     <>
       <Table.Root borderColor='yellow.400' borderTopRadius={24} showColumnBorder variant='outline'>
@@ -115,7 +112,7 @@ export function AllowanceTable({ allowanceList }: AllowanceTableProps) {
           <Table.Row>
             <Table.Cell borderColor='yellow.400' borderWidth={4} colSpan={5} textAlign='center'>
               <Center>
-                <AddAllowanceDialog></AddAllowanceDialog>
+                <AddAllowanceDialog setRefreshKey={setRefreshKey}></AddAllowanceDialog>
               </Center>
             </Table.Cell>
           </Table.Row>
