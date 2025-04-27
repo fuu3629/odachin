@@ -12,7 +12,7 @@ export function AddAllowanceDialog({}: AddAllowanceDialogProps) {
           <Link onClick={() => {}}>
             <IoIosAddCircleOutline size='1.5em' />
             <Text fontSize='lg' fontWeight='semibold'>
-              ユーザーを追加する
+              お小遣いを追加する
             </Text>
           </Link>
         </Dialog.Trigger>

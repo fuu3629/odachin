@@ -2,6 +2,7 @@ import { Center, Link, Table, Tabs, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import { RewardFloat } from '../../Reward/RewardPage';
+import { RewardAddDialog } from './RewardAddDialog';
 import { RewardDeleteDiadlog } from './RewardDeleteDiadlog';
 import { SelectedUser } from './RewardSettingPage';
 import { Reward_Type, RewardService } from '@/__generated__/v1/odachin/reward_pb';
@@ -25,6 +26,7 @@ export function RewardSettingTable({ selectedUser }: RewardSettingTableProps) {
   const cookies = useContext(CokiesContext);
   const [rewardType, setRewardType] = useState<Reward_Type>(Reward_Type.DAILY);
   const [items, setItems] = useState<RewardItem[]>([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +54,7 @@ export function RewardSettingTable({ selectedUser }: RewardSettingTableProps) {
       }
     };
     fetchData();
-  }, [selectedUser, rewardType]);
+  }, [selectedUser, rewardType, refreshKey]);
   return (
     <>
       <Tabs.Root
@@ -111,7 +113,7 @@ export function RewardSettingTable({ selectedUser }: RewardSettingTableProps) {
         <Table.Body bgColor='white'>
           {items.length === 0 ? (
             <Table.Row>
-              <Table.Cell colSpan={4} textAlign='center'>
+              <Table.Cell borderColor='yellow.400' borderWidth={4} colSpan={4} textAlign='center'>
                 <Link>
                   <CiWarning size='1.5em' />
                   <Text fontSize='lg' fontWeight='semibold'>
@@ -148,6 +150,15 @@ export function RewardSettingTable({ selectedUser }: RewardSettingTableProps) {
               ))}
             </>
           )}
+          <Table.Row borderColor='yellow.400' borderWidth={4}>
+            <Table.Cell borderColor='yellow.400' borderWidth={4} colSpan={4} textAlign='center'>
+              <RewardAddDialog
+                rewardType={rewardType}
+                setRefreshKey={setRefreshKey}
+                toUser={selectedUser}
+              ></RewardAddDialog>
+            </Table.Cell>
+          </Table.Row>
         </Table.Body>
       </Table.Root>
     </>
