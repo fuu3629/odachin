@@ -15,21 +15,16 @@ export function MyPage({}: MyPageProps) {
   const client = useClient(AuthService);
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   useEffect(() => {
-    if (!cookies || !cookies.authorization) {
-      unauthorizedPage();
-      console.error('No authentication token found');
-      return;
-    }
     const fetchData = async () => {
       const req = {};
       try {
-        const res = await client.getOwnInfo(req, {
-          headers: { authorization: cookies.authorization },
-        });
+        const res = await client.getOwnInfo(req);
         setuserInfo(res);
       } catch (error) {
-        router.push('/login');
+        console.log('Error fetching user info:', error.message);
         console.error('Error fetching user info:', error);
+        alert('認証に失敗しました。');
+        router.push('/login');
       }
     };
     fetchData();
