@@ -8,6 +8,8 @@ import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface MyPageProps {}
 
+//TODO childの色々
+//TODO チャートとか作りたい
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
   const router = useRouter();

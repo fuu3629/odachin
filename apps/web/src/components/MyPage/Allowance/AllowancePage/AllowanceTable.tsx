@@ -28,6 +28,7 @@ const AllowanceTypeDict = {
   [Alloance_Type.DAILY]: '毎日',
 };
 
+//TODO 削除作る, または子供につき一個にするか
 export function AllowanceTable({ setRefreshKey, allowanceList }: AllowanceTableProps) {
   return (
     <>
