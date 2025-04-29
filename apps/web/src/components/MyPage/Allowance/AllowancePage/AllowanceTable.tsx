@@ -103,7 +103,10 @@ export function AllowanceTable({ setRefreshKey, allowanceList }: AllowanceTableP
                   </Table.Cell>
                   <Table.Cell>
                     <Center>
-                      <UpdateAllowanceDialog allowanceItem={item}></UpdateAllowanceDialog>
+                      <UpdateAllowanceDialog
+                        allowanceItem={item}
+                        setRefreshKey={setRefreshKey}
+                      ></UpdateAllowanceDialog>
                     </Center>
                   </Table.Cell>
                 </Table.Row>

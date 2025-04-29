@@ -11,7 +11,7 @@ import {
   createListCollection,
   Icon,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { CiCircleCheck } from 'react-icons/ci';
 import { AllowanceItem } from '../AllowancePage';
@@ -20,6 +20,7 @@ import { Alloance_Type, DayOfWeek } from '@/__generated__/v1/odachin/allowance_p
 
 export interface UpdateAllowanceDialogProps {
   allowanceItem: AllowanceItem;
+  setRefreshKey: Dispatch<SetStateAction<number>>;
 }
 
 const typeOptions = [
@@ -45,8 +46,12 @@ for (let i = 1; i <= 31; i++) {
 }
 const dateFrameworks = createListCollection({ items: dateOptions });
 
-export function UpdateAllowanceDialog({ allowanceItem }: UpdateAllowanceDialogProps) {
+export function UpdateAllowanceDialog({
+  allowanceItem,
+  setRefreshKey,
+}: UpdateAllowanceDialogProps) {
   const [message, setMessage] = useState<boolean | undefined>(undefined);
+  const [open, setOpen] = useState(false);
   const defaultValues: UpdateAccountFormSchemaType = {
     amount: String(allowanceItem.amount),
     allowanceType: Alloance_Type[allowanceItem.allowanceType] as keyof typeof Alloance_Type,
@@ -61,11 +66,11 @@ export function UpdateAllowanceDialog({ allowanceItem }: UpdateAllowanceDialogPr
     onSubmit,
     formState: { errors },
     watch,
-  } = useUpdateAccountForm(defaultValues, allowanceItem, setMessage);
+  } = useUpdateAccountForm(defaultValues, allowanceItem, setMessage, setRefreshKey, setOpen);
 
   return (
     <>
-      <Dialog.Root>
+      <Dialog.Root onOpenChange={(e) => setOpen(e.open)} open={open}>
         <Dialog.Trigger asChild>
           <Button size='sm'>
             <Text fontWeight='semibold' textAlign='center'>

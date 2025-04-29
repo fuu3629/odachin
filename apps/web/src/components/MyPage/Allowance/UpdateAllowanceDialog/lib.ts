@@ -60,6 +60,8 @@ export const useUpdateAccountForm = (
   defaultValues: UpdateAccountFormSchemaType,
   allowanceItem: AllowanceItem,
   setMessage: Dispatch<SetStateAction<boolean | undefined>>,
+  setRefreshKey: Dispatch<SetStateAction<number>>,
+  setOpen: Dispatch<SetStateAction<boolean>>,
 ) => {
   const client = useClient(AllowanceService);
   const cokkies = useContext(CokiesContext);
@@ -93,6 +95,8 @@ export const useUpdateAccountForm = (
         headers: { authorization: cokkies.authorization },
       });
       setMessage(true);
+      setRefreshKey((prev) => prev + 1);
+      setOpen(false);
     } catch (error) {
       console.error('Error updating allowance:', error);
       setMessage(false);
