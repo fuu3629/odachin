@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/router';
 import { setCookie } from 'nookies';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,6 +18,7 @@ export const useLoginForm = () => {
     resolver: zodResolver(loginFormSchema),
   });
   const client = useClient(AuthService);
+  const router = useRouter();
   const onSubmit = async (data: LoginFormSchemaType) => {
     const req = {
       userId: data.userId,
@@ -28,7 +30,7 @@ export const useLoginForm = () => {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
-      window.location.href = '/myPage';
+      router.push('/myPage');
     } catch (e) {
       alert('Login failed');
     }

@@ -2,45 +2,36 @@ package middleware
 
 import (
 	"context"
-	"fmt"
+	"log"
+	"time"
 
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
-	"go.uber.org/zap"
+	"connectrpc.com/connect"
 )
 
-func InterceptorLogger(l *zap.Logger) logging.Logger {
-	return logging.LoggerFunc(func(ctx context.Context, lvl logging.Level, msg string, fields ...any) {
-		f := make([]zap.Field, 0, len(fields)/2)
+func NewLoggerInterceptor() connect.UnaryInterceptorFunc {
+	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
+		return connect.UnaryFunc(func(
+			ctx context.Context,
+			req connect.AnyRequest,
+		) (connect.AnyResponse, error) {
+			start := time.Now()
+			method := req.Spec().Procedure
+			log.Printf("[Request] %s", method)
 
-		for i := 0; i < len(fields); i += 2 {
-			key := fields[i]
-			value := fields[i+1]
-
-			switch v := value.(type) {
-			case string:
-				f = append(f, zap.String(key.(string), v))
-			case int:
-				f = append(f, zap.Int(key.(string), v))
-			case bool:
-				f = append(f, zap.Bool(key.(string), v))
-			default:
-				f = append(f, zap.Any(key.(string), v))
+			for key, vals := range req.Header() {
+				log.Printf("Header[%s] = %v", key, vals)
 			}
-		}
 
-		logger := l.WithOptions(zap.AddCallerSkip(1)).With(f...)
+			resp, err := next(ctx, req)
 
-		switch lvl {
-		case logging.LevelDebug:
-			logger.Debug(msg)
-		case logging.LevelInfo:
-			logger.Info(msg)
-		case logging.LevelWarn:
-			logger.Warn(msg)
-		case logging.LevelError:
-			logger.Error(msg)
-		default:
-			panic(fmt.Sprintf("unknown level %v", lvl))
-		}
-	})
+			duration := time.Since(start)
+			if err != nil {
+				log.Printf("[Error] %s failed: %v (%v)", method, err, duration)
+			} else {
+				log.Printf("[Success] %s completed in %v", method, duration)
+			}
+			return resp, err
+		})
+	}
+	return connect.UnaryInterceptorFunc(interceptor)
 }
