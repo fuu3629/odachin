@@ -8,7 +8,6 @@ import (
 	"github.com/fuu3629/odachin/apps/service/internal/models"
 	"github.com/fuu3629/odachin/apps/service/pkg/assets"
 	"github.com/fuu3629/odachin/apps/service/pkg/usecase"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -24,6 +23,7 @@ func Seed(db *gorm.DB) error {
 		assets.Log("Database already seeded")
 		return nil
 	}
+	ctx := context.Background()
 
 	// Create a default family
 	family := models.Family{
@@ -34,54 +34,43 @@ func Seed(db *gorm.DB) error {
 		fmt.Printf("%+v", err)
 	}
 
-	// Create a default user
-	hashed, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
-	user := models.User{
-		UserID:   "parent1",
-		UserName: "parent_Name1",
+	auth_usecase := usecase.NewAuthUsecase(db)
+
+	req_create_user1 := &odachin.CreateUserRequest{
+		UserId:   "parent1",
+		Name:     "parent_Name1",
 		Email:    "example1@xxx.com",
-		Password: string(hashed),
-		Role:     "PARENT",
+		Password: "password",
+		Role:     odachin.Role_PARENT,
 	}
-	if err := db.Create(&user).Error; err != nil {
-		fmt.Printf("%+v", err)
-	}
+	_, _ = auth_usecase.CreateUser(ctx, req_create_user1)
 
-	user_belog_family := models.User{
-		UserID:   "parent2",
-		FamilyID: &family.FamilyID,
-		UserName: "parent_Name2",
+	req_create_user2 := &odachin.CreateUserRequest{
+		UserId:   "parent2",
+		Name:     "parent_Name2",
 		Email:    "example2@xxx.com",
-		Password: string(hashed),
-		Role:     "PARENT",
+		Password: "password",
+		Role:     odachin.Role_PARENT,
 	}
-	if err := db.Create(&user_belog_family).Error; err != nil {
-		fmt.Printf("%+v", err)
-	}
+	_, _ = auth_usecase.CreateUser(ctx, req_create_user2)
 
-	// Create a default child
-	child := models.User{
-		UserID:   "child1",
-		UserName: "child_Name1",
+	req_create_user3 := &odachin.CreateUserRequest{
+		UserId:   "child1",
+		Name:     "child_Name1",
 		Email:    "example3@xxx.com",
-		Password: string(hashed),
-		Role:     "CHILD",
+		Password: "password",
+		Role:     odachin.Role_CHILD,
 	}
-	if err := db.Create(&child).Error; err != nil {
-		fmt.Printf("%+v", err)
-	}
+	_, _ = auth_usecase.CreateUser(ctx, req_create_user3)
 
-	child_belong := models.User{
-		UserID:   "child2",
-		FamilyID: &family.FamilyID,
-		UserName: "child_Name2",
+	req_create_user4 := &odachin.CreateUserRequest{
+		UserId:   "child2",
+		Name:     "child_Name2",
 		Email:    "example4@xxx.com",
-		Password: string(hashed),
-		Role:     "CHILD",
+		Password: "password",
+		Role:     odachin.Role_CHILD,
 	}
-	if err := db.Create(&child_belong).Error; err != nil {
-		fmt.Printf("%+v", err)
-	}
+	_, _ = auth_usecase.CreateUser(ctx, req_create_user4)
 
 	// Create a default allowance
 	allowance := models.Allowance{
@@ -94,7 +83,11 @@ func Seed(db *gorm.DB) error {
 		fmt.Printf("%+v", err)
 	}
 
-	ctx := context.Background()
+	user := make(map[string]interface{})
+	user["family_id"] = family.FamilyID
+	db.Model(&models.User{}).Where("user_id = ?", "parent2").Updates(&user)
+	db.Model(&models.User{}).Where("user_id = ?", "child2").Updates(&user)
+
 	ctx = context.WithValue(ctx, "user_id", "parent2")
 
 	// Create a default reward

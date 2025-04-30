@@ -2,6 +2,7 @@ import { Flex, Heading, Input, Button, Text, Box, VStack } from '@chakra-ui/reac
 import { useCreateAccountForm } from './lib';
 export interface CreateAccountFormProps {}
 
+//TODO ROLEの設定する
 export function CreateAccountForm({}: CreateAccountFormProps) {
   const {
     register,
