@@ -12,6 +12,7 @@ service RewardService {
       returns (GetChildRewardListResponse);
   rpc GetUncompletedRewardCount(google.protobuf.Empty)
       returns (GetUncompletedRewardCountResponse);
+  rpc ReportReward(ReportRewardRequest) returns (google.protobuf.Empty);
 }
 
 message Reward {
@@ -62,4 +63,8 @@ message GetUncompletedRewardCountResponse {
   uint32 daily_count = 1;
   uint32 weekly_count = 2;
   uint32 monthly_count = 3;
+}
+
+message ReportRewardRequest {
+  uint64 reward_period_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
 }

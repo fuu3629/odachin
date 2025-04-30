@@ -18,6 +18,7 @@ export function RewardPage({}: RewardPageProps) {
   const cookies = useContext(CokiesContext);
   const [rewardType, setRewardType] = useState<Reward_Type>(Reward_Type.DAILY);
   const [count, setCount] = useState<GetUncompletedRewardCountResponse>();
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,7 +73,11 @@ export function RewardPage({}: RewardPageProps) {
               </Tabs.Trigger>
             </Tabs.List>
           </Tabs.Root>
-          <RewardTable rewardType={rewardType}></RewardTable>
+          <RewardTable
+            refreshKey={refreshKey}
+            rewardType={rewardType}
+            setRefreshKey={setRefreshKey}
+          ></RewardTable>
         </Box>
       </VStack>
     </>

@@ -21,6 +21,7 @@ type RewardUsecase interface {
 	GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) ([]models.RewardPeriod, error)
 	GetChildRewardList(ctx context.Context, req *odachin.GetChildRewardListRequest) ([]models.Reward, error)
 	GetUncompletedRewardCount(ctx context.Context) (*odachin.GetUncompletedRewardCountResponse, error)
+	ReportReward(ctx context.Context, req *odachin.ReportRewardRequest) error
 }
 
 type RewardUsecaseImpl struct {
@@ -145,4 +146,34 @@ func (u *RewardUsecaseImpl) GetUncompletedRewardCount(ctx context.Context) (*oda
 		return nil, err
 	}
 	return &rewardCount, nil
+}
+
+func (u *RewardUsecaseImpl) ReportReward(ctx context.Context, req *odachin.ReportRewardRequest) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		rewardPeriodWithReward, err := u.rewardPeriodRepository.GetWithReward(tx, "reward_period_id = ?", req.RewardPeriodId)
+		rewardPeriod := rewardPeriodWithReward[0]
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		fmt.Println("user_id: ", user_id, rewardPeriod.Reward.ToUserID)
+		if rewardPeriod.Reward.ToUserID != user_id {
+			return status.Errorf(codes.Internal, "not your reward")
+		}
+		if rewardPeriod.Status == "COMPLETED" || rewardPeriod.Status == "REPORTED" {
+			return status.Errorf(codes.Internal, "already completed or reported reward")
+		}
+		reward_period := make(map[string]interface{})
+		reward_period["reward_period_id"] = rewardPeriod.RewardPeriodID
+		reward_period["status"] = "REPORTED"
+		err = u.rewardPeriodRepository.Update(tx, reward_period)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
+	return nil
 }

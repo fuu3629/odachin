@@ -6,7 +6,7 @@ import (
 )
 
 type RewardPeriodRepository interface {
-	Get(tx *gorm.DB, id string) (models.RewardPeriod, error)
+	Get(tx *gorm.DB, id uint) (models.RewardPeriod, error)
 	Save(tx *gorm.DB, param *models.RewardPeriod) error
 	Update(tx *gorm.DB, reward_period map[string]interface{}) error
 	GetWithReward(tx *gorm.DB, condition string, args ...interface{}) ([]models.RewardPeriod, error)
@@ -19,7 +19,7 @@ func NewRewardPeriodRepository() RewardPeriodRepository {
 	return &RewardPeriodRepositoryImpl{}
 }
 
-func (r *RewardPeriodRepositoryImpl) Get(tx *gorm.DB, id string) (models.RewardPeriod, error) {
+func (r *RewardPeriodRepositoryImpl) Get(tx *gorm.DB, id uint) (models.RewardPeriod, error) {
 	var reward_period models.RewardPeriod
 	if err := tx.Where("reward_period_id = ?", id).First(&reward_period).Error; err != nil {
 		return models.RewardPeriod{}, err

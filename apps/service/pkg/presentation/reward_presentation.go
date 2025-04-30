@@ -48,3 +48,11 @@ func (s *ServerStruct) GetUncompletedRewardCount(ctx context.Context, req *conne
 	}
 	return connect.NewResponse(rewardCount), nil
 }
+
+func (s *ServerStruct) ReportReward(ctx context.Context, req *connect.Request[odachin.ReportRewardRequest]) (*connect.Response[emptypb.Empty], error) {
+	err := s.rewardUsecase.ReportReward(ctx, req.Msg)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}

@@ -1,7 +1,8 @@
-import { Button, Center, Link, Table, Text } from '@chakra-ui/react';
-import { useContext, useEffect, useState } from 'react';
+import { Link, Table, Text } from '@chakra-ui/react';
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import { CompletedTag } from './CompletedTag';
+import { RewardReportDialog } from './RewardReportDialog';
 import { Reward_Type, RewardService } from '@/__generated__/v1/odachin/reward_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
@@ -9,6 +10,8 @@ import unauthorizedPage from '@/pages/unauthorized';
 
 export interface RewardTableProps {
   rewardType: Reward_Type;
+  refreshKey: number;
+  setRefreshKey: Dispatch<SetStateAction<number>>;
 }
 
 export interface RewardPeriodItem {
@@ -20,7 +23,7 @@ export interface RewardPeriodItem {
 }
 
 //TODO　いつまでとかあと何日とかつけたい
-export function RewardTable({ rewardType }: RewardTableProps) {
+export function RewardTable({ rewardType, refreshKey, setRefreshKey }: RewardTableProps) {
   const client = useClient(RewardService);
   const cookies = useContext(CokiesContext);
   const [items, setItems] = useState<RewardPeriodItem[]>([]);
@@ -54,11 +57,11 @@ export function RewardTable({ rewardType }: RewardTableProps) {
     } catch (error) {
       console.error('Error fetching reward list:', error);
     }
-  }, [rewardType]);
+  }, [rewardType, refreshKey]);
 
   return (
     <>
-      <Table.Root borderColor='yellow.400' borderTopRadius={24} showColumnBorder variant='outline'>
+      <Table.Root borderColor='yellow.400' showColumnBorder variant='outline'>
         <Table.Header bgColor='yellow.400' borderColor='yellow.400' borderXWidth={4}>
           <Table.Row>
             <Table.ColumnHeader textAlign='center' w='25%'>
@@ -71,17 +74,17 @@ export function RewardTable({ rewardType }: RewardTableProps) {
                 説明
               </Text>
             </Table.ColumnHeader>
-            <Table.ColumnHeader textAlign='center'>
+            <Table.ColumnHeader textAlign='center' w='10%'>
               <Text fontSize='lg' fontWeight='semibold'>
                 おこづかい
               </Text>
             </Table.ColumnHeader>
-            <Table.ColumnHeader textAlign='center'>
+            <Table.ColumnHeader textAlign='center' w='10%'>
               <Text fontSize='lg' fontWeight='semibold'>
                 状態
               </Text>
             </Table.ColumnHeader>
-            <Table.ColumnHeader textAlign='center'>
+            <Table.ColumnHeader textAlign='center' w='15%'>
               <Text fontSize='lg' fontWeight='semibold'>
                 申請
               </Text>
@@ -123,17 +126,10 @@ export function RewardTable({ rewardType }: RewardTableProps) {
                     <CompletedTag status={item.status}></CompletedTag>
                   </Table.Cell>
                   <Table.Cell>
-                    <Center>
-                      <Button
-                        colorPalette={item.status === 'COMPLETED' ? 'gray' : 'orange'}
-                        disabled={item.status === 'COMPLETED'}
-                        size='sm'
-                      >
-                        <Text fontWeight='semibold' textAlign='center'>
-                          {item.status === 'COMPLETED' ? '完了済み' : '申請する'}
-                        </Text>
-                      </Button>
-                    </Center>
+                    <RewardReportDialog
+                      item={item}
+                      setRefreshKey={setRefreshKey}
+                    ></RewardReportDialog>
                   </Table.Cell>
                 </Table.Row>
               ))}
