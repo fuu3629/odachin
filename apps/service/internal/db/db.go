@@ -43,6 +43,9 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'period_enum') THEN
 		create type period_enum AS ENUM ('DAILY', 'WEEKLY', 'MONTHLY');
 	END IF;
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'reward_period_status_enum') THEN
+		create type reward_period_status_enum AS ENUM ('IN_PROGRESS', 'REPORTED', 'COMPLETED', 'REJECTED');
+	END IF;
 END
 $$;
 `)

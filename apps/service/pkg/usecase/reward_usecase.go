@@ -121,15 +121,16 @@ func (u *RewardUsecaseImpl) GetUncompletedRewardCount(ctx context.Context) (*oda
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
 		now := time.Now()
-		daily_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND is_completed = ?", user_id, "DAILY", now, now, false)
+		enum := []string{"IN_PROGRESS", "REPORTED", "REJECTED"}
+		daily_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND status IN ?", user_id, "DAILY", now, now, enum)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
-		weekly_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND is_completed = ?", user_id, "WEEKLY", now, now, false)
+		weekly_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND status IN ?", user_id, "WEEKLY", now, now, enum)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
-		monthly_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND is_completed = ?", user_id, "MONTHLY", now, now, false)
+		monthly_count, err := u.rewardPeriodRepository.Count(tx, "rewards.to_user_id = ? AND rewards.period_type = ? AND start_date < ? AND end_date > ? AND status IN ?", user_id, "MONTHLY", now, now, enum)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}

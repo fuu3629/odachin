@@ -16,9 +16,10 @@ export interface RewardPeriodItem {
   title: string;
   description: string;
   amount: number;
-  isCompleted: boolean;
+  status: string;
 }
 
+//TODO　いつまでとかあと何日とかつけたい
 export function RewardTable({ rewardType }: RewardTableProps) {
   const client = useClient(RewardService);
   const cookies = useContext(CokiesContext);
@@ -43,7 +44,7 @@ export function RewardTable({ rewardType }: RewardTableProps) {
           title: reward.title,
           description: reward.description,
           amount: reward.amount,
-          isCompleted: reward.isCompleted,
+          status: reward.status,
         };
       });
       setItems(rewards);
@@ -119,17 +120,17 @@ export function RewardTable({ rewardType }: RewardTableProps) {
                     </Text>
                   </Table.Cell>
                   <Table.Cell>
-                    <CompletedTag isCompleted={item.isCompleted}></CompletedTag>
+                    <CompletedTag status={item.status}></CompletedTag>
                   </Table.Cell>
                   <Table.Cell>
                     <Center>
                       <Button
-                        colorPalette={item.isCompleted ? 'gray' : 'orange'}
-                        disabled={item.isCompleted}
+                        colorPalette={item.status === 'COMPLETED' ? 'gray' : 'orange'}
+                        disabled={item.status === 'COMPLETED'}
                         size='sm'
                       >
                         <Text fontWeight='semibold' textAlign='center'>
-                          {item.isCompleted ? '完了済み' : '申請する'}
+                          {item.status === 'COMPLETED' ? '完了済み' : '申請する'}
                         </Text>
                       </Button>
                     </Center>

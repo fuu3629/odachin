@@ -44,8 +44,7 @@ func ToGetRewardListResponse(r []models.RewardPeriod) *odachin.GetRewardListResp
 			RewardType:     odachin.Reward_Type(odachin.Reward_Type_value[reward.Reward.PeriodType]),
 			Title:          reward.Reward.Title,
 			Description:    reward.Reward.Description,
-			IsCompleted:    reward.IsCompleted,
-			IsEditable:     reward.IsEditable,
+			Status:         reward.Status,
 		}
 	}
 	return &odachin.GetRewardListResponse{
@@ -64,8 +63,7 @@ func ToGetChildRewardListResponse(r []models.Reward) *odachin.GetChildRewardList
 			RewardType:     odachin.Reward_Type(odachin.Reward_Type_value[reward.PeriodType]),
 			Title:          reward.Title,
 			Description:    reward.Description,
-			IsCompleted:    false,
-			IsEditable:     true,
+			Status:         "",
 		}
 	}
 	return &odachin.GetChildRewardListResponse{

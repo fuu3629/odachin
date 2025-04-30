@@ -30,8 +30,7 @@ message RewardInfo {
   Reward.Type reward_type = 5 [ (buf.validate.field).enum.defined_only = true ];
   string title = 6 [ (buf.validate.field).string.min_len = 1 ];
   string description = 7 [ (buf.validate.field).string.min_len = 1 ];
-  bool isCompleted = 8;
-  bool isEditable = 9;
+  string status = 8 [ (buf.validate.field).string.min_len = 1 ];
 }
 
 message RegisterRewardRequest {

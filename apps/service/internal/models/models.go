@@ -73,9 +73,7 @@ type RewardPeriod struct {
 	RewardID       uint
 	StartDate      time.Time
 	EndDate        time.Time
-	IsCompleted    bool
-	IsEditable     bool
-	CompletedAt    time.Time
+	Status         string `gorm:"type: reward_period_status_enum"`
 	Reward         Reward
 }
 
