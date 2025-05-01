@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"time"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
@@ -47,7 +46,6 @@ func NewRewardUsecase(db *gorm.DB) RewardUsecase {
 func (u *RewardUsecaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error {
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
-		fmt.Println("user_id: ", user_id)
 		reward := &models.Reward{
 			FromUserID:  user_id,
 			ToUserID:    req.ToUserId,
@@ -162,7 +160,6 @@ func (u *RewardUsecaseImpl) ReportReward(ctx context.Context, req *odachin.Repor
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
-		fmt.Println("user_id: ", user_id, rewardPeriod.Reward.ToUserID)
 		if rewardPeriod.Reward.ToUserID != user_id {
 			return status.Errorf(codes.Internal, "not your reward")
 		}

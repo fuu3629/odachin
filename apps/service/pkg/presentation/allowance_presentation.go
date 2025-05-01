@@ -2,7 +2,6 @@ package presentation
 
 import (
 	"context"
-	"fmt"
 
 	"connectrpc.com/connect"
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
@@ -19,7 +18,6 @@ func (s *ServerStruct) RegisterAllowance(ctx context.Context, req *connect.Reque
 }
 
 func (s *ServerStruct) UpdateAllowance(ctx context.Context, req *connect.Request[odachin.UpdateAllowanceRequest]) (*connect.Response[emptypb.Empty], error) {
-	fmt.Println("UpdateAllowance")
 	err := s.allowanceUsecase.UpdateAllowance(ctx, req.Msg)
 	if err != nil {
 		return nil, err

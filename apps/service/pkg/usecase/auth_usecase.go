@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
@@ -89,7 +88,6 @@ func (u *AuthUsecaseImpl) UpdateUser(ctx context.Context, req *odachin.UpdateUse
 		if req.ProfileImage != nil {
 			avaterImageUrl, err := u.s3Client.PutObject(ctx, "odachin-dev", "avatars", req.ProfileImage)
 			if err != nil {
-				fmt.Println("error: ", err)
 				return status.Errorf(codes.Internal, "s3 upload error: %v", err)
 			}
 			user["avatar_image_url"] = avaterImageUrl

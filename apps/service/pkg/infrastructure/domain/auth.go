@@ -55,10 +55,7 @@ func ExtractTokenMetadata(ctx context.Context) (string, error) {
 		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
 	})
 	claims, ok := token.Claims.(jwt.MapClaims)
-	fmt.Println(claims)
 	if ok && token.Valid {
-		fmt.Printf("user_id: %v\n", string(claims["user_id"].(string)))
-		fmt.Printf("exp: %v\n", int64(claims["exp"].(float64)))
 		return claims["user_id"].(string), nil
 	} else {
 		return "", fmt.Errorf("no userId")
