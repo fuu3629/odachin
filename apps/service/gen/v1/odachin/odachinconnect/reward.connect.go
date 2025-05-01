@@ -52,6 +52,12 @@ const (
 	// RewardServiceReportRewardProcedure is the fully-qualified name of the RewardService's
 	// ReportReward RPC.
 	RewardServiceReportRewardProcedure = "/odachin.reward.RewardService/ReportReward"
+	// RewardServiceGetReportedRewardListProcedure is the fully-qualified name of the RewardService's
+	// GetReportedRewardList RPC.
+	RewardServiceGetReportedRewardListProcedure = "/odachin.reward.RewardService/GetReportedRewardList"
+	// RewardServiceApproveRewardProcedure is the fully-qualified name of the RewardService's
+	// ApproveReward RPC.
+	RewardServiceApproveRewardProcedure = "/odachin.reward.RewardService/ApproveReward"
 )
 
 // RewardServiceClient is a client for the odachin.reward.RewardService service.
@@ -62,6 +68,8 @@ type RewardServiceClient interface {
 	GetChildRewardList(context.Context, *connect.Request[odachin.GetChildRewardListRequest]) (*connect.Response[odachin.GetChildRewardListResponse], error)
 	GetUncompletedRewardCount(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUncompletedRewardCountResponse], error)
 	ReportReward(context.Context, *connect.Request[odachin.ReportRewardRequest]) (*connect.Response[emptypb.Empty], error)
+	GetReportedRewardList(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetReportedRewardListResponse], error)
+	ApproveReward(context.Context, *connect.Request[odachin.ApproveRewardRequest]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewRewardServiceClient constructs a client for the odachin.reward.RewardService service. By
@@ -111,6 +119,18 @@ func NewRewardServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(rewardServiceMethods.ByName("ReportReward")),
 			connect.WithClientOptions(opts...),
 		),
+		getReportedRewardList: connect.NewClient[emptypb.Empty, odachin.GetReportedRewardListResponse](
+			httpClient,
+			baseURL+RewardServiceGetReportedRewardListProcedure,
+			connect.WithSchema(rewardServiceMethods.ByName("GetReportedRewardList")),
+			connect.WithClientOptions(opts...),
+		),
+		approveReward: connect.NewClient[odachin.ApproveRewardRequest, emptypb.Empty](
+			httpClient,
+			baseURL+RewardServiceApproveRewardProcedure,
+			connect.WithSchema(rewardServiceMethods.ByName("ApproveReward")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -122,6 +142,8 @@ type rewardServiceClient struct {
 	getChildRewardList        *connect.Client[odachin.GetChildRewardListRequest, odachin.GetChildRewardListResponse]
 	getUncompletedRewardCount *connect.Client[emptypb.Empty, odachin.GetUncompletedRewardCountResponse]
 	reportReward              *connect.Client[odachin.ReportRewardRequest, emptypb.Empty]
+	getReportedRewardList     *connect.Client[emptypb.Empty, odachin.GetReportedRewardListResponse]
+	approveReward             *connect.Client[odachin.ApproveRewardRequest, emptypb.Empty]
 }
 
 // RegisterReward calls odachin.reward.RewardService.RegisterReward.
@@ -154,6 +176,16 @@ func (c *rewardServiceClient) ReportReward(ctx context.Context, req *connect.Req
 	return c.reportReward.CallUnary(ctx, req)
 }
 
+// GetReportedRewardList calls odachin.reward.RewardService.GetReportedRewardList.
+func (c *rewardServiceClient) GetReportedRewardList(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetReportedRewardListResponse], error) {
+	return c.getReportedRewardList.CallUnary(ctx, req)
+}
+
+// ApproveReward calls odachin.reward.RewardService.ApproveReward.
+func (c *rewardServiceClient) ApproveReward(ctx context.Context, req *connect.Request[odachin.ApproveRewardRequest]) (*connect.Response[emptypb.Empty], error) {
+	return c.approveReward.CallUnary(ctx, req)
+}
+
 // RewardServiceHandler is an implementation of the odachin.reward.RewardService service.
 type RewardServiceHandler interface {
 	RegisterReward(context.Context, *connect.Request[odachin.RegisterRewardRequest]) (*connect.Response[emptypb.Empty], error)
@@ -162,6 +194,8 @@ type RewardServiceHandler interface {
 	GetChildRewardList(context.Context, *connect.Request[odachin.GetChildRewardListRequest]) (*connect.Response[odachin.GetChildRewardListResponse], error)
 	GetUncompletedRewardCount(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUncompletedRewardCountResponse], error)
 	ReportReward(context.Context, *connect.Request[odachin.ReportRewardRequest]) (*connect.Response[emptypb.Empty], error)
+	GetReportedRewardList(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetReportedRewardListResponse], error)
+	ApproveReward(context.Context, *connect.Request[odachin.ApproveRewardRequest]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewRewardServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -207,6 +241,18 @@ func NewRewardServiceHandler(svc RewardServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(rewardServiceMethods.ByName("ReportReward")),
 		connect.WithHandlerOptions(opts...),
 	)
+	rewardServiceGetReportedRewardListHandler := connect.NewUnaryHandler(
+		RewardServiceGetReportedRewardListProcedure,
+		svc.GetReportedRewardList,
+		connect.WithSchema(rewardServiceMethods.ByName("GetReportedRewardList")),
+		connect.WithHandlerOptions(opts...),
+	)
+	rewardServiceApproveRewardHandler := connect.NewUnaryHandler(
+		RewardServiceApproveRewardProcedure,
+		svc.ApproveReward,
+		connect.WithSchema(rewardServiceMethods.ByName("ApproveReward")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/odachin.reward.RewardService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case RewardServiceRegisterRewardProcedure:
@@ -221,6 +267,10 @@ func NewRewardServiceHandler(svc RewardServiceHandler, opts ...connect.HandlerOp
 			rewardServiceGetUncompletedRewardCountHandler.ServeHTTP(w, r)
 		case RewardServiceReportRewardProcedure:
 			rewardServiceReportRewardHandler.ServeHTTP(w, r)
+		case RewardServiceGetReportedRewardListProcedure:
+			rewardServiceGetReportedRewardListHandler.ServeHTTP(w, r)
+		case RewardServiceApproveRewardProcedure:
+			rewardServiceApproveRewardHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -252,4 +302,12 @@ func (UnimplementedRewardServiceHandler) GetUncompletedRewardCount(context.Conte
 
 func (UnimplementedRewardServiceHandler) ReportReward(context.Context, *connect.Request[odachin.ReportRewardRequest]) (*connect.Response[emptypb.Empty], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.RewardService.ReportReward is not implemented"))
+}
+
+func (UnimplementedRewardServiceHandler) GetReportedRewardList(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetReportedRewardListResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.RewardService.GetReportedRewardList is not implemented"))
+}
+
+func (UnimplementedRewardServiceHandler) ApproveReward(context.Context, *connect.Request[odachin.ApproveRewardRequest]) (*connect.Response[emptypb.Empty], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.RewardService.ApproveReward is not implemented"))
 }

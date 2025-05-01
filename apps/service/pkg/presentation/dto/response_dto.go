@@ -3,6 +3,7 @@ package dto
 import (
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func uintToUint64Pointer(value *uint) *uint64 {
@@ -45,6 +46,8 @@ func ToGetRewardListResponse(r []models.RewardPeriod) *odachin.GetRewardListResp
 			Title:          reward.Reward.Title,
 			Description:    reward.Reward.Description,
 			Status:         reward.Status,
+			StartDate:      timestamppb.New(reward.StartDate),
+			EndDate:        timestamppb.New(reward.EndDate),
 		}
 	}
 	return &odachin.GetRewardListResponse{
@@ -109,5 +112,26 @@ func ToGetAllowanceByFromUserIdResponse(allowanceList []models.Allowance, userLi
 	}
 	return &odachin.GetAllowanceByFromUserIdResponse{
 		Allowances: allowances,
+	}
+}
+
+func ToGetReportedRewardListResponse(r []models.RewardPeriod) *odachin.GetReportedRewardListResponse {
+	rewardList := make([]*odachin.RewardInfo, len(r))
+	for i, reward := range r {
+		rewardList[i] = &odachin.RewardInfo{
+			RewardPeriodId: uint64(reward.RewardPeriodID),
+			FromUserId:     reward.Reward.FromUserID,
+			ToUserId:       reward.Reward.ToUserID,
+			Amount:         reward.Reward.Amount,
+			RewardType:     odachin.Reward_Type(odachin.Reward_Type_value[reward.Reward.PeriodType]),
+			Title:          reward.Reward.Title,
+			Description:    reward.Reward.Description,
+			Status:         reward.Status,
+			StartDate:      timestamppb.New(reward.StartDate),
+			EndDate:        timestamppb.New(reward.EndDate),
+		}
+	}
+	return &odachin.GetReportedRewardListResponse{
+		RewardList: rewardList,
 	}
 }

@@ -1,6 +1,7 @@
 syntax = "proto3";
 package odachin.reward;
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 import "buf/validate/validate.proto";
 
 // TODO 申請と報酬の取得の実装
@@ -13,6 +14,9 @@ service RewardService {
   rpc GetUncompletedRewardCount(google.protobuf.Empty)
       returns (GetUncompletedRewardCountResponse);
   rpc ReportReward(ReportRewardRequest) returns (google.protobuf.Empty);
+  rpc GetReportedRewardList(google.protobuf.Empty)
+      returns (GetReportedRewardListResponse);
+  rpc ApproveReward(ApproveRewardRequest) returns (google.protobuf.Empty);
 }
 
 message Reward {
@@ -32,6 +36,8 @@ message RewardInfo {
   string title = 6 [ (buf.validate.field).string.min_len = 1 ];
   string description = 7 [ (buf.validate.field).string.min_len = 1 ];
   string status = 8 [ (buf.validate.field).string.min_len = 1 ];
+  google.protobuf.Timestamp start_date = 9;
+  google.protobuf.Timestamp end_date = 10;
 }
 
 message RegisterRewardRequest {
@@ -66,5 +72,11 @@ message GetUncompletedRewardCountResponse {
 }
 
 message ReportRewardRequest {
+  uint64 reward_period_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
+}
+
+message GetReportedRewardListResponse { repeated RewardInfo reward_list = 1; }
+
+message ApproveRewardRequest {
   uint64 reward_period_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
 }

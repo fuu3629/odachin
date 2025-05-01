@@ -1,26 +1,32 @@
 import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import { FaUser, FaLaptop, FaCog, FaTrophy, FaPiggyBank } from 'react-icons/fa';
+import { FaUser, FaLaptop, FaCog, FaTrophy, FaPiggyBank, FaCheck } from 'react-icons/fa';
+import { MyPageFloat } from './MyPageFloat';
 import { AuthService, GetOwnInfoResponse, Role } from '@/__generated__/v1/odachin/auth_pb';
+import { RewardService } from '@/__generated__/v1/odachin/reward_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface MyPageProps {}
 
 //TODO childの色々
-//TODO 使い道のチャートとか作りたい
+//TODO 使い道のチャートとか作りたいå
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
   const router = useRouter();
   const client = useClient(AuthService);
+  const rewardClient = useClient(RewardService);
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
+  const [reportedRewardCount, setReportedRewardCount] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       const req = {};
       try {
         const res = await client.getOwnInfo(req);
         setuserInfo(res);
+        const res2 = await rewardClient.getReportedRewardList({});
+        setReportedRewardCount(res2.rewardList.length);
       } catch (error) {
         router.push('/login');
         alert('Login failed');
@@ -34,10 +40,18 @@ export function MyPage({}: MyPageProps) {
       ? [
           {
             icon: FaPiggyBank,
-            label: 'お小遣い',
+            label: 'お小遣いを管理',
             onCLick: () => {
               router.push('myPage/allowance');
             },
+          },
+          {
+            icon: FaCheck,
+            label: 'ミッションの報告',
+            onCLick: () => {
+              router.push('myPage/rewardReport');
+            },
+            count: reportedRewardCount,
           },
           {
             icon: FaTrophy,
@@ -123,6 +137,7 @@ export function MyPage({}: MyPageProps) {
                     rounded='full'
                     size='lg'
                   >
+                    <MyPageFloat count={item.count}></MyPageFloat>
                     <item.icon size={24} />
                   </IconButton>
                   <Text>{item.label}</Text>

@@ -4,8 +4,8 @@
 
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv1";
 import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv1";
-import type { EmptySchema } from "@bufbuild/protobuf/wkt";
-import { file_google_protobuf_empty } from "@bufbuild/protobuf/wkt";
+import type { EmptySchema, Timestamp } from "@bufbuild/protobuf/wkt";
+import { file_google_protobuf_empty, file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
 import { file_buf_validate_validate } from "../../buf/validate/validate_pb";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/reward.proto.
  */
 export const file_v1_odachin_reward: GenFile = /*@__PURE__*/
-  fileDesc("Chd2MS9vZGFjaGluL3Jld2FyZC5wcm90bxIOb2RhY2hpbi5yZXdhcmQiNAoGUmV3YXJkIioKBFR5cGUSCQoFREFJTFkQABIKCgZXRUVLTFkQARILCgdNT05USExZEAIilgIKClJld2FyZEluZm8SIQoQcmV3YXJkX3BlcmlvZF9pZBgBIAEoBEIHukgEIgIoARIdCgxmcm9tX3VzZXJfaWQYAiABKAlCB7pIBHICEAESGwoKdG9fdXNlcl9pZBgDIAEoCUIHukgEcgIQARIeCgZhbW91bnQYBCABKAFCDrpICxIJIQAAAAAAAAAAEjoKC3Jld2FyZF90eXBlGAUgASgOMhsub2RhY2hpbi5yZXdhcmQuUmV3YXJkLlR5cGVCCLpIBYIBAhABEhYKBXRpdGxlGAYgASgJQge6SARyAhABEhwKC2Rlc2NyaXB0aW9uGAcgASgJQge6SARyAhABEhcKBnN0YXR1cxgIIAEoCUIHukgEcgIQASLGAQoVUmVnaXN0ZXJSZXdhcmRSZXF1ZXN0EhsKCnRvX3VzZXJfaWQYASABKAlCB7pIBHICEAESHgoGYW1vdW50GAIgASgBQg66SAsSCSEAAAAAAAAAABI6CgtyZXdhcmRfdHlwZRgDIAEoDjIbLm9kYWNoaW4ucmV3YXJkLlJld2FyZC5UeXBlQgi6SAWCAQIQARIWCgV0aXRsZRgEIAEoCUIHukgEcgIQARIcCgtkZXNjcmlwdGlvbhgFIAEoCUIHukgEcgIQASIxChNEZWxldGVSZXdhcmRSZXF1ZXN0EhoKCXJld2FyZF9pZBgBIAEoBEIHukgEMgIoASJSChRHZXRSZXdhcmRMaXN0UmVxdWVzdBI6CgtyZXdhcmRfdHlwZRgBIAEoDjIbLm9kYWNoaW4ucmV3YXJkLlJld2FyZC5UeXBlQgi6SAWCAQIQASJIChVHZXRSZXdhcmRMaXN0UmVzcG9uc2USLwoLcmV3YXJkX2xpc3QYASADKAsyGi5vZGFjaGluLnJld2FyZC5SZXdhcmRJbmZvInIKGUdldENoaWxkUmV3YXJkTGlzdFJlcXVlc3QSGQoIY2hpbGRfaWQYASABKAlCB7pIBHICEAESOgoLcmV3YXJkX3R5cGUYAiABKA4yGy5vZGFjaGluLnJld2FyZC5SZXdhcmQuVHlwZUIIukgFggECEAEiTQoaR2V0Q2hpbGRSZXdhcmRMaXN0UmVzcG9uc2USLwoLcmV3YXJkX2xpc3QYASADKAsyGi5vZGFjaGluLnJld2FyZC5SZXdhcmRJbmZvImUKIUdldFVuY29tcGxldGVkUmV3YXJkQ291bnRSZXNwb25zZRITCgtkYWlseV9jb3VudBgBIAEoDRIUCgx3ZWVrbHlfY291bnQYAiABKA0SFQoNbW9udGhseV9jb3VudBgDIAEoDSI4ChNSZXBvcnRSZXdhcmRSZXF1ZXN0EiEKEHJld2FyZF9wZXJpb2RfaWQYASABKARCB7pIBDICKAEyrQQKDVJld2FyZFNlcnZpY2USTwoOUmVnaXN0ZXJSZXdhcmQSJS5vZGFjaGluLnJld2FyZC5SZWdpc3RlclJld2FyZFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSSwoMRGVsZXRlUmV3YXJkEiMub2RhY2hpbi5yZXdhcmQuRGVsZXRlUmV3YXJkUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJcCg1HZXRSZXdhcmRMaXN0EiQub2RhY2hpbi5yZXdhcmQuR2V0UmV3YXJkTGlzdFJlcXVlc3QaJS5vZGFjaGluLnJld2FyZC5HZXRSZXdhcmRMaXN0UmVzcG9uc2USawoSR2V0Q2hpbGRSZXdhcmRMaXN0Eikub2RhY2hpbi5yZXdhcmQuR2V0Q2hpbGRSZXdhcmRMaXN0UmVxdWVzdBoqLm9kYWNoaW4ucmV3YXJkLkdldENoaWxkUmV3YXJkTGlzdFJlc3BvbnNlEmYKGUdldFVuY29tcGxldGVkUmV3YXJkQ291bnQSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaMS5vZGFjaGluLnJld2FyZC5HZXRVbmNvbXBsZXRlZFJld2FyZENvdW50UmVzcG9uc2USSwoMUmVwb3J0UmV3YXJkEiMub2RhY2hpbi5yZXdhcmQuUmVwb3J0UmV3YXJkUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eWIGcHJvdG8z", [file_google_protobuf_empty, file_buf_validate_validate]);
+  fileDesc("Chd2MS9vZGFjaGluL3Jld2FyZC5wcm90bxIOb2RhY2hpbi5yZXdhcmQiNAoGUmV3YXJkIioKBFR5cGUSCQoFREFJTFkQABIKCgZXRUVLTFkQARILCgdNT05USExZEAIi9AIKClJld2FyZEluZm8SIQoQcmV3YXJkX3BlcmlvZF9pZBgBIAEoBEIHukgEIgIoARIdCgxmcm9tX3VzZXJfaWQYAiABKAlCB7pIBHICEAESGwoKdG9fdXNlcl9pZBgDIAEoCUIHukgEcgIQARIeCgZhbW91bnQYBCABKAFCDrpICxIJIQAAAAAAAAAAEjoKC3Jld2FyZF90eXBlGAUgASgOMhsub2RhY2hpbi5yZXdhcmQuUmV3YXJkLlR5cGVCCLpIBYIBAhABEhYKBXRpdGxlGAYgASgJQge6SARyAhABEhwKC2Rlc2NyaXB0aW9uGAcgASgJQge6SARyAhABEhcKBnN0YXR1cxgIIAEoCUIHukgEcgIQARIuCgpzdGFydF9kYXRlGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIsCghlbmRfZGF0ZRgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAixgEKFVJlZ2lzdGVyUmV3YXJkUmVxdWVzdBIbCgp0b191c2VyX2lkGAEgASgJQge6SARyAhABEh4KBmFtb3VudBgCIAEoAUIOukgLEgkhAAAAAAAAAAASOgoLcmV3YXJkX3R5cGUYAyABKA4yGy5vZGFjaGluLnJld2FyZC5SZXdhcmQuVHlwZUIIukgFggECEAESFgoFdGl0bGUYBCABKAlCB7pIBHICEAESHAoLZGVzY3JpcHRpb24YBSABKAlCB7pIBHICEAEiMQoTRGVsZXRlUmV3YXJkUmVxdWVzdBIaCglyZXdhcmRfaWQYASABKARCB7pIBDICKAEiUgoUR2V0UmV3YXJkTGlzdFJlcXVlc3QSOgoLcmV3YXJkX3R5cGUYASABKA4yGy5vZGFjaGluLnJld2FyZC5SZXdhcmQuVHlwZUIIukgFggECEAEiSAoVR2V0UmV3YXJkTGlzdFJlc3BvbnNlEi8KC3Jld2FyZF9saXN0GAEgAygLMhoub2RhY2hpbi5yZXdhcmQuUmV3YXJkSW5mbyJyChlHZXRDaGlsZFJld2FyZExpc3RSZXF1ZXN0EhkKCGNoaWxkX2lkGAEgASgJQge6SARyAhABEjoKC3Jld2FyZF90eXBlGAIgASgOMhsub2RhY2hpbi5yZXdhcmQuUmV3YXJkLlR5cGVCCLpIBYIBAhABIk0KGkdldENoaWxkUmV3YXJkTGlzdFJlc3BvbnNlEi8KC3Jld2FyZF9saXN0GAEgAygLMhoub2RhY2hpbi5yZXdhcmQuUmV3YXJkSW5mbyJlCiFHZXRVbmNvbXBsZXRlZFJld2FyZENvdW50UmVzcG9uc2USEwoLZGFpbHlfY291bnQYASABKA0SFAoMd2Vla2x5X2NvdW50GAIgASgNEhUKDW1vbnRobHlfY291bnQYAyABKA0iOAoTUmVwb3J0UmV3YXJkUmVxdWVzdBIhChByZXdhcmRfcGVyaW9kX2lkGAEgASgEQge6SAQyAigBIlAKHUdldFJlcG9ydGVkUmV3YXJkTGlzdFJlc3BvbnNlEi8KC3Jld2FyZF9saXN0GAEgAygLMhoub2RhY2hpbi5yZXdhcmQuUmV3YXJkSW5mbyI5ChRBcHByb3ZlUmV3YXJkUmVxdWVzdBIhChByZXdhcmRfcGVyaW9kX2lkGAEgASgEQge6SAQyAigBMtwFCg1SZXdhcmRTZXJ2aWNlEk8KDlJlZ2lzdGVyUmV3YXJkEiUub2RhY2hpbi5yZXdhcmQuUmVnaXN0ZXJSZXdhcmRSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5EksKDERlbGV0ZVJld2FyZBIjLm9kYWNoaW4ucmV3YXJkLkRlbGV0ZVJld2FyZFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSXAoNR2V0UmV3YXJkTGlzdBIkLm9kYWNoaW4ucmV3YXJkLkdldFJld2FyZExpc3RSZXF1ZXN0GiUub2RhY2hpbi5yZXdhcmQuR2V0UmV3YXJkTGlzdFJlc3BvbnNlEmsKEkdldENoaWxkUmV3YXJkTGlzdBIpLm9kYWNoaW4ucmV3YXJkLkdldENoaWxkUmV3YXJkTGlzdFJlcXVlc3QaKi5vZGFjaGluLnJld2FyZC5HZXRDaGlsZFJld2FyZExpc3RSZXNwb25zZRJmChlHZXRVbmNvbXBsZXRlZFJld2FyZENvdW50EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5GjEub2RhY2hpbi5yZXdhcmQuR2V0VW5jb21wbGV0ZWRSZXdhcmRDb3VudFJlc3BvbnNlEksKDFJlcG9ydFJld2FyZBIjLm9kYWNoaW4ucmV3YXJkLlJlcG9ydFJld2FyZFJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSXgoVR2V0UmVwb3J0ZWRSZXdhcmRMaXN0EhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Gi0ub2RhY2hpbi5yZXdhcmQuR2V0UmVwb3J0ZWRSZXdhcmRMaXN0UmVzcG9uc2USTQoNQXBwcm92ZVJld2FyZBIkLm9kYWNoaW4ucmV3YXJkLkFwcHJvdmVSZXdhcmRSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5YgZwcm90bzM", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_buf_validate_validate]);
 
 /**
  * @generated from message odachin.reward.Reward
@@ -103,6 +103,16 @@ export type RewardInfo = Message<"odachin.reward.RewardInfo"> & {
    * @generated from field: string status = 8;
    */
   status: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp start_date = 9;
+   */
+  startDate?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp end_date = 10;
+   */
+  endDate?: Timestamp;
 };
 
 /**
@@ -284,6 +294,40 @@ export const ReportRewardRequestSchema: GenMessage<ReportRewardRequest> = /*@__P
   messageDesc(file_v1_odachin_reward, 9);
 
 /**
+ * @generated from message odachin.reward.GetReportedRewardListResponse
+ */
+export type GetReportedRewardListResponse = Message<"odachin.reward.GetReportedRewardListResponse"> & {
+  /**
+   * @generated from field: repeated odachin.reward.RewardInfo reward_list = 1;
+   */
+  rewardList: RewardInfo[];
+};
+
+/**
+ * Describes the message odachin.reward.GetReportedRewardListResponse.
+ * Use `create(GetReportedRewardListResponseSchema)` to create a new message.
+ */
+export const GetReportedRewardListResponseSchema: GenMessage<GetReportedRewardListResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_reward, 10);
+
+/**
+ * @generated from message odachin.reward.ApproveRewardRequest
+ */
+export type ApproveRewardRequest = Message<"odachin.reward.ApproveRewardRequest"> & {
+  /**
+   * @generated from field: uint64 reward_period_id = 1;
+   */
+  rewardPeriodId: bigint;
+};
+
+/**
+ * Describes the message odachin.reward.ApproveRewardRequest.
+ * Use `create(ApproveRewardRequestSchema)` to create a new message.
+ */
+export const ApproveRewardRequestSchema: GenMessage<ApproveRewardRequest> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_reward, 11);
+
+/**
  * TODO 申請と報酬の取得の実装
  *
  * @generated from service odachin.reward.RewardService
@@ -335,6 +379,22 @@ export const RewardService: GenService<{
   reportReward: {
     methodKind: "unary";
     input: typeof ReportRewardRequestSchema;
+    output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc odachin.reward.RewardService.GetReportedRewardList
+   */
+  getReportedRewardList: {
+    methodKind: "unary";
+    input: typeof EmptySchema;
+    output: typeof GetReportedRewardListResponseSchema;
+  },
+  /**
+   * @generated from rpc odachin.reward.RewardService.ApproveReward
+   */
+  approveReward: {
+    methodKind: "unary";
+    input: typeof ApproveRewardRequestSchema;
     output: typeof EmptySchema;
   },
 }> = /*@__PURE__*/
