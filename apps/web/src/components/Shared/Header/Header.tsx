@@ -20,6 +20,7 @@ export function Header({}: HeaderProps) {
   const client = useClient(AuthService);
   const router = useRouter();
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
+  const { pathname } = router;
   useEffect(() => {
     if (!cookies || !cookies.authorization) {
       console.error('No authentication token found');
@@ -38,9 +39,16 @@ export function Header({}: HeaderProps) {
       }
     };
     fetchData();
-  }, []);
-  const { pathname } = router;
+  }, [pathname]);
   const paths = ['/login', '/createNewAccount', '/'];
+
+  const onCLick = () => {
+    if (paths.includes(pathname)) {
+      router.push('/');
+    } else {
+      router.push('/myPage');
+    }
+  };
 
   return (
     <>
@@ -56,7 +64,12 @@ export function Header({}: HeaderProps) {
         top={0}
         w='100%'
       >
-        <Text className={pacifico.className} fontSize='4xl'>
+        <Text
+          _hover={{ cursor: 'pointer' }}
+          className={pacifico.className}
+          fontSize='4xl'
+          onClick={onCLick}
+        >
           Odachin
         </Text>
         <Text color='white' fontSize='2xl' fontWeight='semibold' ml={4}>
