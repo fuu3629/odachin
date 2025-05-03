@@ -9,7 +9,6 @@ import {
   DayOfWeek,
 } from '@/__generated__/v1/odachin/allowance_pb';
 import { useClient } from '@/pages/api/ClientProvider';
-import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export const addAllowanceFormSchema = z
   .object({
@@ -71,8 +70,12 @@ export const useAddAllowanceForm = (
       if (data.intervalType === 'MONTHLY') {
         date = data.date;
       }
+      if (!selectedUser) {
+        console.error('Selected user is not defined');
+        return;
+      }
       const req = {
-        toUserId: selectedUser?.id,
+        toUserId: selectedUser.id,
         amount: data.amount,
         intervalType: Alloance_Type[data.intervalType as keyof typeof Alloance_Type],
         dayOfWeek: dayOfWeek,
