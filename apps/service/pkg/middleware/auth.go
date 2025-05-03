@@ -18,6 +18,7 @@ var authNotRequiredInterceptorMethods = []string{
 	"/odachin.auth.AuthService/CreateUser",
 	"/odachin.auth.AuthService/Login",
 	"/odachin.allowance.AllowanceService/Allowance",
+	"/odachin.reward.RewardService/Reward",
 }
 
 // TODO ROLEによる認可を実装する

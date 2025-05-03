@@ -1,3 +1,4 @@
+import { log } from 'console';
 import { HStack, Spacer, Text } from '@chakra-ui/react';
 import { Pacifico } from 'next/font/google';
 import { useRouter } from 'next/router';
@@ -22,16 +23,16 @@ export function Header({}: HeaderProps) {
   const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   const { pathname } = router;
   useEffect(() => {
+    console.log(cookies?.authorization);
     if (!cookies || !cookies.authorization) {
+      router.push('/login');
       console.error('No authentication token found');
       return;
     }
     const fetchData = async () => {
       const req = {};
       try {
-        const res = await client.getOwnInfo(req, {
-          headers: { authorization: cookies.authorization },
-        });
+        const res = await client.getOwnInfo(req);
         setuserInfo(res);
       } catch (error) {
         router.push('/login');

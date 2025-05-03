@@ -1,12 +1,10 @@
 import { Flex, Input, Button, Center, Box, VStack, Field } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { destroyCookie } from 'nookies';
 import { useLoginForm } from './lib';
 import { PasswordInput } from '@/components/ui/password-input';
 export interface LoginFormProps {}
 
 export function LoginForm({}: LoginFormProps) {
-  destroyCookie(null, 'authorization');
   const {
     register,
     onSubmit,

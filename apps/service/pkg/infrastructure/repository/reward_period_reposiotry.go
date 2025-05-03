@@ -8,6 +8,7 @@ import (
 type RewardPeriodRepository interface {
 	Get(tx *gorm.DB, id uint) (models.RewardPeriod, error)
 	Save(tx *gorm.DB, param *models.RewardPeriod) error
+	SaveList(tx *gorm.DB, param []models.RewardPeriod) error
 	Update(tx *gorm.DB, reward_period map[string]interface{}) error
 	GetWithReward(tx *gorm.DB, condition string, args ...interface{}) ([]models.RewardPeriod, error)
 	Count(tx *gorm.DB, condition string, args ...interface{}) (uint32, error)
@@ -37,6 +38,13 @@ func (r *RewardPeriodRepositoryImpl) GetWithReward(tx *gorm.DB, condition string
 
 func (r *RewardPeriodRepositoryImpl) Save(tx *gorm.DB, reward_period *models.RewardPeriod) error {
 	if err := tx.Create(&reward_period).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *RewardPeriodRepositoryImpl) SaveList(tx *gorm.DB, reward_periods []models.RewardPeriod) error {
+	if err := tx.Create(&reward_periods).Error; err != nil {
 		return err
 	}
 	return nil

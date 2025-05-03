@@ -34,6 +34,8 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
+	// RewardServiceRewardProcedure is the fully-qualified name of the RewardService's Reward RPC.
+	RewardServiceRewardProcedure = "/odachin.reward.RewardService/Reward"
 	// RewardServiceRegisterRewardProcedure is the fully-qualified name of the RewardService's
 	// RegisterReward RPC.
 	RewardServiceRegisterRewardProcedure = "/odachin.reward.RewardService/RegisterReward"
@@ -62,6 +64,7 @@ const (
 
 // RewardServiceClient is a client for the odachin.reward.RewardService service.
 type RewardServiceClient interface {
+	Reward(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error)
 	RegisterReward(context.Context, *connect.Request[odachin.RegisterRewardRequest]) (*connect.Response[emptypb.Empty], error)
 	DeleteReward(context.Context, *connect.Request[odachin.DeleteRewardRequest]) (*connect.Response[emptypb.Empty], error)
 	GetRewardList(context.Context, *connect.Request[odachin.GetRewardListRequest]) (*connect.Response[odachin.GetRewardListResponse], error)
@@ -83,6 +86,12 @@ func NewRewardServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 	baseURL = strings.TrimRight(baseURL, "/")
 	rewardServiceMethods := odachin.File_v1_odachin_reward_proto.Services().ByName("RewardService").Methods()
 	return &rewardServiceClient{
+		reward: connect.NewClient[emptypb.Empty, emptypb.Empty](
+			httpClient,
+			baseURL+RewardServiceRewardProcedure,
+			connect.WithSchema(rewardServiceMethods.ByName("Reward")),
+			connect.WithClientOptions(opts...),
+		),
 		registerReward: connect.NewClient[odachin.RegisterRewardRequest, emptypb.Empty](
 			httpClient,
 			baseURL+RewardServiceRegisterRewardProcedure,
@@ -136,6 +145,7 @@ func NewRewardServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 
 // rewardServiceClient implements RewardServiceClient.
 type rewardServiceClient struct {
+	reward                    *connect.Client[emptypb.Empty, emptypb.Empty]
 	registerReward            *connect.Client[odachin.RegisterRewardRequest, emptypb.Empty]
 	deleteReward              *connect.Client[odachin.DeleteRewardRequest, emptypb.Empty]
 	getRewardList             *connect.Client[odachin.GetRewardListRequest, odachin.GetRewardListResponse]
@@ -144,6 +154,11 @@ type rewardServiceClient struct {
 	reportReward              *connect.Client[odachin.ReportRewardRequest, emptypb.Empty]
 	getReportedRewardList     *connect.Client[emptypb.Empty, odachin.GetReportedRewardListResponse]
 	approveReward             *connect.Client[odachin.ApproveRewardRequest, emptypb.Empty]
+}
+
+// Reward calls odachin.reward.RewardService.Reward.
+func (c *rewardServiceClient) Reward(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	return c.reward.CallUnary(ctx, req)
 }
 
 // RegisterReward calls odachin.reward.RewardService.RegisterReward.
@@ -188,6 +203,7 @@ func (c *rewardServiceClient) ApproveReward(ctx context.Context, req *connect.Re
 
 // RewardServiceHandler is an implementation of the odachin.reward.RewardService service.
 type RewardServiceHandler interface {
+	Reward(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error)
 	RegisterReward(context.Context, *connect.Request[odachin.RegisterRewardRequest]) (*connect.Response[emptypb.Empty], error)
 	DeleteReward(context.Context, *connect.Request[odachin.DeleteRewardRequest]) (*connect.Response[emptypb.Empty], error)
 	GetRewardList(context.Context, *connect.Request[odachin.GetRewardListRequest]) (*connect.Response[odachin.GetRewardListResponse], error)
@@ -205,6 +221,12 @@ type RewardServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewRewardServiceHandler(svc RewardServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	rewardServiceMethods := odachin.File_v1_odachin_reward_proto.Services().ByName("RewardService").Methods()
+	rewardServiceRewardHandler := connect.NewUnaryHandler(
+		RewardServiceRewardProcedure,
+		svc.Reward,
+		connect.WithSchema(rewardServiceMethods.ByName("Reward")),
+		connect.WithHandlerOptions(opts...),
+	)
 	rewardServiceRegisterRewardHandler := connect.NewUnaryHandler(
 		RewardServiceRegisterRewardProcedure,
 		svc.RegisterReward,
@@ -255,6 +277,8 @@ func NewRewardServiceHandler(svc RewardServiceHandler, opts ...connect.HandlerOp
 	)
 	return "/odachin.reward.RewardService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case RewardServiceRewardProcedure:
+			rewardServiceRewardHandler.ServeHTTP(w, r)
 		case RewardServiceRegisterRewardProcedure:
 			rewardServiceRegisterRewardHandler.ServeHTTP(w, r)
 		case RewardServiceDeleteRewardProcedure:
@@ -279,6 +303,10 @@ func NewRewardServiceHandler(svc RewardServiceHandler, opts ...connect.HandlerOp
 
 // UnimplementedRewardServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedRewardServiceHandler struct{}
+
+func (UnimplementedRewardServiceHandler) Reward(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.RewardService.Reward is not implemented"))
+}
 
 func (UnimplementedRewardServiceHandler) RegisterReward(context.Context, *connect.Request[odachin.RegisterRewardRequest]) (*connect.Response[emptypb.Empty], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.RewardService.RegisterReward is not implemented"))

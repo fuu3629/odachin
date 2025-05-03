@@ -8,6 +8,7 @@ import (
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
 	"github.com/fuu3629/odachin/apps/service/internal/models"
 	"github.com/fuu3629/odachin/apps/service/pkg/assets"
+	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/domain"
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -15,6 +16,7 @@ import (
 )
 
 type RewardUsecase interface {
+	Reward() error
 	RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error
 	DeleteReward(ctx context.Context, req *odachin.DeleteRewardRequest) error
 	GetRewardList(ctx context.Context, req *odachin.GetRewardListRequest) ([]models.RewardPeriod, error)
@@ -41,6 +43,45 @@ func NewRewardUsecase(db *gorm.DB) RewardUsecase {
 		walletRepository:       repository.NewWalletRepository(),
 		transactionRepository:  repository.NewTransactionRepository(),
 	}
+}
+
+func (u *RewardUsecaseImpl) Reward() error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		reward, err := u.rewardRepository.GetByCondition(tx, "period_type = ?", "DAILY")
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		err = domain.RewardDomain(reward, tx)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		now := time.Now()
+		if now.Weekday() == time.Monday {
+			reward, err := u.rewardRepository.GetByCondition(tx, "period_type = ?", "WEEKLY")
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+			err = domain.RewardDomain(reward, tx)
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+		}
+		if now.Day() == 1 {
+			reward, err := u.rewardRepository.GetByCondition(tx, "period_type = ?", "MONTHLY")
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+			err = domain.RewardDomain(reward, tx)
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (u *RewardUsecaseImpl) RegisterReward(ctx context.Context, req *odachin.RegisterRewardRequest) error {

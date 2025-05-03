@@ -30,6 +30,8 @@ export const useLoginForm = () => {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
+      //1s待つ
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       router.push('/myPage');
     } catch (e) {
       alert('Login failed');

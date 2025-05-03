@@ -9,6 +9,16 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
+//TODO Rejectを実装する
+
+func (s *ServerStruct) Reward(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	err := s.rewardUsecase.Reward()
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}
+
 func (s *ServerStruct) RegisterReward(ctx context.Context, req *connect.Request[odachin.RegisterRewardRequest]) (*connect.Response[emptypb.Empty], error) {
 	err := s.rewardUsecase.RegisterReward(ctx, req.Msg)
 	if err != nil {

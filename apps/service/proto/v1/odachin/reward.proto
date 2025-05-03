@@ -6,6 +6,7 @@ import "buf/validate/validate.proto";
 
 // TODO 申請と報酬の取得の実装
 service RewardService {
+  rpc Reward(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc RegisterReward(RegisterRewardRequest) returns (google.protobuf.Empty);
   rpc DeleteReward(DeleteRewardRequest) returns (google.protobuf.Empty);
   rpc GetRewardList(GetRewardListRequest) returns (GetRewardListResponse);
