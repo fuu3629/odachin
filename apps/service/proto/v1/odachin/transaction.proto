@@ -1,0 +1,44 @@
+syntax = "proto3";
+package odachin.reward;
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+service TransactionService {
+  rpc GetTransactionList(GetTransactionListRequest)
+      returns (GetTransactionListResponse);
+}
+
+message GetTransactionListRequest {
+  uint32 start_year = 1 [ (buf.validate.field).uint32.gte = 2000 ];
+  uint32 start_month = 2 [
+    (buf.validate.field).uint32.gte = 1,
+    (buf.validate.field).uint32.lte = 12
+  ];
+  optional uint32 start_day = 3 [
+    (buf.validate.field).uint32.gte = 1,
+    (buf.validate.field).uint32.lte = 31
+  ];
+  uint32 end_year = 4 [ (buf.validate.field).uint32.gte = 2000 ];
+  uint32 end_month = 5 [
+    (buf.validate.field).uint32.gte = 1,
+    (buf.validate.field).uint32.lte = 12
+  ];
+  optional uint32 end_day = 6 [
+    (buf.validate.field).uint32.gte = 1,
+    (buf.validate.field).uint32.lte = 31
+  ];
+}
+
+message TransactionInfo {
+  uint64 transaction_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
+  string from_user_id = 2 [ (buf.validate.field).string.min_len = 1 ];
+  string to_user_id = 3 [ (buf.validate.field).string.min_len = 1 ];
+  double amount = 4 [ (buf.validate.field).double.gt = 0 ];
+  string transaction_type = 5 [ (buf.validate.field).string.min_len = 1 ];
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message GetTransactionListResponse {
+  repeated TransactionInfo transaction_list = 1;
+}

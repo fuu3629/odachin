@@ -135,3 +135,19 @@ func ToGetReportedRewardListResponse(r []models.RewardPeriod) *odachin.GetReport
 		RewardList: rewardList,
 	}
 }
+
+func ToGetTransactionListResponse(t []*models.Transaction) *odachin.GetTransactionListResponse {
+	transactionList := make([]*odachin.TransactionInfo, len(t))
+	for i, transaction := range t {
+		transactionList[i] = &odachin.TransactionInfo{
+			TransactionId: uint64(transaction.TransactionID),
+			FromUserId:    transaction.FromUserID,
+			ToUserId:      transaction.ToUserID,
+			Amount:        transaction.Amount,
+			CreatedAt:     timestamppb.New(transaction.CreatedAt),
+		}
+	}
+	return &odachin.GetTransactionListResponse{
+		TransactionList: transactionList,
+	}
+}
