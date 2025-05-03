@@ -43,6 +43,9 @@ const (
 	// AllowanceServiceGetAllowanceByFromUserIdProcedure is the fully-qualified name of the
 	// AllowanceService's GetAllowanceByFromUserId RPC.
 	AllowanceServiceGetAllowanceByFromUserIdProcedure = "/odachin.allowance.AllowanceService/GetAllowanceByFromUserId"
+	// AllowanceServiceAllowanceProcedure is the fully-qualified name of the AllowanceService's
+	// Allowance RPC.
+	AllowanceServiceAllowanceProcedure = "/odachin.allowance.AllowanceService/Allowance"
 )
 
 // AllowanceServiceClient is a client for the odachin.allowance.AllowanceService service.
@@ -50,6 +53,7 @@ type AllowanceServiceClient interface {
 	RegisterAllowance(context.Context, *connect.Request[odachin.RegisterAllowanceRequest]) (*connect.Response[emptypb.Empty], error)
 	UpdateAllowance(context.Context, *connect.Request[odachin.UpdateAllowanceRequest]) (*connect.Response[emptypb.Empty], error)
 	GetAllowanceByFromUserId(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetAllowanceByFromUserIdResponse], error)
+	Allowance(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewAllowanceServiceClient constructs a client for the odachin.allowance.AllowanceService service.
@@ -81,6 +85,12 @@ func NewAllowanceServiceClient(httpClient connect.HTTPClient, baseURL string, op
 			connect.WithSchema(allowanceServiceMethods.ByName("GetAllowanceByFromUserId")),
 			connect.WithClientOptions(opts...),
 		),
+		allowance: connect.NewClient[emptypb.Empty, emptypb.Empty](
+			httpClient,
+			baseURL+AllowanceServiceAllowanceProcedure,
+			connect.WithSchema(allowanceServiceMethods.ByName("Allowance")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -89,6 +99,7 @@ type allowanceServiceClient struct {
 	registerAllowance        *connect.Client[odachin.RegisterAllowanceRequest, emptypb.Empty]
 	updateAllowance          *connect.Client[odachin.UpdateAllowanceRequest, emptypb.Empty]
 	getAllowanceByFromUserId *connect.Client[emptypb.Empty, odachin.GetAllowanceByFromUserIdResponse]
+	allowance                *connect.Client[emptypb.Empty, emptypb.Empty]
 }
 
 // RegisterAllowance calls odachin.allowance.AllowanceService.RegisterAllowance.
@@ -106,11 +117,17 @@ func (c *allowanceServiceClient) GetAllowanceByFromUserId(ctx context.Context, r
 	return c.getAllowanceByFromUserId.CallUnary(ctx, req)
 }
 
+// Allowance calls odachin.allowance.AllowanceService.Allowance.
+func (c *allowanceServiceClient) Allowance(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	return c.allowance.CallUnary(ctx, req)
+}
+
 // AllowanceServiceHandler is an implementation of the odachin.allowance.AllowanceService service.
 type AllowanceServiceHandler interface {
 	RegisterAllowance(context.Context, *connect.Request[odachin.RegisterAllowanceRequest]) (*connect.Response[emptypb.Empty], error)
 	UpdateAllowance(context.Context, *connect.Request[odachin.UpdateAllowanceRequest]) (*connect.Response[emptypb.Empty], error)
 	GetAllowanceByFromUserId(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetAllowanceByFromUserIdResponse], error)
+	Allowance(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewAllowanceServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -138,6 +155,12 @@ func NewAllowanceServiceHandler(svc AllowanceServiceHandler, opts ...connect.Han
 		connect.WithSchema(allowanceServiceMethods.ByName("GetAllowanceByFromUserId")),
 		connect.WithHandlerOptions(opts...),
 	)
+	allowanceServiceAllowanceHandler := connect.NewUnaryHandler(
+		AllowanceServiceAllowanceProcedure,
+		svc.Allowance,
+		connect.WithSchema(allowanceServiceMethods.ByName("Allowance")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/odachin.allowance.AllowanceService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case AllowanceServiceRegisterAllowanceProcedure:
@@ -146,6 +169,8 @@ func NewAllowanceServiceHandler(svc AllowanceServiceHandler, opts ...connect.Han
 			allowanceServiceUpdateAllowanceHandler.ServeHTTP(w, r)
 		case AllowanceServiceGetAllowanceByFromUserIdProcedure:
 			allowanceServiceGetAllowanceByFromUserIdHandler.ServeHTTP(w, r)
+		case AllowanceServiceAllowanceProcedure:
+			allowanceServiceAllowanceHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -165,4 +190,8 @@ func (UnimplementedAllowanceServiceHandler) UpdateAllowance(context.Context, *co
 
 func (UnimplementedAllowanceServiceHandler) GetAllowanceByFromUserId(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetAllowanceByFromUserIdResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.allowance.AllowanceService.GetAllowanceByFromUserId is not implemented"))
+}
+
+func (UnimplementedAllowanceServiceHandler) Allowance(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.allowance.AllowanceService.Allowance is not implemented"))
 }

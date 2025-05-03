@@ -32,3 +32,11 @@ func (s *ServerStruct) GetAllowanceByFromUserId(ctx context.Context, req *connec
 	}
 	return connect.NewResponse(dto.ToGetAllowanceByFromUserIdResponse(allowanceList, userList)), nil
 }
+
+func (s *ServerStruct) Allowance(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	err := s.allowanceUsecase.Allowance()
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}

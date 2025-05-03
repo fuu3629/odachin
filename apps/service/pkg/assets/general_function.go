@@ -98,3 +98,31 @@ func MakePeriod(req *odachin.RegisterRewardRequest, reward *models.Reward) *mode
 	}
 	return reward_period
 }
+
+func Map[T any, R any](input []T, f func(T) R) []R {
+	result := make([]R, len(input))
+	for i, v := range input {
+		result[i] = f(v)
+	}
+	return result
+}
+
+var weekdayToInt = map[string]int{
+	"SUNDAY":    0,
+	"MONDAY":    1,
+	"TUESDAY":   2,
+	"WEDNESDAY": 3,
+	"THURSDAY":  4,
+	"FRIDAY":    5,
+	"SATURDAY":  6,
+}
+
+var IntToWeekday = map[int]string{
+	0: "SUNDAY",
+	1: "MONDAY",
+	2: "TUESDAY",
+	3: "WEDNESDAY",
+	4: "THURSDAY",
+	5: "FRIDAY",
+	6: "SATURDAY",
+}

@@ -10,6 +10,7 @@ type WalletRepository interface {
 	Save(tx *gorm.DB, param *models.Wallet) error
 	Update(tx *gorm.DB, param *models.Wallet) error
 	GetByUserId(tx *gorm.DB, userId string) (models.Wallet, error)
+	GetByConditions(tx *gorm.DB, conditions string, args ...interface{}) ([]models.Wallet, error)
 }
 
 type WalletRepositoryImpl struct {
@@ -47,4 +48,12 @@ func (r *WalletRepositoryImpl) GetByUserId(tx *gorm.DB, userId string) (models.W
 		return models.Wallet{}, err
 	}
 	return wallet, nil
+}
+
+func (r *WalletRepositoryImpl) GetByConditions(tx *gorm.DB, conditions string, args ...interface{}) ([]models.Wallet, error) {
+	var wallets []models.Wallet
+	if err := tx.Where(conditions, args...).Find(&wallets).Error; err != nil {
+		return nil, err
+	}
+	return wallets, nil
 }

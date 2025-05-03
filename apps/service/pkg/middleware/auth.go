@@ -17,6 +17,7 @@ const tokenHeader = "authorization"
 var authNotRequiredInterceptorMethods = []string{
 	"/odachin.auth.AuthService/CreateUser",
 	"/odachin.auth.AuthService/Login",
+	"/odachin.allowance.AllowanceService/Allowance",
 }
 
 // TODO ROLEによる認可を実装する

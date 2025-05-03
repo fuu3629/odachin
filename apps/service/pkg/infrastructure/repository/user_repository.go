@@ -10,6 +10,7 @@ type UserRepository interface {
 	GetByConditions(tx *gorm.DB, condition string, args ...interface{}) ([]models.User, error)
 	Save(tx *gorm.DB, param *models.User) error
 	Update(tx *gorm.DB, user map[string]interface{}) error
+	GetWithAll(tx *gorm.DB, condition string, args ...interface{}) ([]models.User, error)
 }
 
 type UserRepositoryImpl struct{}
@@ -48,4 +49,12 @@ func (r *UserRepositoryImpl) Update(tx *gorm.DB, user map[string]interface{}) er
 		return err
 	}
 	return nil
+}
+
+func (r *UserRepositoryImpl) GetWithAll(tx *gorm.DB, condition string, args ...interface{}) ([]models.User, error) {
+	var users []models.User
+	if err := tx.Joins("JOIN allowances ON allowances.to_user_id = users.user_id").Where(condition, args...).Preload("Wallet").Preload("Allowance").Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }

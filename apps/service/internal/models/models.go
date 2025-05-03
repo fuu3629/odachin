@@ -20,7 +20,8 @@ type User struct {
 	AvatarImageUrl *string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
-	Wallet         Wallet `gorm:"foreignKey:UserID"`
+	Wallet         Wallet    `gorm:"foreignKey:UserID"`
+	Allowance      Allowance `gorm:"foreignKey:ToUserID;constraint:OnDelete:CASCADE;"`
 }
 
 type Wallet struct {
@@ -40,7 +41,6 @@ type Transaction struct {
 	CreatedAt     time.Time
 }
 
-// EVERY_N_DAYは、IntervalがN日ごとに送金される
 // Monthlyは毎月Dateに送金される
 // Weeklyは毎週DayOfWeekに送金される
 type Allowance struct {

@@ -9,6 +9,7 @@ service AllowanceService {
   rpc UpdateAllowance(UpdateAllowanceRequest) returns (google.protobuf.Empty);
   rpc GetAllowanceByFromUserId(google.protobuf.Empty)
       returns (GetAllowanceByFromUserIdResponse);
+  rpc Allowance(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 message Alloance {
