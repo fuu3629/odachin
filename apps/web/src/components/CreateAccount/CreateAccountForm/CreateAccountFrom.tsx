@@ -15,7 +15,6 @@ import { Controller } from 'react-hook-form';
 import { useCreateAccountForm } from './lib';
 export interface CreateAccountFormProps {}
 
-//TODO ROLEの設定する
 const roleOptions = [
   { label: '保護者', value: '0' },
   { label: '子供', value: '1' },
