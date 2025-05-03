@@ -1,5 +1,6 @@
 import { Link, Table, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import { CompletedTag } from './CompletedTag';
@@ -8,6 +9,9 @@ import { Reward_Type, RewardService } from '@/__generated__/v1/odachin/reward_pb
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
 import unauthorizedPage from '@/pages/unauthorized';
+dayjs.extend(relativeTime);
+import 'dayjs/locale/ja';
+dayjs.locale('ja');
 
 export interface RewardTableProps {
   rewardType: Reward_Type;
@@ -21,9 +25,9 @@ export interface RewardPeriodItem {
   description: string;
   amount: number;
   status: string;
+  endDate: dayjs.Dayjs;
 }
 
-//TODO　いつまでとかあと何日とかつけたい
 export function RewardTable({ rewardType, refreshKey, setRefreshKey }: RewardTableProps) {
   const client = useClient(RewardService);
   const cookies = useContext(CokiesContext);
@@ -49,6 +53,7 @@ export function RewardTable({ rewardType, refreshKey, setRefreshKey }: RewardTab
           description: reward.description,
           amount: reward.amount,
           status: reward.status,
+          endDate: dayjs.unix(Number(reward.endDate?.seconds)),
         };
       });
       setItems(rewards);
@@ -82,6 +87,11 @@ export function RewardTable({ rewardType, refreshKey, setRefreshKey }: RewardTab
             </Table.ColumnHeader>
             <Table.ColumnHeader textAlign='center' w='10%'>
               <Text fontSize='lg' fontWeight='semibold'>
+                残り時間
+              </Text>
+            </Table.ColumnHeader>
+            <Table.ColumnHeader textAlign='center' w='10%'>
+              <Text fontSize='lg' fontWeight='semibold'>
                 状態
               </Text>
             </Table.ColumnHeader>
@@ -95,7 +105,7 @@ export function RewardTable({ rewardType, refreshKey, setRefreshKey }: RewardTab
         <Table.Body bgColor='white'>
           {items.length === 0 ? (
             <Table.Row>
-              <Table.Cell colSpan={4} textAlign='center'>
+              <Table.Cell colSpan={5} textAlign='center'>
                 <Link>
                   <CiWarning size='1.5em' />
                   <Text fontSize='lg' fontWeight='semibold'>
@@ -121,6 +131,11 @@ export function RewardTable({ rewardType, refreshKey, setRefreshKey }: RewardTab
                   <Table.Cell>
                     <Text fontWeight='semibold' textAlign='center'>
                       {item.amount}
+                    </Text>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Text fontWeight='semibold' textAlign='center'>
+                      {item.endDate.fromNow()}
                     </Text>
                   </Table.Cell>
                   <Table.Cell>
