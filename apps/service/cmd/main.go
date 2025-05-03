@@ -17,7 +17,6 @@ import (
 //TODO wallet系実装する
 //TODO 24時にreward,allowanceを見る
 
-// TODO connect対応にする
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -37,7 +36,7 @@ func main() {
 	http.ListenAndServe(
 		"localhost:50051",
 		cors.AllowAll().Handler(
-			// HTTP1.1リクエストはHTTP/2にアップグレードされる
+			// HTTP1.1リクエストはHTTP/2にアップグレードする
 			h2c.NewHandler(mux, &http2.Server{}),
 		),
 	)

@@ -10,8 +10,7 @@ import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface MyPageProps {}
 
-//TODO childの色々
-//TODO 使い道のチャートとか作りたいå
+//TODO childの色々使い道のチャートとか作りたい
 export function MyPage({}: MyPageProps) {
   const cookies = useContext(CokiesContext);
   const router = useRouter();
@@ -67,7 +66,6 @@ export function MyPage({}: MyPageProps) {
               router.push('myPage/family');
             },
           },
-          { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
           {
             icon: FaCog,
             label: '設定',

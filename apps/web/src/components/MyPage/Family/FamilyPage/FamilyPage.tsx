@@ -31,13 +31,12 @@ export function FamilyPage({}: FamilyPageProps) {
           headers: { authorization: cookies.authorization },
         });
         setuserInfo(res);
-        //TODO家族がない時、別ページに遷移
         const res2 = await client.getInvitationList(req, {
           headers: { authorization: cookies.authorization },
         });
         setInvitingUser(res2);
       } catch (error) {
-        router.push('/login');
+        router.push('/myPage/createGroup');
         console.error('Error fetching user info:', error);
       }
     };

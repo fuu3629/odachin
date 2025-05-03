@@ -76,7 +76,6 @@ export function AddAllowanceDialog({ setRefreshKey }: AddAllowanceDialogProps) {
       try {
         const res = await familyClient.getFamilyInfo({});
         const childresRes = res.familyMembers.filter((member) => member.role === Role.CHILD);
-        //TODO 0の時どうするか
         if (childresRes.length > 0) {
           setChildren(childresRes);
           setSelectedUser({ id: childresRes[0].userId, name: childresRes[0].name });
