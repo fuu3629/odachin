@@ -8,6 +8,7 @@ service UsageService {
   rpc ApplicateUsage(ApplicateUsageRequest) returns (google.protobuf.Empty);
   rpc GetUsageCategories(google.protobuf.Empty)
       returns (GetUsageCategoriesResponse);
+  rpc ApproveUsage(ApproveUsageRequest) returns (google.protobuf.Empty);
 }
 
 message ApplicateUsageRequest {
@@ -19,3 +20,7 @@ message ApplicateUsageRequest {
 }
 
 message GetUsageCategoriesResponse { repeated string categories = 1; }
+
+message ApproveUsageRequest {
+  uint64 usage_id = 1 [ (buf.validate.field).uint64.gt = 0 ];
+}

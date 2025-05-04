@@ -31,3 +31,14 @@ func (s *ServerStruct) GetUsageCategories(
 		Categories: categories,
 	}), nil
 }
+
+func (s *ServerStruct) ApproveUsage(
+	ctx context.Context,
+	req *connect.Request[odachin.ApproveUsageRequest],
+) (*connect.Response[emptypb.Empty], error) {
+	err := s.usageUsecase.ApproveUsage(ctx, req.Msg)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}

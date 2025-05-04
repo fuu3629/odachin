@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/usage.proto.
  */
 export const file_v1_odachin_usage: GenFile = /*@__PURE__*/
-  fileDesc("ChZ2MS9vZGFjaGluL3VzYWdlLnByb3RvEg5vZGFjaGluLnJld2FyZCKPAQoVQXBwbGljYXRlVXNhZ2VSZXF1ZXN0EhUKBHR5cGUYASABKAlCB7pIBHICEAESFwoGYW1vdW50GAIgASgFQge6SAQaAiAAEhYKBXRpdGxlGAMgASgJQge6SARyAhABEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhkKCGNhdGVnb3J5GAUgASgJQge6SARyAhABIjAKGkdldFVzYWdlQ2F0ZWdvcmllc1Jlc3BvbnNlEhIKCmNhdGVnb3JpZXMYASADKAkyuQEKDFVzYWdlU2VydmljZRJPCg5BcHBsaWNhdGVVc2FnZRIlLm9kYWNoaW4ucmV3YXJkLkFwcGxpY2F0ZVVzYWdlUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJYChJHZXRVc2FnZUNhdGVnb3JpZXMSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaKi5vZGFjaGluLnJld2FyZC5HZXRVc2FnZUNhdGVnb3JpZXNSZXNwb25zZWIGcHJvdG8z", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_buf_validate_validate]);
+  fileDesc("ChZ2MS9vZGFjaGluL3VzYWdlLnByb3RvEg5vZGFjaGluLnJld2FyZCKPAQoVQXBwbGljYXRlVXNhZ2VSZXF1ZXN0EhUKBHR5cGUYASABKAlCB7pIBHICEAESFwoGYW1vdW50GAIgASgFQge6SAQaAiAAEhYKBXRpdGxlGAMgASgJQge6SARyAhABEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhkKCGNhdGVnb3J5GAUgASgJQge6SARyAhABIjAKGkdldFVzYWdlQ2F0ZWdvcmllc1Jlc3BvbnNlEhIKCmNhdGVnb3JpZXMYASADKAkiMAoTQXBwcm92ZVVzYWdlUmVxdWVzdBIZCgh1c2FnZV9pZBgBIAEoBEIHukgEMgIgADKGAgoMVXNhZ2VTZXJ2aWNlEk8KDkFwcGxpY2F0ZVVzYWdlEiUub2RhY2hpbi5yZXdhcmQuQXBwbGljYXRlVXNhZ2VSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5ElgKEkdldFVzYWdlQ2F0ZWdvcmllcxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoqLm9kYWNoaW4ucmV3YXJkLkdldFVzYWdlQ2F0ZWdvcmllc1Jlc3BvbnNlEksKDEFwcHJvdmVVc2FnZRIjLm9kYWNoaW4ucmV3YXJkLkFwcHJvdmVVc2FnZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHliBnByb3RvMw", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_buf_validate_validate]);
 
 /**
  * @generated from message odachin.reward.ApplicateUsageRequest
@@ -70,6 +70,23 @@ export const GetUsageCategoriesResponseSchema: GenMessage<GetUsageCategoriesResp
   messageDesc(file_v1_odachin_usage, 1);
 
 /**
+ * @generated from message odachin.reward.ApproveUsageRequest
+ */
+export type ApproveUsageRequest = Message<"odachin.reward.ApproveUsageRequest"> & {
+  /**
+   * @generated from field: uint64 usage_id = 1;
+   */
+  usageId: bigint;
+};
+
+/**
+ * Describes the message odachin.reward.ApproveUsageRequest.
+ * Use `create(ApproveUsageRequestSchema)` to create a new message.
+ */
+export const ApproveUsageRequestSchema: GenMessage<ApproveUsageRequest> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_usage, 2);
+
+/**
  * @generated from service odachin.reward.UsageService
  */
 export const UsageService: GenService<{
@@ -88,6 +105,14 @@ export const UsageService: GenService<{
     methodKind: "unary";
     input: typeof EmptySchema;
     output: typeof GetUsageCategoriesResponseSchema;
+  },
+  /**
+   * @generated from rpc odachin.reward.UsageService.ApproveUsage
+   */
+  approveUsage: {
+    methodKind: "unary";
+    input: typeof ApproveUsageRequestSchema;
+    output: typeof EmptySchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_v1_odachin_usage, 0);

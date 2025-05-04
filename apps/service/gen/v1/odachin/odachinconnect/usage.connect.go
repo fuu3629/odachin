@@ -40,12 +40,16 @@ const (
 	// UsageServiceGetUsageCategoriesProcedure is the fully-qualified name of the UsageService's
 	// GetUsageCategories RPC.
 	UsageServiceGetUsageCategoriesProcedure = "/odachin.reward.UsageService/GetUsageCategories"
+	// UsageServiceApproveUsageProcedure is the fully-qualified name of the UsageService's ApproveUsage
+	// RPC.
+	UsageServiceApproveUsageProcedure = "/odachin.reward.UsageService/ApproveUsage"
 )
 
 // UsageServiceClient is a client for the odachin.reward.UsageService service.
 type UsageServiceClient interface {
 	ApplicateUsage(context.Context, *connect.Request[odachin.ApplicateUsageRequest]) (*connect.Response[emptypb.Empty], error)
 	GetUsageCategories(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageCategoriesResponse], error)
+	ApproveUsage(context.Context, *connect.Request[odachin.ApproveUsageRequest]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewUsageServiceClient constructs a client for the odachin.reward.UsageService service. By
@@ -71,6 +75,12 @@ func NewUsageServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(usageServiceMethods.ByName("GetUsageCategories")),
 			connect.WithClientOptions(opts...),
 		),
+		approveUsage: connect.NewClient[odachin.ApproveUsageRequest, emptypb.Empty](
+			httpClient,
+			baseURL+UsageServiceApproveUsageProcedure,
+			connect.WithSchema(usageServiceMethods.ByName("ApproveUsage")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -78,6 +88,7 @@ func NewUsageServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 type usageServiceClient struct {
 	applicateUsage     *connect.Client[odachin.ApplicateUsageRequest, emptypb.Empty]
 	getUsageCategories *connect.Client[emptypb.Empty, odachin.GetUsageCategoriesResponse]
+	approveUsage       *connect.Client[odachin.ApproveUsageRequest, emptypb.Empty]
 }
 
 // ApplicateUsage calls odachin.reward.UsageService.ApplicateUsage.
@@ -90,10 +101,16 @@ func (c *usageServiceClient) GetUsageCategories(ctx context.Context, req *connec
 	return c.getUsageCategories.CallUnary(ctx, req)
 }
 
+// ApproveUsage calls odachin.reward.UsageService.ApproveUsage.
+func (c *usageServiceClient) ApproveUsage(ctx context.Context, req *connect.Request[odachin.ApproveUsageRequest]) (*connect.Response[emptypb.Empty], error) {
+	return c.approveUsage.CallUnary(ctx, req)
+}
+
 // UsageServiceHandler is an implementation of the odachin.reward.UsageService service.
 type UsageServiceHandler interface {
 	ApplicateUsage(context.Context, *connect.Request[odachin.ApplicateUsageRequest]) (*connect.Response[emptypb.Empty], error)
 	GetUsageCategories(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageCategoriesResponse], error)
+	ApproveUsage(context.Context, *connect.Request[odachin.ApproveUsageRequest]) (*connect.Response[emptypb.Empty], error)
 }
 
 // NewUsageServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -115,12 +132,20 @@ func NewUsageServiceHandler(svc UsageServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(usageServiceMethods.ByName("GetUsageCategories")),
 		connect.WithHandlerOptions(opts...),
 	)
+	usageServiceApproveUsageHandler := connect.NewUnaryHandler(
+		UsageServiceApproveUsageProcedure,
+		svc.ApproveUsage,
+		connect.WithSchema(usageServiceMethods.ByName("ApproveUsage")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/odachin.reward.UsageService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UsageServiceApplicateUsageProcedure:
 			usageServiceApplicateUsageHandler.ServeHTTP(w, r)
 		case UsageServiceGetUsageCategoriesProcedure:
 			usageServiceGetUsageCategoriesHandler.ServeHTTP(w, r)
+		case UsageServiceApproveUsageProcedure:
+			usageServiceApproveUsageHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -136,4 +161,8 @@ func (UnimplementedUsageServiceHandler) ApplicateUsage(context.Context, *connect
 
 func (UnimplementedUsageServiceHandler) GetUsageCategories(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageCategoriesResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.UsageService.GetUsageCategories is not implemented"))
+}
+
+func (UnimplementedUsageServiceHandler) ApproveUsage(context.Context, *connect.Request[odachin.ApproveUsageRequest]) (*connect.Response[emptypb.Empty], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.UsageService.ApproveUsage is not implemented"))
 }

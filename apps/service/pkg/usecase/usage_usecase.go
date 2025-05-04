@@ -16,6 +16,7 @@ import (
 type UsageUsecase interface {
 	ApplicateUsage(ctx context.Context, req *odachin.ApplicateUsageRequest) error
 	GetUsageCategories(ctx context.Context) ([]string, error)
+	ApproveUsage(ctx context.Context, req *odachin.ApproveUsageRequest) error
 }
 
 type UsageUsecaseImpl struct {
@@ -57,7 +58,7 @@ func (u *UsageUsecaseImpl) GetUsageCategories(ctx context.Context) ([]string, er
 	var categories []string
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		user_id := ctx.Value("user_id").(string)
-		usage, err := u.usageRepository.Get(tx, user_id)
+		usage, err := u.usageRepository.GetByUserId(tx, user_id)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
@@ -80,4 +81,29 @@ func (u *UsageUsecaseImpl) GetUsageCategories(ctx context.Context) ([]string, er
 		return nil, status.Errorf(codes.Internal, "transaction error: %v", err)
 	}
 	return categories, nil
+}
+
+func (u *UsageUsecaseImpl) ApproveUsage(ctx context.Context, req *odachin.ApproveUsageRequest) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		usage, err := u.usageRepository.GetById(tx, uint(req.UsageId))
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		if usage == nil {
+			return status.Errorf(codes.NotFound, "usage not found")
+		}
+		if usage.Status != "APPLICATED" {
+			return status.Errorf(codes.InvalidArgument, "usage already approved")
+		}
+		usage.Status = "APPROVED"
+		err = u.usageRepository.Update(tx, usage)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return status.Errorf(codes.Internal, "transaction error: %v", err)
+	}
+	return nil
 }

@@ -7,7 +7,9 @@ import (
 
 type UsageRepository interface {
 	Save(tx *gorm.DB, usage *models.Usage) error
-	Get(tx *gorm.DB, userID string) ([]*models.Usage, error)
+	Update(tx *gorm.DB, usage *models.Usage) error
+	GetByUserId(tx *gorm.DB, userID string) ([]*models.Usage, error)
+	GetById(tx *gorm.DB, id uint) (*models.Usage, error)
 }
 
 type UsageRepositoryImpl struct{}
@@ -23,10 +25,25 @@ func (r *UsageRepositoryImpl) Save(tx *gorm.DB, usage *models.Usage) error {
 	return nil
 }
 
-func (r *UsageRepositoryImpl) Get(tx *gorm.DB, userID string) ([]*models.Usage, error) {
+func (r *UsageRepositoryImpl) Update(tx *gorm.DB, usage *models.Usage) error {
+	if err := tx.Save(&usage).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *UsageRepositoryImpl) GetByUserId(tx *gorm.DB, userID string) ([]*models.Usage, error) {
 	var usages []*models.Usage
 	if err := tx.Where("user_id = ?", userID).Find(&usages).Error; err != nil {
 		return nil, err
 	}
 	return usages, nil
+}
+
+func (r *UsageRepositoryImpl) GetById(tx *gorm.DB, id uint) (*models.Usage, error) {
+	var usage models.Usage
+	if err := tx.Where("usage_id = ?", id).First(&usage).Error; err != nil {
+		return nil, err
+	}
+	return &usage, nil
 }
