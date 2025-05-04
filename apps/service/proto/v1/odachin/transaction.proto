@@ -34,7 +34,7 @@ message TransactionInfo {
   uint64 transaction_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
   string from_user_id = 2 [ (buf.validate.field).string.min_len = 1 ];
   string to_user_id = 3 [ (buf.validate.field).string.min_len = 1 ];
-  double amount = 4 [ (buf.validate.field).double.gt = 0 ];
+  int32 amount = 4 [ (buf.validate.field).int64.gt = 0 ];
   string transaction_type = 5 [ (buf.validate.field).string.min_len = 1 ];
   string title = 6;
   string description = 7;

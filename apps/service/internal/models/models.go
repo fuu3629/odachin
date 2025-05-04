@@ -27,7 +27,7 @@ type User struct {
 type Wallet struct {
 	WalletID  uint   `gorm:"primaryKey;autoIncrement"`
 	UserID    string `gorm:"uniqueIndex"`
-	Balance   float64
+	Balance   int32
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -37,7 +37,7 @@ type Transaction struct {
 	TransactionID uint   `gorm:"primaryKey;autoIncrement"`
 	FromUserID    string `gorm:"index"`
 	ToUserID      string `gorm:"index"`
-	Amount        float64
+	Amount        int32
 	Type          string
 	Title         string
 	Description   string
@@ -50,7 +50,7 @@ type Allowance struct {
 	AllowanceID  uint   `gorm:"primaryKey;autoIncrement"`
 	FromUserID   string `gorm:"index"`
 	ToUserID     string `gorm:"index"`
-	Amount       float64
+	Amount       int32
 	IntervalType string `gorm:"type: period_enum"`
 	Date         *uint32
 	DayOfWeek    *string `gorm:"type: dayofweek_enum"`
@@ -65,7 +65,7 @@ type Reward struct {
 	PeriodType    string `gorm:"type: period_enum"`
 	Title         string
 	Description   string
-	Amount        float64
+	Amount        int32
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 	RewardPeriods []RewardPeriod `gorm:"foreignKey:RewardID;constraint:OnDelete:CASCADE;"`
@@ -88,4 +88,14 @@ type Invitation struct {
 	IsAccepted   bool
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
+}
+
+type Usage struct {
+	UsageID     uint   `gorm:"primaryKey;autoIncrement"`
+	UserID      string `gorm:"index"`
+	Amount      int32
+	Title       string
+	Description string
+	Category    string
+	CreatedAt   time.Time
 }

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Dispatch, SetStateAction, useContext } from 'react';
-import { set, useForm } from 'react-hook-form';
+import { Dispatch, SetStateAction } from 'react';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { SelectedUser } from '../../RewardSetting/RewardSettingPage/RewardSettingPage';
 import {

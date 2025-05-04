@@ -32,7 +32,7 @@ enum DayOfWeek {
 
 message RegisterAllowanceRequest {
   string to_user_id = 1 [ (buf.validate.field).string.min_len = 1 ];
-  double amount = 2 [ (buf.validate.field).double.gt = 0 ];
+  int32 amount = 2 [ (buf.validate.field).int32.gt = 0 ];
   Alloance.Type interval_type = 3
       [ (buf.validate.field).enum.defined_only = true ];
   optional uint32 date = 4;
@@ -41,7 +41,7 @@ message RegisterAllowanceRequest {
 
 message UpdateAllowanceRequest {
   uint64 allowance_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
-  optional double amount = 2 [ (buf.validate.field).double.gt = 0 ];
+  optional int32 amount = 2 [ (buf.validate.field).int32.gt = 0 ];
   optional Alloance.Type interval_type = 3;
   optional uint32 date = 4;
   optional DayOfWeek day_of_week = 5;
@@ -51,7 +51,7 @@ message Allowance {
   uint64 allowance_id = 1;
   string to_user_id = 2;
   string to_user_name = 3;
-  double amount = 4;
+  int32 amount = 4;
   Alloance.Type interval_type = 5;
   optional uint32 date = 6;
   optional DayOfWeek day_of_week = 7;

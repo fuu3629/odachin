@@ -94,7 +94,7 @@ func (u *RewardUsecaseImpl) RegisterReward(ctx context.Context, req *odachin.Reg
 			PeriodType:  req.RewardType.String(),
 			Title:       req.Title,
 			Description: req.Description,
-			Amount:      float64(req.Amount),
+			Amount:      req.Amount,
 		}
 		err := u.rewardRepository.Save(tx, reward)
 		if err != nil {
