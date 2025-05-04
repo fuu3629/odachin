@@ -6,6 +6,8 @@ import "buf/validate/validate.proto";
 
 service UsageService {
   rpc ApplicateUsage(ApplicateUsageRequest) returns (google.protobuf.Empty);
+  rpc GetUsageCategories(google.protobuf.Empty)
+      returns (GetUsageCategoriesResponse);
 }
 
 message ApplicateUsageRequest {
@@ -15,3 +17,5 @@ message ApplicateUsageRequest {
   string description = 4;
   string category = 5 [ (buf.validate.field).string.min_len = 1 ];
 }
+
+message GetUsageCategoriesResponse { repeated string categories = 1; }

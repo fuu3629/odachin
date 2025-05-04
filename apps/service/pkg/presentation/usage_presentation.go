@@ -18,3 +18,16 @@ func (s *ServerStruct) ApplicateUsage(
 	}
 	return connect.NewResponse(&emptypb.Empty{}), nil
 }
+
+func (s *ServerStruct) GetUsageCategories(
+	ctx context.Context,
+	req *connect.Request[emptypb.Empty],
+) (*connect.Response[odachin.GetUsageCategoriesResponse], error) {
+	categories, err := s.usageUsecase.GetUsageCategories(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&odachin.GetUsageCategoriesResponse{
+		Categories: categories,
+	}), nil
+}

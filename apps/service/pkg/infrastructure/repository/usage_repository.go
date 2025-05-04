@@ -7,6 +7,7 @@ import (
 
 type UsageRepository interface {
 	Save(tx *gorm.DB, usage *models.Usage) error
+	Get(tx *gorm.DB, userID string) ([]*models.Usage, error)
 }
 
 type UsageRepositoryImpl struct{}
@@ -20,4 +21,12 @@ func (r *UsageRepositoryImpl) Save(tx *gorm.DB, usage *models.Usage) error {
 		return err
 	}
 	return nil
+}
+
+func (r *UsageRepositoryImpl) Get(tx *gorm.DB, userID string) ([]*models.Usage, error) {
+	var usages []*models.Usage
+	if err := tx.Where("user_id = ?", userID).Find(&usages).Error; err != nil {
+		return nil, err
+	}
+	return usages, nil
 }

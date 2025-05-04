@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/usage.proto.
  */
 export const file_v1_odachin_usage: GenFile = /*@__PURE__*/
-  fileDesc("ChZ2MS9vZGFjaGluL3VzYWdlLnByb3RvEg5vZGFjaGluLnJld2FyZCKPAQoVQXBwbGljYXRlVXNhZ2VSZXF1ZXN0EhUKBHR5cGUYASABKAlCB7pIBHICEAESFwoGYW1vdW50GAIgASgFQge6SAQaAiAAEhYKBXRpdGxlGAMgASgJQge6SARyAhABEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhkKCGNhdGVnb3J5GAUgASgJQge6SARyAhABMl8KDFVzYWdlU2VydmljZRJPCg5BcHBsaWNhdGVVc2FnZRIlLm9kYWNoaW4ucmV3YXJkLkFwcGxpY2F0ZVVzYWdlUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eWIGcHJvdG8z", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_buf_validate_validate]);
+  fileDesc("ChZ2MS9vZGFjaGluL3VzYWdlLnByb3RvEg5vZGFjaGluLnJld2FyZCKPAQoVQXBwbGljYXRlVXNhZ2VSZXF1ZXN0EhUKBHR5cGUYASABKAlCB7pIBHICEAESFwoGYW1vdW50GAIgASgFQge6SAQaAiAAEhYKBXRpdGxlGAMgASgJQge6SARyAhABEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhkKCGNhdGVnb3J5GAUgASgJQge6SARyAhABIjAKGkdldFVzYWdlQ2F0ZWdvcmllc1Jlc3BvbnNlEhIKCmNhdGVnb3JpZXMYASADKAkyuQEKDFVzYWdlU2VydmljZRJPCg5BcHBsaWNhdGVVc2FnZRIlLm9kYWNoaW4ucmV3YXJkLkFwcGxpY2F0ZVVzYWdlUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJYChJHZXRVc2FnZUNhdGVnb3JpZXMSFi5nb29nbGUucHJvdG9idWYuRW1wdHkaKi5vZGFjaGluLnJld2FyZC5HZXRVc2FnZUNhdGVnb3JpZXNSZXNwb25zZWIGcHJvdG8z", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_buf_validate_validate]);
 
 /**
  * @generated from message odachin.reward.ApplicateUsageRequest
@@ -53,6 +53,23 @@ export const ApplicateUsageRequestSchema: GenMessage<ApplicateUsageRequest> = /*
   messageDesc(file_v1_odachin_usage, 0);
 
 /**
+ * @generated from message odachin.reward.GetUsageCategoriesResponse
+ */
+export type GetUsageCategoriesResponse = Message<"odachin.reward.GetUsageCategoriesResponse"> & {
+  /**
+   * @generated from field: repeated string categories = 1;
+   */
+  categories: string[];
+};
+
+/**
+ * Describes the message odachin.reward.GetUsageCategoriesResponse.
+ * Use `create(GetUsageCategoriesResponseSchema)` to create a new message.
+ */
+export const GetUsageCategoriesResponseSchema: GenMessage<GetUsageCategoriesResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_usage, 1);
+
+/**
  * @generated from service odachin.reward.UsageService
  */
 export const UsageService: GenService<{
@@ -63,6 +80,14 @@ export const UsageService: GenService<{
     methodKind: "unary";
     input: typeof ApplicateUsageRequestSchema;
     output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc odachin.reward.UsageService.GetUsageCategories
+   */
+  getUsageCategories: {
+    methodKind: "unary";
+    input: typeof EmptySchema;
+    output: typeof GetUsageCategoriesResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_v1_odachin_usage, 0);

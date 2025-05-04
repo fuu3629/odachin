@@ -107,6 +107,20 @@ func Map[T any, R any](input []T, f func(T) R) []R {
 	return result
 }
 
+func RemoveDuplicates(input []string) []string {
+	seen := make(map[string]bool)
+	result := []string{}
+
+	for _, val := range input {
+		if !seen[val] {
+			seen[val] = true
+			result = append(result, val)
+		}
+	}
+
+	return result
+}
+
 var weekdayToInt = map[string]int{
 	"SUNDAY":    0,
 	"MONDAY":    1,
