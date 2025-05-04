@@ -67,7 +67,13 @@ func (u *UsageUsecaseImpl) GetUsageCategories(ctx context.Context) ([]string, er
 				categories = append(categories, u.Category)
 			}
 		}
-		categories = assets.RemoveDuplicates(categories)
+		categories_count := assets.CountAndSortByFrequency(categories)
+		categories = make([]string, 0)
+		for _, c := range categories_count {
+			if c.Count > 1 {
+				categories = append(categories, c.Value)
+			}
+		}
 		return nil
 	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
 	if err != nil {

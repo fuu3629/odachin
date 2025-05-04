@@ -3,6 +3,7 @@ package assets
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"time"
 
 	"github.com/fuu3629/odachin/apps/service/gen/v1/odachin"
@@ -119,6 +120,31 @@ func RemoveDuplicates(input []string) []string {
 	}
 
 	return result
+}
+
+type ItemCount struct {
+	Value string
+	Count int
+}
+
+func CountAndSortByFrequency(input []string) []ItemCount {
+	freqMap := make(map[string]int)
+	for _, val := range input {
+		freqMap[val]++
+	}
+
+	// mapからスライスに変換
+	counts := make([]ItemCount, 0, len(freqMap))
+	for val, count := range freqMap {
+		counts = append(counts, ItemCount{Value: val, Count: count})
+	}
+
+	// 出現回数の降順にソート
+	sort.Slice(counts, func(i, j int) bool {
+		return counts[i].Count > counts[j].Count
+	})
+
+	return counts
 }
 
 var weekdayToInt = map[string]int{
