@@ -46,10 +46,13 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'reward_period_status_enum') THEN
 		create type reward_period_status_enum AS ENUM ('IN_PROGRESS', 'REPORTED', 'COMPLETED', 'REJECTED');
 	END IF;
+	IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'usage_status_enum') THEN
+		create type usage_status_enum AS ENUM ('APPLICATED', 'APPROVED', 'REJECTED');
+	END IF;
 END
 $$;
 `)
-	err := db.AutoMigrate(&models.Family{}, &models.User{}, &models.Wallet{}, &models.Transaction{}, &models.Allowance{}, &models.Reward{}, &models.RewardPeriod{}, &models.Invitation{})
+	err := db.AutoMigrate(&models.Family{}, &models.User{}, &models.Wallet{}, &models.Transaction{}, &models.Allowance{}, &models.Reward{}, &models.RewardPeriod{}, &models.Invitation{}, &models.Usage{})
 	if err != nil {
 		fmt.Println(err)
 	} else {

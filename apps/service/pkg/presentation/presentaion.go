@@ -16,6 +16,7 @@ type ServerStruct struct {
 	allowanceUsecase   usecase.AllowanceUsecase
 	rewardUsecase      usecase.RewardUsecase
 	transactionUsecase usecase.TransactionUsecase
+	usageUsecase       usecase.UsageUsecase
 }
 
 func NewServer(mux *http.ServeMux, db *gorm.DB) {
@@ -25,6 +26,7 @@ func NewServer(mux *http.ServeMux, db *gorm.DB) {
 		allowanceUsecase:   usecase.NewAllowanceUsecase(db),
 		rewardUsecase:      usecase.NewRewardUsecase(db),
 		transactionUsecase: usecase.NewTransactionUsecase(db),
+		usageUsecase:       usecase.NewUsageUsecase(db),
 	}
 
 	authInterceptor := middleware.NewAuthInterceptor()
@@ -43,4 +45,5 @@ func NewServer(mux *http.ServeMux, db *gorm.DB) {
 	mux.Handle(odachinconnect.NewFamilyServiceHandler(server, intercepters))
 	mux.Handle(odachinconnect.NewRewardServiceHandler(server, intercepters))
 	mux.Handle(odachinconnect.NewTransactionServiceHandler(server, intercepters))
+	mux.Handle(odachinconnect.NewUsageServiceHandler(server, intercepters))
 }

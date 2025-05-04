@@ -97,5 +97,6 @@ type Usage struct {
 	Title       string
 	Description string
 	Category    string
+	Status      string `gorm:"type: usage_status_enum"`
 	CreatedAt   time.Time
 }

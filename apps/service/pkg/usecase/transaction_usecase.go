@@ -17,19 +17,19 @@ type TransactionUsecase interface {
 	GetTransactionList(ctx context.Context, req *odachin.GetTransactionListRequest) ([]*models.Transaction, error)
 }
 
-type transactionUsecase struct {
+type TransactionUsecaseImpl struct {
 	db                    *gorm.DB
 	TransactionRepository repository.TransactionRepository
 }
 
 func NewTransactionUsecase(db *gorm.DB) TransactionUsecase {
-	return &transactionUsecase{
+	return &TransactionUsecaseImpl{
 		db:                    db,
 		TransactionRepository: repository.NewTransactionRepository(),
 	}
 }
 
-func (u *transactionUsecase) GetTransactionList(ctx context.Context, req *odachin.GetTransactionListRequest) ([]*models.Transaction, error) {
+func (u *TransactionUsecaseImpl) GetTransactionList(ctx context.Context, req *odachin.GetTransactionListRequest) ([]*models.Transaction, error) {
 	var transactions []*models.Transaction
 	err := u.db.Transaction(func(tx *gorm.DB) error {
 		var start, end time.Time

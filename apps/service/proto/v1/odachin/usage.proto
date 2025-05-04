@@ -1,0 +1,17 @@
+syntax = "proto3";
+package odachin.reward;
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "buf/validate/validate.proto";
+
+service UsageService {
+  rpc ApplicateUsage(ApplicateUsageRequest) returns (google.protobuf.Empty);
+}
+
+message ApplicateUsageRequest {
+  string type = 1 [ (buf.validate.field).string.min_len = 1 ];
+  int32 amount = 2 [ (buf.validate.field).int32.gt = 0 ];
+  string title = 3 [ (buf.validate.field).string.min_len = 1 ];
+  string description = 4;
+  string category = 5 [ (buf.validate.field).string.min_len = 1 ];
+}
