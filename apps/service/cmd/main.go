@@ -13,9 +13,6 @@ import (
 )
 
 //TODO 自動デプロイ作る
-//TODO transaction系ちゃんとする
-//TODO wallet系実装する
-//TODO 24時にreward,allowanceを見る
 
 func main() {
 	err := godotenv.Load()

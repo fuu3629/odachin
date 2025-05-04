@@ -18,6 +18,7 @@ service RewardService {
   rpc GetReportedRewardList(google.protobuf.Empty)
       returns (GetReportedRewardListResponse);
   rpc ApproveReward(ApproveRewardRequest) returns (google.protobuf.Empty);
+  rpc RejectReward(RejectRewardRequest) returns (google.protobuf.Empty);
 }
 
 message Reward {
@@ -79,5 +80,9 @@ message ReportRewardRequest {
 message GetReportedRewardListResponse { repeated RewardInfo reward_list = 1; }
 
 message ApproveRewardRequest {
+  uint64 reward_period_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
+}
+
+message RejectRewardRequest {
   uint64 reward_period_id = 1 [ (buf.validate.field).uint64.gte = 1 ];
 }

@@ -25,6 +25,7 @@ type RewardUsecase interface {
 	ReportReward(ctx context.Context, req *odachin.ReportRewardRequest) error
 	GetReportedRewardList(ctx context.Context) ([]models.RewardPeriod, error)
 	ApproveReward(ctx context.Context, req *odachin.ApproveRewardRequest) error
+	RejectReward(ctx context.Context, req *odachin.RejectRewardRequest) error
 }
 
 type RewardUsecaseImpl struct {
@@ -279,6 +280,35 @@ func (u *RewardUsecaseImpl) ApproveReward(ctx context.Context, req *odachin.Appr
 			Description: rewardPeriod.Reward.Description,
 		}
 		err = u.transactionRepository.Save(tx, transaction)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *RewardUsecaseImpl) RejectReward(ctx context.Context, req *odachin.RejectRewardRequest) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		user_id := ctx.Value("user_id").(string)
+		rewardPeriodWithReward, err := u.rewardPeriodRepository.GetWithReward(tx, "reward_period_id = ?", req.RewardPeriodId)
+		rewardPeriod := rewardPeriodWithReward[0]
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		if rewardPeriod.Reward.FromUserID != user_id {
+			return status.Errorf(codes.Internal, "not your reward")
+		}
+		if rewardPeriod.Status == "COMPLETED" {
+			return status.Errorf(codes.Internal, "already completed or reported reward")
+		}
+		reward_period := make(map[string]interface{})
+		reward_period["reward_period_id"] = rewardPeriod.RewardPeriodID
+		reward_period["status"] = "REJECTED"
+		err = u.rewardPeriodRepository.Update(tx, reward_period)
 		if err != nil {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}

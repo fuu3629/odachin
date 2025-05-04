@@ -32,7 +32,6 @@ type Wallet struct {
 	UpdatedAt time.Time
 }
 
-// TODO descriptionを追加する
 // TODO typeをenumにする
 type Transaction struct {
 	TransactionID uint   `gorm:"primaryKey;autoIncrement"`

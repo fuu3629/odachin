@@ -82,3 +82,11 @@ func (s *ServerStruct) ApproveReward(ctx context.Context, req *connect.Request[o
 	}
 	return connect.NewResponse(&emptypb.Empty{}), nil
 }
+
+func (s *ServerStruct) RejectReward(ctx context.Context, req *connect.Request[odachin.RejectRewardRequest]) (*connect.Response[emptypb.Empty], error) {
+	err := s.rewardUsecase.RejectReward(ctx, req.Msg)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}
