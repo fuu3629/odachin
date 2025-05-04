@@ -64,6 +64,7 @@ export function Header({}: HeaderProps) {
         pr={6}
         top={0}
         w='100%'
+        zIndex={1000001}
       >
         <Text
           _hover={{ cursor: 'pointer' }}

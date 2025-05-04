@@ -19,10 +19,12 @@ func AllowanceDomain(users []models.User, tx *gorm.DB) error {
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
 		transaction := &models.Transaction{
-			FromUserID: us.Allowance.FromUserID,
-			ToUserID:   us.Allowance.ToUserID,
-			Amount:     us.Allowance.Amount,
-			Type:       "ALLOWANCE",
+			FromUserID:  us.Allowance.FromUserID,
+			ToUserID:    us.Allowance.ToUserID,
+			Amount:      us.Allowance.Amount,
+			Type:        "ALLOWANCE",
+			Title:       "お小遣い",
+			Description: "お小遣いを送金しました",
 		}
 		transactions = append(transactions, transaction)
 	}

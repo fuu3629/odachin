@@ -271,10 +271,12 @@ func (u *RewardUsecaseImpl) ApproveReward(ctx context.Context, req *odachin.Appr
 			return status.Errorf(codes.Internal, "database error: %v", err)
 		}
 		transaction := &models.Transaction{
-			FromUserID: user_id,
-			ToUserID:   child_user_id,
-			Amount:     rewardPeriod.Reward.Amount,
-			Type:       "REWARD",
+			FromUserID:  user_id,
+			ToUserID:    child_user_id,
+			Amount:      rewardPeriod.Reward.Amount,
+			Type:        "REWARD",
+			Title:       rewardPeriod.Reward.Title,
+			Description: rewardPeriod.Reward.Description,
 		}
 		err = u.transactionRepository.Save(tx, transaction)
 		if err != nil {

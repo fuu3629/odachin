@@ -87,7 +87,13 @@ export function MyPage({}: MyPageProps) {
             label: '使う',
             onCLick: () => {},
           },
-          { icon: FaLaptop, label: '取引履歴', onCLick: () => {} },
+          {
+            icon: FaLaptop,
+            label: '取引履歴',
+            onCLick: () => {
+              router.push('myPage/transaction');
+            },
+          },
           {
             icon: FaCog,
             label: '設定',

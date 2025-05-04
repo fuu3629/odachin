@@ -36,7 +36,9 @@ message TransactionInfo {
   string to_user_id = 3 [ (buf.validate.field).string.min_len = 1 ];
   double amount = 4 [ (buf.validate.field).double.gt = 0 ];
   string transaction_type = 5 [ (buf.validate.field).string.min_len = 1 ];
-  google.protobuf.Timestamp created_at = 6;
+  string title = 6;
+  string description = 7;
+  google.protobuf.Timestamp created_at = 8;
 }
 
 message GetTransactionListResponse {

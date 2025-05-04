@@ -144,6 +144,8 @@ func ToGetTransactionListResponse(t []*models.Transaction) *odachin.GetTransacti
 			FromUserId:    transaction.FromUserID,
 			ToUserId:      transaction.ToUserID,
 			Amount:        transaction.Amount,
+			Title:         transaction.Title,
+			Description:   transaction.Description,
 			CreatedAt:     timestamppb.New(transaction.CreatedAt),
 		}
 	}
