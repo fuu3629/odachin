@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file v1/odachin/usage.proto.
  */
 export const file_v1_odachin_usage: GenFile = /*@__PURE__*/
-  fileDesc("ChZ2MS9vZGFjaGluL3VzYWdlLnByb3RvEg5vZGFjaGluLnJld2FyZCKPAQoVQXBwbGljYXRlVXNhZ2VSZXF1ZXN0EhUKBHR5cGUYASABKAlCB7pIBHICEAESFwoGYW1vdW50GAIgASgFQge6SAQaAiAAEhYKBXRpdGxlGAMgASgJQge6SARyAhABEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhkKCGNhdGVnb3J5GAUgASgJQge6SARyAhABIjAKGkdldFVzYWdlQ2F0ZWdvcmllc1Jlc3BvbnNlEhIKCmNhdGVnb3JpZXMYASADKAkiMAoTQXBwcm92ZVVzYWdlUmVxdWVzdBIZCgh1c2FnZV9pZBgBIAEoBEIHukgEMgIgADKGAgoMVXNhZ2VTZXJ2aWNlEk8KDkFwcGxpY2F0ZVVzYWdlEiUub2RhY2hpbi5yZXdhcmQuQXBwbGljYXRlVXNhZ2VSZXF1ZXN0GhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5ElgKEkdldFVzYWdlQ2F0ZWdvcmllcxIWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRoqLm9kYWNoaW4ucmV3YXJkLkdldFVzYWdlQ2F0ZWdvcmllc1Jlc3BvbnNlEksKDEFwcHJvdmVVc2FnZRIjLm9kYWNoaW4ucmV3YXJkLkFwcHJvdmVVc2FnZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHliBnByb3RvMw", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_buf_validate_validate]);
+  fileDesc("ChZ2MS9vZGFjaGluL3VzYWdlLnByb3RvEg5vZGFjaGluLnJld2FyZCKPAQoVQXBwbGljYXRlVXNhZ2VSZXF1ZXN0EhUKBHR5cGUYASABKAlCB7pIBHICEAESFwoGYW1vdW50GAIgASgFQge6SAQaAiAAEhYKBXRpdGxlGAMgASgJQge6SARyAhABEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhkKCGNhdGVnb3J5GAUgASgJQge6SARyAhABIjAKGkdldFVzYWdlQ2F0ZWdvcmllc1Jlc3BvbnNlEhIKCmNhdGVnb3JpZXMYASADKAkiMAoTQXBwcm92ZVVzYWdlUmVxdWVzdBIZCgh1c2FnZV9pZBgBIAEoBEIHukgEMgIgACJqChBVc2FnZUFwcGxpY2F0aW9uEhAKCHVzYWdlX2lkGAEgASgEEg4KBmFtb3VudBgCIAEoBRINCgV0aXRsZRgDIAEoCRITCgtkZXNjcmlwdGlvbhgEIAEoCRIQCghjYXRlZ29yeRgFIAEoCSItChpHZXRVc2FnZUFwcGxpY2F0aW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgAygJIlsKG0dldFVzYWdlQXBwbGljYXRpb25SZXNwb25zZRI8ChJ1c2FnZV9hcHBsaWNhdGlvbnMYASADKAsyIC5vZGFjaGluLnJld2FyZC5Vc2FnZUFwcGxpY2F0aW9uMvYCCgxVc2FnZVNlcnZpY2USTwoOQXBwbGljYXRlVXNhZ2USJS5vZGFjaGluLnJld2FyZC5BcHBsaWNhdGVVc2FnZVJlcXVlc3QaFi5nb29nbGUucHJvdG9idWYuRW1wdHkSWAoSR2V0VXNhZ2VDYXRlZ29yaWVzEhYuZ29vZ2xlLnByb3RvYnVmLkVtcHR5Gioub2RhY2hpbi5yZXdhcmQuR2V0VXNhZ2VDYXRlZ29yaWVzUmVzcG9uc2USSwoMQXBwcm92ZVVzYWdlEiMub2RhY2hpbi5yZXdhcmQuQXBwcm92ZVVzYWdlUmVxdWVzdBoWLmdvb2dsZS5wcm90b2J1Zi5FbXB0eRJuChNHZXRVc2FnZUFwcGxpY2F0aW9uEioub2RhY2hpbi5yZXdhcmQuR2V0VXNhZ2VBcHBsaWNhdGlvblJlcXVlc3QaKy5vZGFjaGluLnJld2FyZC5HZXRVc2FnZUFwcGxpY2F0aW9uUmVzcG9uc2ViBnByb3RvMw", [file_google_protobuf_empty, file_google_protobuf_timestamp, file_buf_validate_validate]);
 
 /**
  * @generated from message odachin.reward.ApplicateUsageRequest
@@ -87,6 +87,77 @@ export const ApproveUsageRequestSchema: GenMessage<ApproveUsageRequest> = /*@__P
   messageDesc(file_v1_odachin_usage, 2);
 
 /**
+ * @generated from message odachin.reward.UsageApplication
+ */
+export type UsageApplication = Message<"odachin.reward.UsageApplication"> & {
+  /**
+   * @generated from field: uint64 usage_id = 1;
+   */
+  usageId: bigint;
+
+  /**
+   * @generated from field: int32 amount = 2;
+   */
+  amount: number;
+
+  /**
+   * @generated from field: string title = 3;
+   */
+  title: string;
+
+  /**
+   * @generated from field: string description = 4;
+   */
+  description: string;
+
+  /**
+   * @generated from field: string category = 5;
+   */
+  category: string;
+};
+
+/**
+ * Describes the message odachin.reward.UsageApplication.
+ * Use `create(UsageApplicationSchema)` to create a new message.
+ */
+export const UsageApplicationSchema: GenMessage<UsageApplication> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_usage, 3);
+
+/**
+ * @generated from message odachin.reward.GetUsageApplicationRequest
+ */
+export type GetUsageApplicationRequest = Message<"odachin.reward.GetUsageApplicationRequest"> & {
+  /**
+   * @generated from field: repeated string user_id = 1;
+   */
+  userId: string[];
+};
+
+/**
+ * Describes the message odachin.reward.GetUsageApplicationRequest.
+ * Use `create(GetUsageApplicationRequestSchema)` to create a new message.
+ */
+export const GetUsageApplicationRequestSchema: GenMessage<GetUsageApplicationRequest> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_usage, 4);
+
+/**
+ * @generated from message odachin.reward.GetUsageApplicationResponse
+ */
+export type GetUsageApplicationResponse = Message<"odachin.reward.GetUsageApplicationResponse"> & {
+  /**
+   * @generated from field: repeated odachin.reward.UsageApplication usage_applications = 1;
+   */
+  usageApplications: UsageApplication[];
+};
+
+/**
+ * Describes the message odachin.reward.GetUsageApplicationResponse.
+ * Use `create(GetUsageApplicationResponseSchema)` to create a new message.
+ */
+export const GetUsageApplicationResponseSchema: GenMessage<GetUsageApplicationResponse> = /*@__PURE__*/
+  messageDesc(file_v1_odachin_usage, 5);
+
+/**
  * @generated from service odachin.reward.UsageService
  */
 export const UsageService: GenService<{
@@ -113,6 +184,14 @@ export const UsageService: GenService<{
     methodKind: "unary";
     input: typeof ApproveUsageRequestSchema;
     output: typeof EmptySchema;
+  },
+  /**
+   * @generated from rpc odachin.reward.UsageService.GetUsageApplication
+   */
+  getUsageApplication: {
+    methodKind: "unary";
+    input: typeof GetUsageApplicationRequestSchema;
+    output: typeof GetUsageApplicationResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_v1_odachin_usage, 0);

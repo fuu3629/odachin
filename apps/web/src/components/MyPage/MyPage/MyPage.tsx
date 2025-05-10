@@ -2,6 +2,8 @@ import { Box, Flex, Avatar, Text, Grid, IconButton, VStack, GridItem } from '@ch
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog, FaTrophy, FaPiggyBank, FaCheck } from 'react-icons/fa';
+import { IoChatbubble } from 'react-icons/io5';
+
 import { MyPageFloat } from './MyPageFloat';
 import { AuthService, GetOwnInfoResponse, Role } from '@/__generated__/v1/odachin/auth_pb';
 import { RewardService } from '@/__generated__/v1/odachin/reward_pb';
@@ -67,6 +69,13 @@ export function MyPage({}: MyPageProps) {
             },
           },
           {
+            icon: IoChatbubble,
+            label: '使用リクエスト',
+            onCLick: () => {
+              router.push('myPage/usage');
+            },
+          },
+          {
             icon: FaCog,
             label: '設定',
             onCLick: () => {
@@ -85,7 +94,9 @@ export function MyPage({}: MyPageProps) {
           {
             icon: FaTrophy,
             label: '使う',
-            onCLick: () => {},
+            onCLick: () => {
+              router.push('myPage/usage');
+            },
           },
           {
             icon: FaLaptop,

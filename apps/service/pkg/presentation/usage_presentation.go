@@ -42,3 +42,16 @@ func (s *ServerStruct) ApproveUsage(
 	}
 	return connect.NewResponse(&emptypb.Empty{}), nil
 }
+
+func (s *ServerStruct) GetUsageApplication(
+	ctx context.Context,
+	req *connect.Request[odachin.GetUsageApplicationRequest],
+) (*connect.Response[odachin.GetUsageApplicationResponse], error) {
+	usages, err := s.usageUsecase.GetUsageApplication(ctx, req.Msg)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&odachin.GetUsageApplicationResponse{
+		UsageApplications: usages,
+	}), nil
+}

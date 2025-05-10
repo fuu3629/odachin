@@ -17,6 +17,7 @@ type UsageUsecase interface {
 	ApplicateUsage(ctx context.Context, req *odachin.ApplicateUsageRequest) error
 	GetUsageCategories(ctx context.Context) ([]string, error)
 	ApproveUsage(ctx context.Context, req *odachin.ApproveUsageRequest) error
+	GetUsageApplication(ctx context.Context, req *odachin.GetUsageApplicationRequest) ([]*odachin.UsageApplication, error)
 }
 
 type UsageUsecaseImpl struct {
@@ -106,4 +107,34 @@ func (u *UsageUsecaseImpl) ApproveUsage(ctx context.Context, req *odachin.Approv
 		return status.Errorf(codes.Internal, "transaction error: %v", err)
 	}
 	return nil
+}
+
+func (u *UsageUsecaseImpl) GetUsageApplication(ctx context.Context, req *odachin.GetUsageApplicationRequest) ([]*odachin.UsageApplication, error) {
+	var allUsages []*odachin.UsageApplication
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		for _, userId := range req.UserId {
+			usages, err := u.usageRepository.GetByUserId(tx, userId)
+			if err != nil {
+				return status.Errorf(codes.Internal, "database error: %v", err)
+			}
+			for _, usage := range usages {
+				if usage.Status != "APPROVED" {
+					allUsages = append(allUsages, &odachin.UsageApplication{
+						UsageId:     uint64(usage.UsageID),
+						Title:       usage.Title,
+						Description: usage.Description,
+						Amount:      usage.Amount,
+						Category:    usage.Category,
+					})
+
+				}
+			}
+		}
+
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "transaction error: %v", err)
+	}
+	return allUsages, nil
 }
