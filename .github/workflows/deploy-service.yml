@@ -1,0 +1,50 @@
+name: Deploy Backend to ECS
+
+on:
+  workflow_dispatch:
+    paths:
+      - "apps/service/**"
+      - ".github/workflows/deploy-backend.yml"
+
+jobs:
+  build-and-deploy:
+    name: Build, Push to ECR, and Deploy to ECS
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: us-east-1
+      ECR_REPO_NAME: odachin/backend
+      ECS_CLUSTER_NAME: odachin-cluster
+      ECS_SERVICE_NAME: odachin-backend-task-service-27l562pk
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and Push Docker image
+        run: |
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
+          docker build -t $IMAGE_URI ./apps/service
+          docker push $IMAGE_URI
+
+      - name: Deploy to Amazon ECS
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER_NAME \
+            --service $ECS_SERVICE_NAME \
+            --force-new-deployment \
+            --region $AWS_REGION

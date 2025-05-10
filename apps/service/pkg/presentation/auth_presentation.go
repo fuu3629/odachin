@@ -9,6 +9,10 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
+func (s *ServerStruct) HealthCheck(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}
+
 func (s *ServerStruct) CreateUser(ctx context.Context, req *connect.Request[odachin.CreateUserRequest]) (*connect.Response[odachin.CreateUserResponse], error) {
 	token, err := s.authUsecase.CreateUser(ctx, req.Msg)
 	if err != nil {

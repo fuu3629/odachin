@@ -13,6 +13,7 @@ import (
 )
 
 //TODO 自動デプロイ作る
+//TODO 本番環境のDBの接続先を考える。
 
 func main() {
 	err := godotenv.Load()

@@ -4,6 +4,7 @@ import "google/protobuf/empty.proto";
 import "buf/validate/validate.proto";
 
 service AuthService {
+  rpc HealthCheck(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
   rpc UpdateUser(UpdateUserRequest) returns (google.protobuf.Empty);
   rpc Login(LoginRequest) returns (LoginResponse);

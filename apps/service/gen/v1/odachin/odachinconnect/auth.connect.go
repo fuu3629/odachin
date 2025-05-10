@@ -34,6 +34,8 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
+	// AuthServiceHealthCheckProcedure is the fully-qualified name of the AuthService's HealthCheck RPC.
+	AuthServiceHealthCheckProcedure = "/odachin.auth.AuthService/HealthCheck"
 	// AuthServiceCreateUserProcedure is the fully-qualified name of the AuthService's CreateUser RPC.
 	AuthServiceCreateUserProcedure = "/odachin.auth.AuthService/CreateUser"
 	// AuthServiceUpdateUserProcedure is the fully-qualified name of the AuthService's UpdateUser RPC.
@@ -48,6 +50,7 @@ const (
 
 // AuthServiceClient is a client for the odachin.auth.AuthService service.
 type AuthServiceClient interface {
+	HealthCheck(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error)
 	CreateUser(context.Context, *connect.Request[odachin.CreateUserRequest]) (*connect.Response[odachin.CreateUserResponse], error)
 	UpdateUser(context.Context, *connect.Request[odachin.UpdateUserRequest]) (*connect.Response[emptypb.Empty], error)
 	Login(context.Context, *connect.Request[odachin.LoginRequest]) (*connect.Response[odachin.LoginResponse], error)
@@ -66,6 +69,12 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 	baseURL = strings.TrimRight(baseURL, "/")
 	authServiceMethods := odachin.File_v1_odachin_auth_proto.Services().ByName("AuthService").Methods()
 	return &authServiceClient{
+		healthCheck: connect.NewClient[emptypb.Empty, emptypb.Empty](
+			httpClient,
+			baseURL+AuthServiceHealthCheckProcedure,
+			connect.WithSchema(authServiceMethods.ByName("HealthCheck")),
+			connect.WithClientOptions(opts...),
+		),
 		createUser: connect.NewClient[odachin.CreateUserRequest, odachin.CreateUserResponse](
 			httpClient,
 			baseURL+AuthServiceCreateUserProcedure,
@@ -101,11 +110,17 @@ func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 
 // authServiceClient implements AuthServiceClient.
 type authServiceClient struct {
+	healthCheck *connect.Client[emptypb.Empty, emptypb.Empty]
 	createUser  *connect.Client[odachin.CreateUserRequest, odachin.CreateUserResponse]
 	updateUser  *connect.Client[odachin.UpdateUserRequest, emptypb.Empty]
 	login       *connect.Client[odachin.LoginRequest, odachin.LoginResponse]
 	getUserInfo *connect.Client[odachin.GetUserInfoRequest, odachin.GetUserInfoResponse]
 	getOwnInfo  *connect.Client[emptypb.Empty, odachin.GetOwnInfoResponse]
+}
+
+// HealthCheck calls odachin.auth.AuthService.HealthCheck.
+func (c *authServiceClient) HealthCheck(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	return c.healthCheck.CallUnary(ctx, req)
 }
 
 // CreateUser calls odachin.auth.AuthService.CreateUser.
@@ -135,6 +150,7 @@ func (c *authServiceClient) GetOwnInfo(ctx context.Context, req *connect.Request
 
 // AuthServiceHandler is an implementation of the odachin.auth.AuthService service.
 type AuthServiceHandler interface {
+	HealthCheck(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error)
 	CreateUser(context.Context, *connect.Request[odachin.CreateUserRequest]) (*connect.Response[odachin.CreateUserResponse], error)
 	UpdateUser(context.Context, *connect.Request[odachin.UpdateUserRequest]) (*connect.Response[emptypb.Empty], error)
 	Login(context.Context, *connect.Request[odachin.LoginRequest]) (*connect.Response[odachin.LoginResponse], error)
@@ -149,6 +165,12 @@ type AuthServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	authServiceMethods := odachin.File_v1_odachin_auth_proto.Services().ByName("AuthService").Methods()
+	authServiceHealthCheckHandler := connect.NewUnaryHandler(
+		AuthServiceHealthCheckProcedure,
+		svc.HealthCheck,
+		connect.WithSchema(authServiceMethods.ByName("HealthCheck")),
+		connect.WithHandlerOptions(opts...),
+	)
 	authServiceCreateUserHandler := connect.NewUnaryHandler(
 		AuthServiceCreateUserProcedure,
 		svc.CreateUser,
@@ -181,6 +203,8 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 	)
 	return "/odachin.auth.AuthService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case AuthServiceHealthCheckProcedure:
+			authServiceHealthCheckHandler.ServeHTTP(w, r)
 		case AuthServiceCreateUserProcedure:
 			authServiceCreateUserHandler.ServeHTTP(w, r)
 		case AuthServiceUpdateUserProcedure:
@@ -199,6 +223,10 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption
 
 // UnimplementedAuthServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedAuthServiceHandler struct{}
+
+func (UnimplementedAuthServiceHandler) HealthCheck(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[emptypb.Empty], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.auth.AuthService.HealthCheck is not implemented"))
+}
 
 func (UnimplementedAuthServiceHandler) CreateUser(context.Context, *connect.Request[odachin.CreateUserRequest]) (*connect.Response[odachin.CreateUserResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.auth.AuthService.CreateUser is not implemented"))

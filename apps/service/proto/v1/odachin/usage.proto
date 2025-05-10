@@ -4,6 +4,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "buf/validate/validate.proto";
 
+// Rejectと伊jぶんの子供の申請全部持ってくるAPI
 service UsageService {
   rpc ApplicateUsage(ApplicateUsageRequest) returns (google.protobuf.Empty);
   rpc GetUsageCategories(google.protobuf.Empty)
