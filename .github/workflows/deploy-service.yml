@@ -35,6 +35,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Restore .env file
+        working-directory: ./apps/service
+        run: |
+          printf '%s' "${{ secrets.BACKEND_ENV_PLAIN }}" > .env
+
       - name: Build and Push Docker image
         run: |
           IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
