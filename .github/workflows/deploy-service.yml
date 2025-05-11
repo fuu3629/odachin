@@ -15,7 +15,7 @@ jobs:
       AWS_REGION: us-east-1
       ECR_REPO_NAME: odachin/backend
       ECS_CLUSTER_NAME: odachin-cluster
-      ECS_SERVICE_NAME: odachin-backend-task-service-27l562pk
+      ECS_SERVICE_NAME: odachin-backend-task-service-erz18pos
 
     steps:
       - name: Checkout code
