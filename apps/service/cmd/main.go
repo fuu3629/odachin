@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	database "github.com/fuu3629/odachin/apps/service/internal/db"
 	"github.com/fuu3629/odachin/apps/service/pkg/presentation"
@@ -32,7 +33,7 @@ func main() {
 	presentation.NewServer(mux, db)
 
 	http.ListenAndServe(
-		"localhost:50051",
+		os.Getenv("PORT"),
 		cors.AllowAll().Handler(
 			// HTTP1.1リクエストはHTTP/2にアップグレードする
 			h2c.NewHandler(mux, &http2.Server{}),
