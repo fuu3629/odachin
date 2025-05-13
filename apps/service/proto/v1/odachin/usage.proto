@@ -12,6 +12,7 @@ service UsageService {
   rpc ApproveUsage(ApproveUsageRequest) returns (google.protobuf.Empty);
   rpc GetUsageApplication(GetUsageApplicationRequest)
       returns (GetUsageApplicationResponse);
+  rpc GetUsageSummary(google.protobuf.Empty) returns (GetUsageSummaryResponse);
 }
 
 message ApplicateUsageRequest {
@@ -30,16 +31,24 @@ message ApproveUsageRequest {
 
 message UsageApplication {
   uint64 usage_id = 1;
-  int32 amount = 2 ;
+  int32 amount = 2;
   string title = 3;
   string description = 4;
   string category = 5;
 }
 
-message GetUsageApplicationRequest {
-  repeated string user_id = 1;
-}
+message GetUsageApplicationRequest { repeated string user_id = 1; }
 
 message GetUsageApplicationResponse {
   repeated UsageApplication usage_applications = 1;
+}
+
+message UsageSummary {
+  string category = 1;
+  int32 amount = 2;
+}
+
+message GetUsageSummaryResponse {
+  repeated UsageSummary usage_summaries = 1;
+  repeated UsageSummary usage_summaries_monthly = 2;
 }

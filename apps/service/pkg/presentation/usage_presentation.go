@@ -55,3 +55,17 @@ func (s *ServerStruct) GetUsageApplication(
 		UsageApplications: usages,
 	}), nil
 }
+
+func (s *ServerStruct) GetUsageSummary(
+	ctx context.Context,
+	req *connect.Request[emptypb.Empty],
+) (*connect.Response[odachin.GetUsageSummaryResponse], error) {
+	summary, summary_monthly, err := s.usageUsecase.GetUsageSummary(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&odachin.GetUsageSummaryResponse{
+		UsageSummaries:        summary,
+		UsageSummariesMonthly: summary_monthly,
+	}), nil
+}

@@ -46,6 +46,9 @@ const (
 	// UsageServiceGetUsageApplicationProcedure is the fully-qualified name of the UsageService's
 	// GetUsageApplication RPC.
 	UsageServiceGetUsageApplicationProcedure = "/odachin.reward.UsageService/GetUsageApplication"
+	// UsageServiceGetUsageSummaryProcedure is the fully-qualified name of the UsageService's
+	// GetUsageSummary RPC.
+	UsageServiceGetUsageSummaryProcedure = "/odachin.reward.UsageService/GetUsageSummary"
 )
 
 // UsageServiceClient is a client for the odachin.reward.UsageService service.
@@ -54,6 +57,7 @@ type UsageServiceClient interface {
 	GetUsageCategories(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageCategoriesResponse], error)
 	ApproveUsage(context.Context, *connect.Request[odachin.ApproveUsageRequest]) (*connect.Response[emptypb.Empty], error)
 	GetUsageApplication(context.Context, *connect.Request[odachin.GetUsageApplicationRequest]) (*connect.Response[odachin.GetUsageApplicationResponse], error)
+	GetUsageSummary(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageSummaryResponse], error)
 }
 
 // NewUsageServiceClient constructs a client for the odachin.reward.UsageService service. By
@@ -91,6 +95,12 @@ func NewUsageServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(usageServiceMethods.ByName("GetUsageApplication")),
 			connect.WithClientOptions(opts...),
 		),
+		getUsageSummary: connect.NewClient[emptypb.Empty, odachin.GetUsageSummaryResponse](
+			httpClient,
+			baseURL+UsageServiceGetUsageSummaryProcedure,
+			connect.WithSchema(usageServiceMethods.ByName("GetUsageSummary")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -100,6 +110,7 @@ type usageServiceClient struct {
 	getUsageCategories  *connect.Client[emptypb.Empty, odachin.GetUsageCategoriesResponse]
 	approveUsage        *connect.Client[odachin.ApproveUsageRequest, emptypb.Empty]
 	getUsageApplication *connect.Client[odachin.GetUsageApplicationRequest, odachin.GetUsageApplicationResponse]
+	getUsageSummary     *connect.Client[emptypb.Empty, odachin.GetUsageSummaryResponse]
 }
 
 // ApplicateUsage calls odachin.reward.UsageService.ApplicateUsage.
@@ -122,12 +133,18 @@ func (c *usageServiceClient) GetUsageApplication(ctx context.Context, req *conne
 	return c.getUsageApplication.CallUnary(ctx, req)
 }
 
+// GetUsageSummary calls odachin.reward.UsageService.GetUsageSummary.
+func (c *usageServiceClient) GetUsageSummary(ctx context.Context, req *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageSummaryResponse], error) {
+	return c.getUsageSummary.CallUnary(ctx, req)
+}
+
 // UsageServiceHandler is an implementation of the odachin.reward.UsageService service.
 type UsageServiceHandler interface {
 	ApplicateUsage(context.Context, *connect.Request[odachin.ApplicateUsageRequest]) (*connect.Response[emptypb.Empty], error)
 	GetUsageCategories(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageCategoriesResponse], error)
 	ApproveUsage(context.Context, *connect.Request[odachin.ApproveUsageRequest]) (*connect.Response[emptypb.Empty], error)
 	GetUsageApplication(context.Context, *connect.Request[odachin.GetUsageApplicationRequest]) (*connect.Response[odachin.GetUsageApplicationResponse], error)
+	GetUsageSummary(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageSummaryResponse], error)
 }
 
 // NewUsageServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -161,6 +178,12 @@ func NewUsageServiceHandler(svc UsageServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(usageServiceMethods.ByName("GetUsageApplication")),
 		connect.WithHandlerOptions(opts...),
 	)
+	usageServiceGetUsageSummaryHandler := connect.NewUnaryHandler(
+		UsageServiceGetUsageSummaryProcedure,
+		svc.GetUsageSummary,
+		connect.WithSchema(usageServiceMethods.ByName("GetUsageSummary")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/odachin.reward.UsageService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UsageServiceApplicateUsageProcedure:
@@ -171,6 +194,8 @@ func NewUsageServiceHandler(svc UsageServiceHandler, opts ...connect.HandlerOpti
 			usageServiceApproveUsageHandler.ServeHTTP(w, r)
 		case UsageServiceGetUsageApplicationProcedure:
 			usageServiceGetUsageApplicationHandler.ServeHTTP(w, r)
+		case UsageServiceGetUsageSummaryProcedure:
+			usageServiceGetUsageSummaryHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -194,4 +219,8 @@ func (UnimplementedUsageServiceHandler) ApproveUsage(context.Context, *connect.R
 
 func (UnimplementedUsageServiceHandler) GetUsageApplication(context.Context, *connect.Request[odachin.GetUsageApplicationRequest]) (*connect.Response[odachin.GetUsageApplicationResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.UsageService.GetUsageApplication is not implemented"))
+}
+
+func (UnimplementedUsageServiceHandler) GetUsageSummary(context.Context, *connect.Request[emptypb.Empty]) (*connect.Response[odachin.GetUsageSummaryResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("odachin.reward.UsageService.GetUsageSummary is not implemented"))
 }
