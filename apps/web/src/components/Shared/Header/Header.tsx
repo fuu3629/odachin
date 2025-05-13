@@ -1,13 +1,8 @@
-import { log } from 'console';
 import { HStack, Spacer, Text } from '@chakra-ui/react';
 import { Pacifico } from 'next/font/google';
 import { useRouter } from 'next/router';
-import { useContext, useState, useEffect } from 'react';
 import { ForLogin } from './ForLogin';
 import { ForUnLogin } from './ForUnLogin';
-import { AuthService, GetOwnInfoResponse } from '@/__generated__/v1/odachin/auth_pb';
-import { useClient } from '@/pages/api/ClientProvider';
-import { CokiesContext } from '@/pages/api/CokiesContext';
 
 export interface HeaderProps {}
 
@@ -17,30 +12,8 @@ const pacifico = Pacifico({
 });
 
 export function Header({}: HeaderProps) {
-  const cookies = useContext(CokiesContext);
-  const client = useClient(AuthService);
   const router = useRouter();
-  const [userInfo, setuserInfo] = useState<GetOwnInfoResponse | null>(null);
   const { pathname } = router;
-  useEffect(() => {
-    console.log(cookies?.authorization);
-    if (!cookies || !cookies.authorization) {
-      router.push('/login');
-      console.error('No authentication token found');
-      return;
-    }
-    const fetchData = async () => {
-      const req = {};
-      try {
-        const res = await client.getOwnInfo(req);
-        setuserInfo(res);
-      } catch (error) {
-        router.push('/login');
-        console.error('Error fetching user info:', error);
-      }
-    };
-    fetchData();
-  }, [pathname]);
   const paths = ['/login', '/createNewAccount', '/'];
 
   const onCLick = () => {
@@ -78,16 +51,7 @@ export function Header({}: HeaderProps) {
           家庭に安全にお小遣いを導入できるアプリ
         </Text>
         <Spacer></Spacer>
-        {paths.includes(pathname) ? (
-          <ForUnLogin></ForUnLogin>
-        ) : (
-          <HStack>
-            <Text fontSize='xl' fontWeight='semibold' mr={4}>
-              {userInfo?.name}さん
-            </Text>
-            <ForLogin avaterImageUrl={userInfo?.avaterImageUrl}></ForLogin>
-          </HStack>
-        )}
+        {paths.includes(pathname) ? <ForUnLogin></ForUnLogin> : <ForLogin></ForLogin>}
       </HStack>
     </>
   );
