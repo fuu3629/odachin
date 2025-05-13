@@ -1,5 +1,5 @@
 // import '@/styles/globals.css';
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Toast } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { CokiesContext } from './api/CokiesContext';
 import { Header } from '@/components/Shared/Header';
 import { Provider } from '@/components/ui/provider';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function App({ Component, pageProps }: AppProps, ctx: NextPageContext) {
   const router = useRouter();
@@ -34,6 +35,7 @@ export default function App({ Component, pageProps }: AppProps, ctx: NextPageCon
   return (
     <Provider>
       <CokiesContext.Provider value={cookies}>
+        <Toaster />
         <Box>
           <Header></Header>
           <Flex>

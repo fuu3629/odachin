@@ -1,33 +1,9 @@
-import { register } from 'module';
-import {
-  Box,
-  VStack,
-  Field,
-  Input,
-  Button,
-  Center,
-  Text,
-  HStack,
-  Card,
-  CardBody,
-  List,
-  ListItem,
-  Stack,
-} from '@chakra-ui/react';
-import router from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import { number } from 'zod';
-import { AddFamilyDialog } from '../../Family/FamilyPage/AddFamilyDialog';
-import { FamilyAvatar } from '../../Family/FamilyPage/FamilyAvatar';
-import { useApplicateUsageForm } from '../ApplicateUsage/lib';
-import { FamilyService, GetFamilyInfoResponse } from '@/__generated__/v1/odachin/faimily_pb';
-import { GetUsageApplicationResponse, UsageService } from '@/__generated__/v1/odachin/usage_pb';
-import { useLoginForm } from '@/components/Login/LoginForm/lib';
-import { useColorModeValue } from '@/components/ui/color-mode';
-import { PasswordInput } from '@/components/ui/password-input';
+import { HStack, Center, Box, VStack, Button, Text } from '@chakra-ui/react';
+import { useContext, useState, useEffect } from 'react';
+import { FamilyService } from '@/__generated__/v1/odachin/faimily_pb';
+import { UsageService, GetUsageApplicationResponse } from '@/__generated__/v1/odachin/usage_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
-import usage from '@/pages/myPage/usage';
 
 export interface ApproveUsageProps {}
 
@@ -35,7 +11,6 @@ export function ApproveUsage({}: ApproveUsageProps) {
   const client = useClient(FamilyService);
   const usageClient = useClient(UsageService);
   const cookies = useContext(CokiesContext);
-  const [familyInfo, setFamilyInfo] = useState<GetFamilyInfoResponse>();
   const [usageApplication, setUsageApplication] = useState<GetUsageApplicationResponse>();
 
   useEffect(() => {
