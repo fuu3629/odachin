@@ -15,6 +15,7 @@ import (
 const tokenHeader = "authorization"
 
 var authNotRequiredInterceptorMethods = []string{
+	"/odachin.auth.AuthService/HealthCheck",
 	"/odachin.auth.AuthService/CreateUser",
 	"/odachin.auth.AuthService/Login",
 	"/odachin.allowance.AllowanceService/Allowance",

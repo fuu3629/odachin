@@ -1,4 +1,4 @@
-name: Deploy Frontend to ECR
+name: Deploy Frontend to ECS
 
 on:
   workflow_dispatch:
@@ -7,9 +7,15 @@ on:
       - ".github/workflows/deploy-frontend.yml"
 
 jobs:
-  build-and-push:
-    name: Build & Push to ECR
+  build-and-deploy:
+    name: Build, Push to ECR, and Deploy to ECS
     runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: us-east-1
+      ECR_REPO_NAME: odachin/frontend
+      ECS_CLUSTER_NAME: odachin-cluster
+      ECS_SERVICE_NAME: odachin-frontend-task-def-service
 
     steps:
       - name: Checkout code
@@ -23,14 +29,27 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Restore .env file
+        working-directory: ./apps/frontend
+        run: |
+          printf '%s' "${{ secrets.FRONTEND_ENV_PLAIN }}" > .env
+
       - name: Build and Push Docker image
         run: |
-          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/odachin_web_dev:latest
-          docker build -t $IMAGE_URI ./apps/web
+          IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPO_NAME }}:latest
+          docker build -t $IMAGE_URI ./apps/frontend
           docker push $IMAGE_URI
+
+      - name: Deploy to Amazon ECS
+        run: |
+          aws ecs update-service \
+            --cluster $ECS_CLUSTER_NAME \
+            --service $ECS_SERVICE_NAME \
+            --force-new-deployment \
+            --region $AWS_REGION

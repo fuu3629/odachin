@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FaUser, FaLaptop, FaCog, FaTrophy, FaPiggyBank, FaCheck } from 'react-icons/fa';
 import { ApplicateUsage } from './ApplicateUsage';
+import { ApproveUsage } from './ApproveUsage';
 import { AuthService, GetOwnInfoResponse, Role } from '@/__generated__/v1/odachin/auth_pb';
 import { RewardService } from '@/__generated__/v1/odachin/reward_pb';
 import { useClient } from '@/pages/api/ClientProvider';
 import { CokiesContext } from '@/pages/api/CokiesContext';
-import { ApproveUsage } from './ApproveUsage';
 
 export interface UsagePageProps {}
 
