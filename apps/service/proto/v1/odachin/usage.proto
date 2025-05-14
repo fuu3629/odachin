@@ -35,6 +35,8 @@ message UsageApplication {
   string title = 3;
   string description = 4;
   string category = 5;
+  string status = 6;
+  google.protobuf.Timestamp created_at = 7;
 }
 
 message GetUsageApplicationRequest { repeated string user_id = 1; }

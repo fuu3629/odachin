@@ -12,6 +12,7 @@ import (
 	"github.com/fuu3629/odachin/apps/service/pkg/infrastructure/repository"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
 )
 
@@ -123,16 +124,15 @@ func (u *UsageUsecaseImpl) GetUsageApplication(ctx context.Context, req *odachin
 				return status.Errorf(codes.Internal, "database error: %v", err)
 			}
 			for _, usage := range usages {
-				if usage.Status != "APPROVED" {
-					allUsages = append(allUsages, &odachin.UsageApplication{
-						UsageId:     uint64(usage.UsageID),
-						Title:       usage.Title,
-						Description: usage.Description,
-						Amount:      usage.Amount,
-						Category:    usage.Category,
-					})
-
-				}
+				allUsages = append(allUsages, &odachin.UsageApplication{
+					UsageId:     uint64(usage.UsageID),
+					Title:       usage.Title,
+					Description: usage.Description,
+					Amount:      usage.Amount,
+					Category:    usage.Category,
+					Status:      usage.Status,
+					CreatedAt:   timestamppb.New(usage.CreatedAt),
+				})
 			}
 		}
 

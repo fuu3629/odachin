@@ -36,8 +36,6 @@ export function ApproveUsage({}: ApproveUsageProps) {
         if (req) {
           setUsageApplication(await usageClient.getUsageApplication(req));
         }
-
-        console.log(req);
       } catch (error) {
         alert('使用リクエストの取得に失敗しました。');
       }
@@ -51,47 +49,49 @@ export function ApproveUsage({}: ApproveUsageProps) {
   };
   return (
     <Wrap gap={8} m={10} w='100%'>
-      {usageApplication?.usageApplications.map((usage) => (
-        <Center key={usage.usageId} py={6}>
-          <Box bg='white' boxShadow='2xl' overflow='hidden' rounded='md' w='340px'>
-            <VStack align='center' direction='row' justify='center'>
-              <HStack>
-                <Text fontSize='3xl'>{usage.amount}</Text>
-                <Text>pt</Text>
-              </HStack>
-              <Text fontSize='4xl' fontWeight={800}>
-                {usage.title}
-              </Text>
-            </VStack>
+      {usageApplication?.usageApplications
+        .filter((usage) => usage.status === 'APPLICATED')
+        .map((usage) => (
+          <Center key={usage.usageId} py={6}>
+            <Box bg='white' boxShadow='2xl' overflow='hidden' rounded='md' w='340px'>
+              <VStack align='center' direction='row' justify='center'>
+                <HStack>
+                  <Text fontSize='3xl'>{usage.amount}</Text>
+                  <Text>pt</Text>
+                </HStack>
+                <Text fontSize='4xl' fontWeight={800}>
+                  {usage.title}
+                </Text>
+              </VStack>
 
-            <Box bg='gray.100' px={6} py={10}>
-              <Text>{usage.description}</Text>
+              <Box bg='gray.100' px={6} py={10}>
+                <Text>{usage.description}</Text>
 
-              <Button
-                _focus={{
-                  bg: 'orange.500',
-                }}
-                _hover={{
-                  bg: 'orange.500',
-                }}
-                bg='orange.400'
-                boxShadow='0 5px 20px 0px'
-                color='white'
-                fontWeight={600}
-                mt={10}
-                onClick={() => {
-                  apploveUsageApplication(usage.usageId);
-                  window.location.reload();
-                }}
-                rounded='xl'
-                w='full'
-              >
-                承認する
-              </Button>
+                <Button
+                  _focus={{
+                    bg: 'orange.500',
+                  }}
+                  _hover={{
+                    bg: 'orange.500',
+                  }}
+                  bg='orange.400'
+                  boxShadow='0 5px 20px 0px'
+                  color='white'
+                  fontWeight={600}
+                  mt={10}
+                  onClick={() => {
+                    apploveUsageApplication(usage.usageId);
+                    window.location.reload();
+                  }}
+                  rounded='xl'
+                  w='full'
+                >
+                  承認する
+                </Button>
+              </Box>
             </Box>
-          </Box>
-        </Center>
-      ))}
+          </Center>
+        ))}
     </Wrap>
   );
 }

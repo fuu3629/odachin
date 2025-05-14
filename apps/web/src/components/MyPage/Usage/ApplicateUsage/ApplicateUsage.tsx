@@ -1,9 +1,11 @@
-import { Box, VStack, Field, Input, Button, Text } from '@chakra-ui/react';
+import { Box, VStack, Field, Input, Button, Text, HStack, Flex } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import CreatableSelect from 'react-select/creatable';
+import { ApplicationStatusTable } from './ApplicationStatusTable ';
 import { useApplicateUsageForm } from './lib';
 import { UsageService } from '@/__generated__/v1/odachin/usage_pb';
+import App from '@/pages/_app';
 import { useClient } from '@/pages/api/ClientProvider';
 
 export interface ApplicateUsageProps {}
@@ -45,8 +47,8 @@ export function ApplicateUsage({}: ApplicateUsageProps) {
   });
 
   return (
-    <>
-      <Box bg='white' borderRadius='xl' boxShadow='lg' h='40%' m='auto' p={8} w='40%'>
+    <Flex gap={8} m={10} w='100%'>
+      <Box bg='white' borderRadius='xl' boxShadow='lg' m='auto' p={8} w='50%'>
         <form onSubmit={onSubmit} style={{ width: '100%' }}>
           <VStack gap={4}>
             <Field.Root invalid={!!errors.title}>
@@ -122,6 +124,7 @@ export function ApplicateUsage({}: ApplicateUsageProps) {
           </VStack>
         </form>
       </Box>
-    </>
+      <ApplicationStatusTable />
+    </Flex>
   );
 }
