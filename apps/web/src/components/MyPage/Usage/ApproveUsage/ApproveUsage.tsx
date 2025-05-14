@@ -1,4 +1,4 @@
-import { HStack, Center, Box, VStack, Button, Text, Wrap } from '@chakra-ui/react';
+import { HStack, Center, Box, Button, Text, Wrap, VStack } from '@chakra-ui/react';
 import { useContext, useState, useEffect } from 'react';
 import { FamilyService } from '@/__generated__/v1/odachin/faimily_pb';
 import { UsageService, GetUsageApplicationResponse } from '@/__generated__/v1/odachin/usage_pb';
@@ -47,6 +47,11 @@ export function ApproveUsage({}: ApproveUsageProps) {
   const apploveUsageApplication = async (usageId: bigint) => {
     await usageClient.approveUsage({ usageId: usageId });
   };
+
+  const rejectUsageApplication = async (usageId: bigint) => {
+    await usageClient.rejectUsage({ usageId: usageId });
+  };
+
   return (
     <Wrap gap={8} m={10} w='100%'>
       {usageApplication?.usageApplications
@@ -63,31 +68,52 @@ export function ApproveUsage({}: ApproveUsageProps) {
                   {usage.title}
                 </Text>
               </VStack>
-
               <Box bg='gray.100' px={6} py={10}>
-                <Text>{usage.description}</Text>
-
-                <Button
-                  _focus={{
-                    bg: 'orange.500',
-                  }}
-                  _hover={{
-                    bg: 'orange.500',
-                  }}
-                  bg='orange.400'
-                  boxShadow='0 5px 20px 0px'
-                  color='white'
-                  fontWeight={600}
-                  mt={10}
-                  onClick={() => {
-                    apploveUsageApplication(usage.usageId);
-                    window.location.reload();
-                  }}
-                  rounded='xl'
-                  w='full'
-                >
-                  承認する
-                </Button>
+                <Box h='100px' w='full'>
+                  <Text>{usage.description}</Text>
+                </Box>
+                <VStack gapY={4} mt={10} w='full'>
+                  <Button
+                    _focus={{
+                      bg: 'orange.500',
+                    }}
+                    _hover={{
+                      bg: 'orange.500',
+                    }}
+                    bg='orange.400'
+                    boxShadow='0 5px 20px 0px'
+                    color='white'
+                    fontWeight={600}
+                    onClick={() => {
+                      apploveUsageApplication(usage.usageId);
+                      window.location.reload();
+                    }}
+                    rounded='xl'
+                    w='full'
+                  >
+                    承認する
+                  </Button>
+                  <Button
+                    _focus={{
+                      bg: 'gray.500',
+                    }}
+                    _hover={{
+                      bg: 'gray.500',
+                    }}
+                    bg='gray.400'
+                    boxShadow='0 5px 20px 0px'
+                    color='white'
+                    fontWeight={600}
+                    onClick={() => {
+                      rejectUsageApplication(usage.usageId);
+                      window.location.reload();
+                    }}
+                    rounded='xl'
+                    w='full'
+                  >
+                    却下する
+                  </Button>
+                </VStack>
               </Box>
             </Box>
           </Center>

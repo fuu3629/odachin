@@ -32,11 +32,11 @@ export function ApplicationStatusTable() {
             <Text>申請受理</Text>
           </HStack>
         );
-      case 'REJECT':
+      case 'REJECTED':
         return (
           <HStack justify='end'>
             <FaExclamationCircle color='red' />
-            <Text>却下</Text>
+            <Text>申請却下</Text>
           </HStack>
         );
     }

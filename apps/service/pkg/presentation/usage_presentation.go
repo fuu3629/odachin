@@ -69,3 +69,14 @@ func (s *ServerStruct) GetUsageSummary(
 		UsageSummariesMonthly: summary_monthly,
 	}), nil
 }
+
+func (s *ServerStruct) RejectUsage(
+	ctx context.Context,
+	req *connect.Request[odachin.RejectUsageRequest],
+) (*connect.Response[emptypb.Empty], error) {
+	err := s.usageUsecase.RejectUsage(ctx, req.Msg)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}

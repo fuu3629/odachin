@@ -13,6 +13,7 @@ service UsageService {
   rpc GetUsageApplication(GetUsageApplicationRequest)
       returns (GetUsageApplicationResponse);
   rpc GetUsageSummary(google.protobuf.Empty) returns (GetUsageSummaryResponse);
+  rpc RejectUsage(RejectUsageRequest) returns (google.protobuf.Empty);
 }
 
 message ApplicateUsageRequest {
@@ -53,4 +54,8 @@ message UsageSummary {
 message GetUsageSummaryResponse {
   repeated UsageSummary usage_summaries = 1;
   repeated UsageSummary usage_summaries_monthly = 2;
+}
+
+message RejectUsageRequest {
+  uint64 usage_id = 1 [ (buf.validate.field).uint64.gt = 0 ];
 }

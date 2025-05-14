@@ -22,6 +22,7 @@ type UsageUsecase interface {
 	ApproveUsage(ctx context.Context, req *odachin.ApproveUsageRequest) error
 	GetUsageApplication(ctx context.Context, req *odachin.GetUsageApplicationRequest) ([]*odachin.UsageApplication, error)
 	GetUsageSummary(ctx context.Context) ([]*odachin.UsageSummary, []*odachin.UsageSummary, error)
+	RejectUsage(ctx context.Context, req *odachin.RejectUsageRequest) error
 }
 
 type UsageUsecaseImpl struct {
@@ -100,7 +101,7 @@ func (u *UsageUsecaseImpl) ApproveUsage(ctx context.Context, req *odachin.Approv
 			return status.Errorf(codes.NotFound, "usage not found")
 		}
 		if usage.Status != "APPLICATED" {
-			return status.Errorf(codes.InvalidArgument, "usage already approved")
+			return status.Errorf(codes.InvalidArgument, "usage already approved or rejected")
 		}
 		usage.Status = "APPROVED"
 		err = u.usageRepository.Update(tx, usage)
@@ -211,4 +212,29 @@ func (u *UsageUsecaseImpl) GetUsageSummary(ctx context.Context) ([]*odachin.Usag
 		return nil, nil, status.Errorf(codes.Internal, "transaction error: %v", err)
 	}
 	return allUsages, allUsagesMonthly, nil
+}
+
+func (u *UsageUsecaseImpl) RejectUsage(ctx context.Context, req *odachin.RejectUsageRequest) error {
+	err := u.db.Transaction(func(tx *gorm.DB) error {
+		usage, err := u.usageRepository.GetById(tx, uint(req.UsageId))
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		if usage == nil {
+			return status.Errorf(codes.NotFound, "usage not found")
+		}
+		if usage.Status != "APPLICATED" {
+			return status.Errorf(codes.InvalidArgument, "usage already approved or rejected")
+		}
+		usage.Status = "REJECTED"
+		err = u.usageRepository.Update(tx, usage)
+		if err != nil {
+			return status.Errorf(codes.Internal, "database error: %v", err)
+		}
+		return nil
+	}, &sql.TxOptions{Isolation: sql.LevelSerializable})
+	if err != nil {
+		return status.Errorf(codes.Internal, "transaction error: %v", err)
+	}
+	return nil
 }
