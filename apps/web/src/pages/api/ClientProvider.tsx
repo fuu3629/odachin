@@ -1,6 +1,6 @@
 import { DescService } from '@bufbuild/protobuf';
 import { Client, createClient, Interceptor } from '@connectrpc/connect';
-import { createGrpcWebTransport } from '@connectrpc/connect-web';
+import { createConnectTransport } from '@connectrpc/connect-web';
 import { useContext, useMemo } from 'react';
 import { CokiesContext } from './CokiesContext';
 
@@ -15,7 +15,7 @@ export function useClient<T extends DescService>(service: T): Client<T> {
       return await next(req);
     };
 
-    return createGrpcWebTransport({
+    return createConnectTransport({
       baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL!,
       interceptors: [authInterceptor],
     });
