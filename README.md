@@ -33,6 +33,22 @@
   - フレームワーク
     - PyTorch
     - scikit-learn 系
+   
+### 原田悠真
+
+担当
+
+- Backend
+- Frontend
+
+できること  
+- Webアプリ開発
+  - 使用可能言語
+    - Python
+    - Golang
+    - Java
+    - TypeScript
+    - JavaScript
 
 ## 使用技術
 
